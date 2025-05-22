@@ -5,6 +5,7 @@ import Register from "./components/pages/Register";
 import Login from "./components/pages/Login";
 import Blogs from "./components/pages/Blogs";
 import LayoutDefault from "./components/layouts/LayoutDefault";
+import LandingPage from "./components/pages/LandingPage";
 
 function App() {
   const router = createBrowserRouter([
@@ -14,7 +15,7 @@ function App() {
       children: [
         {
           index: true,
-          element: <h2>welcome landing page</h2>,
+          element: <LandingPage />,
         },
         {
           path: "register",
