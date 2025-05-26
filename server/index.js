@@ -10,7 +10,12 @@ import cookieParser from "cookie-parser";
 import { blogRouter } from "./router/blogRouter.js";
 
 //middlewares
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Your frontend URL
+    credentials: true, // REQUIRED for cookies
+  })
+);
 app.use(
   express.urlencoded({
     extended: true,

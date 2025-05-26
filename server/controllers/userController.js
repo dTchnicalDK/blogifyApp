@@ -11,12 +11,12 @@ export const registerUser = async (req, res) => {
   try {
     //validate for empty and already registered
     if (!email || !password) {
-      return res.status(400).json({ msg: "fill all the fields first" });
+      return res.status(200).json({ msg: "fill all the fields first" });
     }
     const isUserAlredyRegistered = await User.findOne({ email });
     if (isUserAlredyRegistered) {
       return res
-        .status(400)
+        .status(200)
         .json({ msg: "user already registered, please login" });
     }
     //hash password
@@ -26,7 +26,7 @@ export const registerUser = async (req, res) => {
     const createdUser = await User.create({ email, password });
     res.status(200).json({
       msg: "user registered successfully",
-      // user: createdUser.select("-password"),
+      // user: createdUser.select("- password"),
     });
   } catch (error) {
     console.log("user registration error", error);
@@ -37,33 +37,41 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    //basic validation
+    // Basic validation
     if (!email || !password) {
-      return res.status(400).json({ msg: "fill all the fields first" });
+      return res.status(400).json({ msg: "Fill all the fields first" }); // 400 is more appropriate
     }
+
     const validUser = await User.findOne({ email });
     if (!validUser) {
-      return res.status(400).json({ msg: "wrong credentials" });
+      return res.status(401).json({ msg: "Wrong credentials" }); // 401 for unauthorized
     }
-    //comparing password
+
+    // Comparing password
     const matchedPassword = await bcrypt.compare(password, validUser.password);
     if (!matchedPassword) {
-      return res.status(400).json({ msg: "wrong credentials" });
+      return res.status(401).json({ msg: "Wrong credentials" });
     }
-    //creating token
+
+    // Creating token
     const token = jwt.sign({ email: validUser.email }, tokenSecretCode);
-    //setting cookie
+
+    // Setting cookie - FIXED VERSION
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false,
-      maxAge: 10000,
+      secure: process.env.NODE_ENV === "production", // true in production
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 10 * 60 * 1000, // 10 minutes in milliseconds
+      // domain: Remove this line for localhost testing
     });
+
     res.status(200).json({
-      msg: "token set inside cookie, no need to login again for 10 min",
+      msg: "Token set inside cookie",
       result: token,
     });
   } catch (error) {
-    console.log("user login error", error);
+    console.log("User login error", error);
+    res.status(500).json({ msg: "Server error" });
   }
 };
 

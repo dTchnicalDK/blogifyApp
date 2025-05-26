@@ -1,10 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router";
+import axios from "axios";
 
 function Register() {
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    email: " ",
+    password: "",
+    rePassword: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log(formData);
+  };
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submit button clicked");
+    //validation if password and repassword matches
+    if (formData.password !== formData.rePassword) {
+      return console.log("password don't match");
+    }
+    try {
+      const userCreationRespose = await axios.post(
+        "http://localhost:2000/api/user/register",
+        formData
+      );
+      console.log("userCreationRespose", userCreationRespose?.data.msg);
+    } catch (error) {
+      console.log("user registration error (frontend): ", error);
+    }
   };
   return (
     <div>
@@ -15,7 +38,7 @@ function Register() {
             Register Here
           </h2>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
@@ -23,8 +46,11 @@ function Register() {
               <input
                 type="email"
                 name="email"
+                required
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                 placeholder="your@email.com"
+                value={formData.email}
+                onChange={handleChange}
               />
             </div>
 
@@ -34,8 +60,15 @@ function Register() {
               </label>
               <input
                 type="password"
+                name="password"
+                required
+                minLength={6}
+                // pattern="^(?=.*[A-Z])(?=.*\d).+$" //insures at least one capital letter and a nuber
+                // title="Must include at least one CAPITAL LETTER and a NUM13ER"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                 placeholder="••••••••"
+                value={formData.password}
+                onChange={handleChange}
               />
             </div>
             <div>
@@ -44,8 +77,15 @@ function Register() {
               </label>
               <input
                 type="password"
+                name="rePassword"
+                required
+                minLength={6}
+                // pattern="^(?=.*[A-Z])(?=.*\d).+$"
+                // title="Must include at least one CAPITAL LETTER and a NUM13ER"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                 placeholder="••••••••"
+                value={formData.rePassword}
+                onChange={handleChange}
               />
             </div>
 
@@ -53,12 +93,7 @@ function Register() {
               <label className="flex items-center"></label>
             </div>
 
-            <button
-              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors"
-              onSubmit={(e) => {
-                console.log("submitted");
-              }}
-            >
+            <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors">
               Submit Now
             </button>
           </form>
