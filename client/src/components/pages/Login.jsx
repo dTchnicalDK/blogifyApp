@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
 
-function Register() {
+function Register({ setUser, LoggedInUser }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: " ",
@@ -21,8 +21,10 @@ function Register() {
         formData,
         { withCredentials: true }
       );
-      navigate("/");
-      console.log("userCreationRespose", userLoginRespose?.data.msg);
+
+      console.log("userLoginRespose", userLoginRespose?.data);
+      navigate("/udashboard");
+      // navigate(window.location.pathname);
       // console.log("Login data", formData);
     } catch (error) {
       console.log("user registration error (frontend): ", error);

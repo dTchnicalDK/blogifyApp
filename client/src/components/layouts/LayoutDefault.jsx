@@ -5,10 +5,10 @@ import Navbar from "../Navbar";
 import Mynavbar from "../Navbar";
 import Footer from "../Footer";
 
-function LayoutDefault() {
+function LayoutDefault({ loggedInUser }) {
   return (
     <div className="layout">
-      <Mynavbar />
+      <Mynavbar loggedInUser={loggedInUser} />
       <main>
         <Outlet /> {/* This is where child routes will render */}
       </main>

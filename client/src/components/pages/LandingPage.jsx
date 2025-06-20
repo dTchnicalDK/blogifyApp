@@ -1,17 +1,32 @@
 import React from "react";
-import "./LandingPage.css";
+import { Link } from "react-router";
+import HeroSection from "../HeroSection";
+import BlogCard from "../BlogCard";
+import TrendingNowSection from "../TrendingNowSection";
 
 function LandingPage() {
   return (
-    <div>
-      <div className="hero">
-        <div className="salutaion ">
-          <h1>Welcome to the Dk's Blogging site...</h1>
-        </div>
-        <div className="image">
-          <img src="/images/undraw_landing-page_tsx8.svg" alt="landingLogo" />
-        </div>
-      </div>
+    <div className="space-y-12">
+      <section className="section">
+        <HeroSection />
+      </section>
+
+      <section
+        id="u-may-like-blogs"
+        className="py-8"
+        aria-label="Recommended blogs for you"
+      >
+        <TrendingNowSection sectionTitle="Just for you blogs" />
+      </section>
+
+      <section id="trending-blogs" className="py-8">
+        {/* Add content here */}
+        <TrendingNowSection sectionTitle="Trending now blogs" />
+      </section>
+
+      <section id="blogs" className="py-8">
+        {/* Add content here */}
+      </section>
     </div>
   );
 }
