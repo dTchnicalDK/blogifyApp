@@ -1,28 +1,34 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import { userContext } from "../../contexts/UserContexProvider";
 
 function UserDashboard({ setUser, LoggedInUser }) {
+  const { loggedUser, login, logOut } = useContext(userContext);
   const navigate = useNavigate();
   // const [resUser, setResUser] = useState("");
   useEffect(() => {
-    axios
-      .get("http://localhost:2000/api/user/authenticate", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        // setResUser(res.data.user);
-        setUser(res.data.user);
-        navigate(window.location.pathname);
-      });
+    try {
+      axios
+        .get("http://localhost:2000/api/user/authenticate", {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log("res before set user is", res.data.user);
+          login(res.data.user);
+        });
+    } catch (error) {
+      console.log("user fetching error, UserDashboard", error);
+    }
   }, []);
   return (
-    <div className="container mb-8.5 relative bg-amber-400">
-      {/* <h2>welcome {resUser ? resUser.email : "Unknown"}</h2> */}
-      <h1 className="">
-        welcome to you {LoggedInUser ? LoggedInUser.email : "Unknown"}
-      </h1>
+    <div>
+      <h1 className="text-4xl text-orange-700 font-bold">
+        Welcome Mr.
+        {loggedUser.email}
+      </h1>{" "}
+      {JSON.stringify(loggedUser)}
     </div>
   );
 }

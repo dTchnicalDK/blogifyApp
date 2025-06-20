@@ -2,8 +2,8 @@
 
 @layer components {
   .section {
-    border: 2px solid salmon;
-    background-color: var(--color-slate-200);
+    /* border: 2px solid salmon;
+    background-color: var(--color-slate-200); */
     width: 100%;
     display: flex;
     flex-direction: column;

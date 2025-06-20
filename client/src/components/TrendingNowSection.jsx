@@ -13,7 +13,7 @@ const TrendingNowSection = ({ sectionTitle = "Trending now blogs" }) => {
           aria-label="Blog carousel"
           tabIndex="0"
         >
-          <div className="flex gap-6 flex-nowrap">
+          <div className="flex gap-6 flex-nowrap ">
             <BlogCard
               title="Introducing AMD Instinct™ MI300X GPU Droplets"
               createOn="June 12, 2025"
