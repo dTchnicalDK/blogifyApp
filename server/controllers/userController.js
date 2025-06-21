@@ -50,7 +50,9 @@ export const loginUser = async (req, res) => {
     // Comparing password
     const matchedPassword = await bcrypt.compare(password, validUser.password);
     if (!matchedPassword) {
-      return res.status(401).json({ msg: "Wrong credentials" });
+      return res
+        .status(401)
+        .json({ msg: "Wrong credentials, Check userId and Password!" });
     }
 
     // Creating token
@@ -66,7 +68,7 @@ export const loginUser = async (req, res) => {
     });
 
     res.status(200).json({
-      msg: "Token set inside cookie",
+      msg: "User logged in successfully !",
       result: token,
     });
   } catch (error) {

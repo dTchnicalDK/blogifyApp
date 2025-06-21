@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Don't forget the CSS
 
-function Register({ setUser, LoggedInUser }) {
+function Login({ setUser, LoggedInUser }) {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: " ",
@@ -11,7 +13,6 @@ function Register({ setUser, LoggedInUser }) {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    console.log(formData);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,18 +22,18 @@ function Register({ setUser, LoggedInUser }) {
         formData,
         { withCredentials: true }
       );
-
-      console.log("userLoginRespose", userLoginRespose?.data);
+      // console.log("userLoginRespose", userLoginRespose?.data);
       navigate("/udashboard");
-      // navigate(window.location.pathname);
-      // console.log("Login data", formData);
+      toast.success(userLoginRespose.data.msg, { position: "top-right" });
     } catch (error) {
       console.log("user registration error (frontend): ", error);
+      toast.error(error.response?.data?.msg || "login failed", {
+        position: "top-center",
+      });
     }
   };
   return (
     <div>
-      {" "}
       <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
@@ -83,13 +84,13 @@ function Register({ setUser, LoggedInUser }) {
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-600">
-            Already have an account?
+            Not yet registered ?
             <Link
-              to={"/login"}
+              to={"/register"}
               className="text-indigo-600 hover:text-indigo-500 font-medium"
             >
               {" "}
-              Sign in
+              Register now !
             </Link>
           </div>
         </div>
@@ -98,4 +99,4 @@ function Register({ setUser, LoggedInUser }) {
   );
 }
 
-export default Register;
+export default Login;

@@ -7,6 +7,7 @@ import Blogs from "./components/pages/Blogs";
 import LayoutDefault from "./components/layouts/LayoutDefault";
 import LandingPage from "./components/pages/LandingPage";
 import UserDashboard from "./components/pages/UserDashboard";
+import { ToastContainer } from "react-toastify";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
@@ -51,6 +52,7 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />;
+      <ToastContainer />
     </>
   );
 }

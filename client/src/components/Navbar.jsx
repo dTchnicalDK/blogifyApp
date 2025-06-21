@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import { userContext } from "../contexts/UserContexProvider";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const NavBar = () => {
   const { loggedUser, logOut } = useContext(userContext);
@@ -12,11 +13,13 @@ const NavBar = () => {
       const res = await axios.get("http://localhost:2000/api/user/logout", {
         withCredentials: true,
       });
-      console.log("check logout", res);
+      // console.log("check logout", res);
       logOut();
+      toast.info(res.data.msg);
       navigate("/login");
     } catch (error) {
       console.log("logout error", error);
+      toast.error(error.response?.msg || "logout error");
     }
   };
 
@@ -49,7 +52,7 @@ const NavBar = () => {
         ) : (
           <button
             className="bg-green-400 text-white px-3.5 py-1.5 cursor-pointer rounded-2xl"
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/login")}
           >
             SignIn
           </button>
