@@ -58,6 +58,11 @@ export const loginUser = async (req, res) => {
     // Creating token
     const token = jwt.sign({ email: validUser.email }, tokenSecretCode);
 
+    //creating safe object to send in response without password
+    const userObject = validUser.toObject();
+    delete userObject.password;
+    // console.log("object for response", userObject);
+
     // Setting cookie - FIXED VERSION
     res.cookie("token", token, {
       httpOnly: true,
@@ -69,7 +74,7 @@ export const loginUser = async (req, res) => {
 
     res.status(200).json({
       msg: "User logged in successfully !",
-      result: token,
+      user: userObject,
     });
   } catch (error) {
     console.log("User login error", error);

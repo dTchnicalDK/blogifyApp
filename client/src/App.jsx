@@ -8,6 +8,7 @@ import LayoutDefault from "./components/layouts/LayoutDefault";
 import LandingPage from "./components/pages/LandingPage";
 import UserDashboard from "./components/pages/UserDashboard";
 import { ToastContainer } from "react-toastify";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
@@ -39,10 +40,12 @@ function App() {
         {
           path: "udashboard",
           element: (
-            <UserDashboard
-              setUser={setLoggedInUser}
-              LoggedInUser={LoggedInUser}
-            />
+            <ProtectedRoute>
+              <UserDashboard
+                setUser={setLoggedInUser}
+                LoggedInUser={LoggedInUser}
+              />
+            </ProtectedRoute>
           ),
         },
       ],

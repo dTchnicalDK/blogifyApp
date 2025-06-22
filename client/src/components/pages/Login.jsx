@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import React, { useContext, useState } from "react";
+import { Link, Navigate, useNavigate } from "react-router";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Don't forget the CSS
+import { userContext } from "../../contexts/UserContexProvider";
 
-function Login({ setUser, LoggedInUser }) {
+function Login() {
+  const { loggedloggedUser, login } = useContext(userContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: " ",
@@ -14,6 +16,7 @@ function Login({ setUser, LoggedInUser }) {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -22,7 +25,12 @@ function Login({ setUser, LoggedInUser }) {
         formData,
         { withCredentials: true }
       );
-      // console.log("userLoginRespose", userLoginRespose?.data);
+      console.log("userLoginRespose inside loggin", userLoginRespose?.data);
+      if (!userLoginRespose.data.user) {
+        throw new Error("login failure");
+      }
+      // setting user inside user context
+      login(userLoginRespose.data.user);
       navigate("/udashboard");
       toast.success(userLoginRespose.data.msg, { position: "top-right" });
     } catch (error) {
@@ -32,6 +40,10 @@ function Login({ setUser, LoggedInUser }) {
       });
     }
   };
+
+  // if (loggedloggedUser) {
+  //   <Navigate to={"/udashboard"} />;
+  // }
   return (
     <div>
       <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
