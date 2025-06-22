@@ -90,7 +90,7 @@ function Login() {
               <label className="flex items-center"></label>
             </div>
 
-            <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-lg transition-colors">
+            <button className="w-full bg-slate-600 hover:bg-slate-700 text-white font-medium py-2.5 rounded-lg transition-colors">
               Submit Now
             </button>
           </form>
