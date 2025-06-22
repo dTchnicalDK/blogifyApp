@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css"; // Don't forget the CSS
 import { userContext } from "../../contexts/UserContexProvider";
 
 function Login() {
-  const { loggedloggedUser, login } = useContext(userContext);
+  const { loggedUser, login } = useContext(userContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: " ",
@@ -41,9 +41,9 @@ function Login() {
     }
   };
 
-  // if (loggedloggedUser) {
-  //   <Navigate to={"/udashboard"} />;
-  // }
+  if (loggedUser) {
+    return <Navigate to={"/udashboard"} />;
+  }
   return (
     <div>
       <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">

@@ -29,4 +29,14 @@
     color: var(--color-slate-400);
     font-weight: 400;
   }
+  a {
+    transition: all ease-in-out 300ms;
+  }
+  a:hover {
+    border-bottom: 2px solid var(--color-slate-50);
+  }
+  a.active {
+    color: var(--color-green-500);
+    font-weight: 600;
+  }
 }

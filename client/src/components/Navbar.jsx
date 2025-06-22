@@ -5,6 +5,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { IoCloseOutline } from "react-icons/io5";
 import axios from "axios";
 import { toast } from "react-toastify";
+import UserProfileImage from "./UserProfileImage";
 
 const NavBar = () => {
   const { loggedUser, logOut } = useContext(userContext);
@@ -56,25 +57,38 @@ const NavBar = () => {
         <NavLink to={"/"}>
           <li>Home</li>
         </NavLink>
-        <NavLink to={"/login"}>
-          <li>login</li>
-        </NavLink>
-        <NavLink to={"/udashboard"}>
-          <li>Dashboard</li>
-        </NavLink>
         {loggedUser ? (
-          <button className="btn-primary text-slate-50" onClick={handleLogout}>
-            SignOut
-          </button>
+          <NavLink to={"/udashboard"}>
+            <li>Dashboard</li>
+          </NavLink>
         ) : (
-          <button
-            className="btn-primary text-slate-50"
-            onClick={() => navigate("/login")}
-          >
-            SignIn
-          </button>
+          <NavLink to={"/login"}>
+            <li>login</li>
+          </NavLink>
         )}
       </ul>
+      <div>
+        {loggedUser ? (
+          <div className="hidden md:flex items-center gap-5 cursor-pointer">
+            <UserProfileImage />
+            <button
+              className="btn-primary text-slate-50"
+              onClick={handleLogout}
+            >
+              SignOut
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center gap-5">
+            <button
+              className="btn-primary text-slate-50 "
+              onClick={() => navigate("/login")}
+            >
+              SignIn
+            </button>
+          </div>
+        )}
+      </div>
       {/* ////////////////mobile nav////////////////starts here//////////////////////////// */}
       <div
         id="mobile-nav"
@@ -82,22 +96,28 @@ const NavBar = () => {
         ref={mobileNavRef}
       >
         <div
-          className="w-20 rounded-tr-3xl pt-6 px-2 bg-slate-500 pb-7 cursor-pointer"
+          className="w-20 rounded-tr-3xl pt-6 px-2 bg-slate-500 pb-7 cursor-pointer "
           onClick={handleMobileNav}
         >
           <IoCloseOutline />
         </div>
         <div id="sub-menu" className="bg-slate-500 h-full">
+          <div className="px-5 py-5">
+            <UserProfileImage />
+          </div>
           <ul className="flex flex-col justify-around gap-5 px-5">
             <NavLink to={"/"}>
               <li onClick={handleMobileNav}>Home</li>
             </NavLink>
-            <NavLink to={"/login"}>
-              <li onClick={handleMobileNav}>login</li>
-            </NavLink>
-            <NavLink to={"/udashboard"}>
-              <li onClick={handleMobileNav}>Dashboard</li>
-            </NavLink>
+            {loggedUser ? (
+              <NavLink to={"/udashboard"}>
+                <li onClick={handleMobileNav}>Dashboard</li>
+              </NavLink>
+            ) : (
+              <NavLink to={"/login"}>
+                <li onClick={handleMobileNav}>login</li>
+              </NavLink>
+            )}
             {loggedUser ? (
               <button
                 className="btn-primary text-slate-50"

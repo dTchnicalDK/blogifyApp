@@ -5,9 +5,9 @@ import App from "./App.jsx";
 import UserContexProvider from "./contexts/UserContexProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <UserContexProvider>
-      <App />
-    </UserContexProvider>
-  </StrictMode>
+  // <StrictMode>
+  <UserContexProvider>
+    <App />
+  </UserContexProvider>
+  // </StrictMode>
 );

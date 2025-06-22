@@ -3,7 +3,7 @@ import React from "react";
 function Footer() {
   return (
     <div>
-      <section className="bg-slate-950">
+      <section className="bg-slate-950 mt-20">
         <div className="max-w-lg bg-slate-950 px-4 pt-24 py-8 mx-auto text-left md:max-w-none md:text-center">
           <h1 className="font-extrabold leading-10 tracking-tight text-left text-white sm:leading-none md:text-6xl text-4xl lg:text-7xl">
             <span className="inline md:block">Join Us</span>
