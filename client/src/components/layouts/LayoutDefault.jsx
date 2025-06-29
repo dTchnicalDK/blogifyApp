@@ -3,6 +3,8 @@ import React from "react";
 import { Outlet } from "react-router";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
+import { Button } from "../ui/button";
+import Accordian from "../Accordian";
 
 function LayoutDefault({ loggedInUser }) {
   return (

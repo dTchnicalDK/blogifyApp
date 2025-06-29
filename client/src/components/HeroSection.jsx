@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
+import { Button } from "./ui/button";
 // import "./LandingPage.css";
 
 function HeroSection() {
@@ -20,6 +21,7 @@ function HeroSection() {
           Whether you're here to learn, explore, or just enjoy great
           content—you’re in the right place. Dive in and make yourself at home!
         </p>
+
         <div>
           <Link to={"/blogs"}>
             <button className="btn-primary">Explore Now...</button>

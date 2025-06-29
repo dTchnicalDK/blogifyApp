@@ -25,7 +25,7 @@ function Login() {
         formData,
         { withCredentials: true }
       );
-      console.log("userLoginRespose inside loggin", userLoginRespose?.data);
+      // console.log("userLoginRespose inside loggin", userLoginRespose?.data);
       if (!userLoginRespose.data.user) {
         throw new Error("login failure");
       }
@@ -42,7 +42,8 @@ function Login() {
   };
 
   if (loggedUser) {
-    return <Navigate to={"/udashboard"} />;
+    // return <Navigate to={"/udashboard"} />;
+    return <Navigate to={"/user"} />;
   }
   return (
     <div>

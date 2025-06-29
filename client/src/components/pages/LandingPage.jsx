@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import HeroSection from "../HeroSection";
 import BlogCard from "../BlogCard";
 import TrendingNowSection from "../TrendingNowSection";
+import { Button } from "../ui/button";
 
 function LandingPage() {
   return (

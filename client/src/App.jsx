@@ -9,6 +9,8 @@ import LandingPage from "./components/pages/LandingPage";
 import UserDashboard from "./components/pages/UserDashboard";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./components/ProtectedRoute";
+import UserLayout from "./components/layouts/UserLayout";
+import ClientBoard from "./components/pages/ClientBoard";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
@@ -49,6 +51,11 @@ function App() {
           ),
         },
       ],
+    },
+    {
+      path: "/user",
+      element: <UserLayout />,
+      children: [{ index: true, element: <ClientBoard /> }],
     },
   ]);
 
