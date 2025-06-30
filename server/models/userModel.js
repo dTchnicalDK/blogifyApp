@@ -9,7 +9,12 @@ const userSchema = mongoose.Schema(
       trim: true,
     },
     password: { type: String, required: true },
+    uid: { type: String, unique: true }, // Firebase UID
+    displayName: { type: String },
+    photoURL: { type: String },
+    provider: { type: String, default: "nonGoogle" },
   },
+
   { timestamps: true }
 );
 

@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Don't forget the CSS
 import { userContext } from "../../contexts/UserContexProvider";
+import FirebaseLoginComp from "../firebase/FirebaseLoginComp";
 
 function Login() {
   const { loggedUser, login } = useContext(userContext);
@@ -52,6 +53,12 @@ function Login() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             Login Here
           </h2>
+          <div className="relative flex justify-center border-b-2 border-b-slate-400 mb-10 pb-5">
+            <FirebaseLoginComp />
+            <span className="absolute bottom-[-10px] bg-white px-2 rounded-full">
+              or
+            </span>
+          </div>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>

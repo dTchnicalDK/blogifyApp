@@ -30,7 +30,7 @@ const TopBar = () => {
 
   return (
     <div className="bg-white px-3 flex justify-between items-center border-b-2  w-full border-slate-400 shadow ">
-      <div>
+      <div className="w-1/6">
         <img src={logo} alt="logo" width={"70px"} />
       </div>
 

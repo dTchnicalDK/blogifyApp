@@ -5,6 +5,7 @@ const defaultUser = { email: "dharmendra", password: "1234" };
 
 const UserContexProvider = ({ children }) => {
   const [loggedUser, setLoggedUser] = useState(null);
+
   const login = useCallback((user) => {
     setLoggedUser(user);
   }, []);
@@ -12,6 +13,7 @@ const UserContexProvider = ({ children }) => {
   const logOut = useCallback(() => {
     setLoggedUser(null);
   }, []);
+  // console.log("logged user", loggedUser);
   return (
     <userContext.Provider value={{ loggedUser, login, logOut }}>
       {children}

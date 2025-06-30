@@ -12,13 +12,16 @@ const UserLayout = () => {
         <TopBar />
       </div>
       <SidebarProvider>
-        <div id="main-sec" className="w-screen  flex justify-between mt-[70px]">
+        <div
+          id="main-sec"
+          className="w-screen  flex justify-between mt-[70px] bg-slate-50"
+        >
           <div id="sidebar">
             <AppSideBar />
           </div>
-          <main className="flex flex-col justify-between items-center ">
+          <main className="border-2 border-green-700 w-full flex flex-col justify-center items-center">
             <Outlet />
-            <footer>footer</footer>
+            <footer className="mt-[20%]">footer</footer>
           </main>
         </div>
       </SidebarProvider>

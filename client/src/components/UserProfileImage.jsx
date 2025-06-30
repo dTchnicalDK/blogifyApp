@@ -7,11 +7,11 @@ const UserProfileImage = () => {
   return (
     <div className="flex justify-end ">
       {loggedUser ? (
-        <Link to={"/udashboard"} className="hover:border-b-0">
+        <Link to={"/user"} className="hover:border-b-0">
           <img
-            src="/images/profile.jpg"
+            src={`${loggedUser ? loggedUser.photoURL : "/images/profile.jpg"}`}
             alt="photo"
-            className="rounded-full w-16 h-16 "
+            className="rounded-full size-12 "
           />
         </Link>
       ) : (
