@@ -2,8 +2,8 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAstOIhFh0QV_KKxDBERtPV2hz_0z4WPgo",
-  authDomain: "blogify-a8cee.firebaseapp.com",
+  apiKey: import.meta.env.VITE_FIREBASE_API,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
   projectId: "blogify-a8cee",
   storageBucket: "blogify-a8cee.firebasestorage.app",
   messagingSenderId: "248681391956",
