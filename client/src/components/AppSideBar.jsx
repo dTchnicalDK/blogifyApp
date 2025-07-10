@@ -37,7 +37,7 @@ const AppSideBar = () => {
             <SidebarMenuItem>
               <SidebarMenuButton>
                 <TbCategory />
-                <Link>Categories</Link>
+                <Link to={"/user/categories"}>Categories</Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>

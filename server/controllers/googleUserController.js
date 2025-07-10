@@ -35,7 +35,6 @@ export const registerGoogleUser = async (req, res) => {
     const userWithoutPassword = sanitizeUser(user);
     // Creating token
     const token = await jwt.sign(userWithoutPassword, tokenSecretCode);
-    console.log("token", token, user);
 
     // Setting cookie
     res.cookie("token", token, {

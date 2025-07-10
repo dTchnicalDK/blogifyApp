@@ -13,6 +13,15 @@ const userSchema = mongoose.Schema(
     displayName: { type: String },
     photoURL: { type: String },
     provider: { type: String, default: "nonGoogle" },
+    bio: {
+      type: String,
+    },
+    location: {
+      type: String,
+    },
+    Mobile: {
+      type: Number,
+    },
   },
 
   { timestamps: true }

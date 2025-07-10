@@ -43,12 +43,15 @@ const TopBar = () => {
   return (
     <div className="bg-white px-3 flex justify-between items-center border-b-2  w-full border-slate-400 shadow ">
       <div className="w-1/6">
-        <img src={logo} alt="logo" width={"70px"} />
+        <Link to={"/"}>
+          <img src={logo} alt="logo" width={"70px"} />
+        </Link>
       </div>
 
       <div>
         <SearchBar />
       </div>
+      {/* //////////////// DropdownMenu ////////////////// */}
       <div>
         {loggedUser ? (
           <div className="flex items-center gap-3">
@@ -71,12 +74,14 @@ const TopBar = () => {
                 </small>
                 <Separator />
                 <DropdownMenuSeparator />
-                <Link>
-                  <DropdownMenuItem>
+
+                <DropdownMenuItem asChild>
+                  <Link to={"/user/update-profile"}>
                     <ImProfile />
                     profile
-                  </DropdownMenuItem>
-                </Link>
+                  </Link>
+                </DropdownMenuItem>
+
                 <Link>
                   <DropdownMenuItem>
                     {" "}

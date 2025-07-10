@@ -11,10 +11,15 @@ import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./components/ProtectedRoute";
 import UserLayout from "./components/layouts/UserLayout";
 import ClientBoard from "./components/pages/ClientBoard";
+import UpdateProfile from "./components/pages/UpdateProfile";
+import Profile from "./components/pages/Profile";
+import CategoriesDetails from "./components/pages/categories/CategoriesDetails";
+import CategorieUpdate from "./components/pages/categories/CategorieUpdate";
+import AddCategories from "./components/pages/categories/AddCategories";
+import path from "path";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
-  // console.log("app loggedInUser", LoggedInUser);
 
   const router = createBrowserRouter([
     {
@@ -55,7 +60,18 @@ function App() {
     {
       path: "/user",
       element: <UserLayout />,
-      children: [{ index: true, element: <ClientBoard /> }],
+      children: [
+        { index: true, element: <ClientBoard /> },
+        { path: "profile", element: <Profile /> },
+        { path: "update-profile", element: <UpdateProfile /> },
+        // { path: "categories", element: <CategoriesDetails /> },
+
+        { path: "categories", element: <CategoriesDetails /> },
+
+        // { index: true, element: <UpdateProfile /> },
+        { path: "categories/add", element: <AddCategories /> },
+        { path: "categories/update", element: <CategorieUpdate /> },
+      ],
     },
   ]);
 

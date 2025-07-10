@@ -118,3 +118,9 @@
     @apply bg-background text-foreground;
   }
 }
+@layer component {
+  .btn-hover:hover {
+    background-color: var(--color-slate-600);
+    color: white;
+  }
+}

@@ -1,6 +1,7 @@
 import { User } from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 const tokenSecretCode = process.env.JWT_TOKEN_SECRET;
 
 //------------------function to register user-----------------------------
@@ -86,4 +87,18 @@ export const loginUser = async (req, res) => {
 export const userLogOut = (req, res) => {
   res.clearCookie("token");
   res.status(200).json({ msg: "user logged successfully" });
+};
+
+////update profile -----------------------------------------------
+export const updateProfile = async (req, res) => {
+  const { id, displayName, bio, location } = req.body;
+  const userOnDb = await User.findById(
+    { id }
+    // { displayName, bio, location },
+    // { new: true }
+  );
+  res.status(200).json({
+    msg: "Data updated successfully",
+    userOnDb,
+  });
 };

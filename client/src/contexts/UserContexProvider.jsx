@@ -1,7 +1,6 @@
-import React, { createContext, useCallback, useState } from "react";
+import React, { createContext, useCallback, useEffect, useState } from "react";
 
 export const userContext = createContext();
-const defaultUser = { email: "dharmendra", password: "1234" };
 
 const UserContexProvider = ({ children }) => {
   const [loggedUser, setLoggedUser] = useState(null);
@@ -13,7 +12,7 @@ const UserContexProvider = ({ children }) => {
   const logOut = useCallback(() => {
     setLoggedUser(null);
   }, []);
-  // console.log("logged user", loggedUser);
+
   return (
     <userContext.Provider value={{ loggedUser, login, logOut }}>
       {children}

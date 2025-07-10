@@ -8,6 +8,7 @@ import userRouter from "./router/userRouter.js";
 import { connectDb } from "./configurations/serverNDBconnection.js";
 import cookieParser from "cookie-parser";
 import { blogRouter } from "./router/blogRouter.js";
+import { categoryRouter } from "./router/categoryRouter.js";
 
 //middlewares
 app.use(
@@ -29,11 +30,10 @@ app.use(express.json());
 app.use(cookieParser());
 
 //routes
-app.get("/", (req, res) => {
-  res.status(200).json({ msg: "welcome homepage" });
-});
+
 app.use("/api/user", userRouter);
 app.use("/api/blog", blogRouter);
+app.use("/api/categories", categoryRouter);
 
 //connecting db and starting server
 connectDb(dbUri, port, app);
