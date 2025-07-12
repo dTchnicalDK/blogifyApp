@@ -1,6 +1,24 @@
 import mongoose from "mongoose";
 import { Categories } from "../models/categoriesModel.js";
 
+///////////////getCategory by id//////////////////
+export const getCategoryById = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ msg: "check category id" });
+  }
+  try {
+    const response = await Categories.findById(id);
+    if (!response) {
+      return res.status(400).json({ msg: "check no data found" });
+    }
+    return res.status(200).json({ msg: "data achieved", data: response });
+  } catch (error) {
+    // console.log("error fetching category data backend", error);
+  }
+  // res.status(200).json({ msg: "getCategoryById backend hit", id });
+};
+
 /////////////////creating category////////////////////
 export const createCategory = async (req, res) => {
   const { categoryName, categorySlug } = req.body;
@@ -16,7 +34,7 @@ export const createCategory = async (req, res) => {
     });
     if (isCatergoryAlreadyCreated) {
       return res
-        .status(400)
+        .status(409)
         .json({ msg: "category already created, use that or create other" });
     }
     const createdCategory = await Categories.create({
@@ -28,16 +46,20 @@ export const createCategory = async (req, res) => {
       .json({ msg: "category created successfully", data: createdCategory });
   } catch (error) {
     console.log("category creation error", error);
+    return res
+      .status(500)
+      .json({ msg: "Something went wrong during category creation." });
   }
-  res.status(200).json({ categoryName, categorySlug });
+  // res.status(200).json({ categoryName, categorySlug });
 };
 
 //////////////edit categories//////////////
 export const editCategory = async (req, res) => {
+  // console.log("edit category hit");
   const { id } = req.params;
   const { categoryName, categorySlug } = req.body;
-  console.log("id ", id);
 
+  //-------------checking if blank fields-----------
   if (!categoryName || !categorySlug) {
     return res
       .status(400)
@@ -48,19 +70,30 @@ export const editCategory = async (req, res) => {
   }
 
   try {
-    const foundCategory = await Categories.findById(
+    // checking if category already exits
+    const isDuplicatCatgory = await Categories.findOne({ categoryName });
+
+    if (isDuplicatCatgory) {
+      return res.status(903).json({
+        msg: "catebgory already exits !!, choose another category name",
+        id,
+        success: false,
+      });
+    }
+    const updatedCategory = await Categories.findByIdAndUpdate(
       { _id: id },
       { categoryName, categorySlug },
       { new: true }
     );
-    if (!foundCategory) {
+    if (!updatedCategory) {
       return res.status(400).json({ msg: "wrong id", id, success: false });
     }
-    return res.status(400).json({
-      msg: "Edited successfully",
+    // console.log("updatedCategory", updatedCategory);
+    return res.status(201).json({
+      msg: `category edited into ${categoryName}`,
       id,
       success: false,
-      data: foundCategory,
+      data: updatedCategory,
     });
   } catch (error) {
     console.log("edit category error", error);
@@ -69,6 +102,7 @@ export const editCategory = async (req, res) => {
 
 //////////////delete categories//////////////
 export const deleteCategory = async (req, res) => {
+  console.log("delete route hit");
   const { id } = req.params;
   const deletedData = await Categories.findByIdAndDelete(id);
   if (!deletedData) {

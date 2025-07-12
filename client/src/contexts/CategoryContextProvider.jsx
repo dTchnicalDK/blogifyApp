@@ -21,7 +21,7 @@ const CategoryContextProvider = ({ children }) => {
     };
     fetchCategories();
   }, []);
-  console.log("updated category inside contextProvider", categories);
+  // console.log("updated category inside contextProvider", categories);
 
   return (
     <CategoriesContext.Provider value={{ categories, setCategories }}>

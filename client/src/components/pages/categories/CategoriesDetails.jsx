@@ -14,48 +14,64 @@ import { Link, useNavigate } from "react-router";
 import { IoAddSharp } from "react-icons/io5";
 import { RiEdit2Fill, RiDeleteBin5Fill } from "react-icons/ri";
 import { CategoriesContext } from "@/contexts/CategoryContextProvider";
+import axios from "axios";
+import { toast } from "react-toastify";
+const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const CategoriesDetails = () => {
   const { categories, setCategories } = useContext(CategoriesContext);
-  // const [categories, setCategories] = useState(
-  //   // null
-  //   [
-  //     {
-  //       categoryName: "first category",
-  //       categorySlug: "first category slug",
-  //     },
-  //     {
-  //       categoryName: "second category",
-  //       categorySlug: "second category slug",
-  //     },
-  //   ]
-  // );
+  const [reRender, setRerender] = useState(false);
   const navigate = useNavigate();
-  // console.log("context value in details page", categories);
 
-  // useEffect(async () => {
-  //   try {
-  //     const fetchedCategories = await axios.get("", { withCredentials: true });
-  //     console.log("fetched category", fetchedCategories);
-  //     // setCategories(fetchedCategories)
-  //   } catch (error) {
-  //     console.log("error fetching category", error);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedCategories = await axios.get(
+          `${baseUrl}/api/categories/get`,
+          { withCredentials: true }
+        );
+        setCategories(fetchedCategories?.data?.data);
+      } catch (error) {
+        console.log("error fetching category", error);
+      }
+    };
+    fetchData();
+  }, [reRender]);
 
-  const handleEdit = (e) => {
-    navigate("/user/categories/update");
+  const handleEdit = (id) => {
+    navigate(`/user/categories/update/${id}`);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const deletedCategory = await axios.delete(
+        `${baseUrl}/api/categories/delete/${id}`,
+        { withCredentials: true }
+      );
+      if (deletedCategory) {
+        setRerender(() => (reRender ? false : true));
+        toast.success(deletedCategory.data.msg);
+      } else {
+        toast.error("something went wrong");
+      }
+    } catch (error) {
+      console.log("error deleting category", error);
+    }
+    // navigate(`/user/categories/update/${id}`);
   };
 
   return (
-    <div>
-      <Button asChild>
-        <Link to="/user/categories/add">
-          <IoAddSharp /> NewCategory
-        </Link>
-      </Button>
+    <div className="relative">
+      <div className="m-3 fixed z-10 md:left-80">
+        <Button asChild>
+          <Link to="/user/categories/add">
+            <IoAddSharp /> NewCategory
+          </Link>
+        </Button>
+      </div>
+
       {categories && categories.length >= 1 ? (
-        <Table>
+        <Table className="mt-12 ">
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
             <TableRow>
@@ -79,7 +95,9 @@ const CategoriesDetails = () => {
                       variant="secondary"
                       size="icon"
                       className="size-8 btn-hover"
-                      onClick={handleEdit}
+                      onClick={() => {
+                        handleEdit(cat._id);
+                      }}
                     >
                       <RiEdit2Fill />
                     </Button>
@@ -89,6 +107,9 @@ const CategoriesDetails = () => {
                       variant="secondary"
                       size="icon"
                       className="btn-hover text-destructive"
+                      onClick={() => {
+                        handleDelete(cat._id);
+                      }}
                     >
                       <RiDeleteBin5Fill />
                     </Button>

@@ -70,7 +70,7 @@ function App() {
 
         // { index: true, element: <UpdateProfile /> },
         { path: "categories/add", element: <AddCategories /> },
-        { path: "categories/update", element: <CategorieUpdate /> },
+        { path: "categories/update/:id", element: <CategorieUpdate /> },
       ],
     },
   ]);

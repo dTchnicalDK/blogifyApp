@@ -23,7 +23,7 @@ const AddCategories = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    // checking wether empty fields----------
     if (!category.categoryName.trim() || !category.categorySlug.trim()) {
       toast.error("Please fill in all fields");
       return;
@@ -34,14 +34,17 @@ const AddCategories = () => {
         category,
         { withCredentials: true }
       );
-
+      // console.log("addedCategory", addedCategory);
       navigate("/user/categories");
       toast.success(addedCategory.data.msg);
     } catch (error) {
-      console.log("frontend add category error", error);
-      toast.error(error.message);
+      if (error.response.status == 409) {
+        return toast.warn(error.response.data.msg);
+      } else {
+        console.log("frontend add category error", error);
+        toast.error(error.message);
+      }
     }
-    console.log("data submitted", category);
   };
   return (
     <div className="container">
@@ -49,12 +52,6 @@ const AddCategories = () => {
       <Card>
         <CardHeader>you can add new category here</CardHeader>
         <CardContent className="">
-          {/* <div > */}
-          <Button asChild>
-            <Link to="/user/categories-add">
-              <IoAddSharp /> NewCategory
-            </Link>
-          </Button>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4.5 mt-12">
             <label htmlFor="categoryName">Enter category name: </label>
             <Input
