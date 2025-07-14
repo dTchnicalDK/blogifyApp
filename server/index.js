@@ -32,8 +32,19 @@ app.use(cookieParser());
 //routes
 
 app.use("/api/user", userRouter);
-app.use("/api/blog", blogRouter);
+app.use("/api/blogs", blogRouter);
 app.use("/api/categories", categoryRouter);
 
 //connecting db and starting server
 connectDb(dbUri, port, app);
+
+//error handling
+app.use((error, req, res, next) => {
+  const statusCode = error.statusCode || 500;
+  const msg = error.message || "internal server error";
+  res.status(statusCode).json({
+    success: false,
+    statusCode,
+    msg,
+  });
+});

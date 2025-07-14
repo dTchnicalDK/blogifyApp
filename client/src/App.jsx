@@ -17,6 +17,9 @@ import CategoriesDetails from "./components/pages/categories/CategoriesDetails";
 import CategorieUpdate from "./components/pages/categories/CategorieUpdate";
 import AddCategories from "./components/pages/categories/AddCategories";
 import path from "path";
+import AddBlog from "./components/pages/blogs/AddBlog";
+import UpdateBlog from "./components/pages/blogs/UpdateBlog";
+import BlogDetails from "./components/pages/blogs/blogDetails";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
@@ -59,18 +62,24 @@ function App() {
     },
     {
       path: "/user",
-      element: <UserLayout />,
+      element: (
+        <ProtectedRoute>
+          <UserLayout />{" "}
+        </ProtectedRoute>
+      ),
       children: [
         { index: true, element: <ClientBoard /> },
         { path: "profile", element: <Profile /> },
         { path: "update-profile", element: <UpdateProfile /> },
-        // { path: "categories", element: <CategoriesDetails /> },
-
+        // categories routes
         { path: "categories", element: <CategoriesDetails /> },
-
-        // { index: true, element: <UpdateProfile /> },
         { path: "categories/add", element: <AddCategories /> },
         { path: "categories/update/:id", element: <CategorieUpdate /> },
+        // blogs routes
+        { path: "blogs", element: <Blogs /> },
+        { path: "blogs-details", element: <BlogDetails /> },
+        { path: "blog/add", element: <AddBlog /> },
+        { path: "blogs/update/:id", element: <UpdateBlog /> },
       ],
     },
   ]);

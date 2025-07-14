@@ -2,9 +2,12 @@ import mongoose from "mongoose";
 
 const blogSchema = mongoose.Schema(
   {
-    title: { type: String, required: true },
-    content: { type: String, required: true },
-    owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    category: { type: mongoose.Schema.Types.ObjectId, ref: "Categories" },
+    blogTitle: { type: String, required: true, trim: true },
+    featuredImage: { type: String, default: "" },
+    BlogContent: { type: String, required: true },
+    slug: { type: String, required: true, default: "default slug" },
   },
   { timestamps: true }
 );
