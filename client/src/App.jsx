@@ -64,7 +64,7 @@ function App() {
       path: "/user",
       element: (
         <ProtectedRoute>
-          <UserLayout />{" "}
+          <UserLayout />
         </ProtectedRoute>
       ),
       children: [
@@ -76,7 +76,7 @@ function App() {
         { path: "categories/add", element: <AddCategories /> },
         { path: "categories/update/:id", element: <CategorieUpdate /> },
         // blogs routes
-        { path: "blogs", element: <Blogs /> },
+        { path: "user-blogs/:id", element: <Blogs /> },
         { path: "blogs-details", element: <BlogDetails /> },
         { path: "blog/add", element: <AddBlog /> },
         { path: "blogs/update/:id", element: <UpdateBlog /> },

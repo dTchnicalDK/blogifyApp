@@ -86,7 +86,7 @@ import "ckeditor5-premium-features/ckeditor5-premium-features.css";
 const LICENSE_KEY =
   "eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NTM3NDcxOTksImp0aSI6Ijg5YTRkOGI1LTVmZWMtNGY3My1hMmZhLThlMDBiYzY1Y2EzOSIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6ImFmNGQ3NWRmIn0.vokDPwyfyq7C4l0GVJ2FnO6nXymJHvfHz1JXFqxc1_9dI8SC13EMQ8Ymk3onYbuF-wd7VwQECCUA6TrTNJg6SQ";
 
-export default function Editor(props) {
+export default function Editor({ props }) {
   const editorContainerRef = useRef(null);
   const editorRef = useRef(null);
   const [isLayoutReady, setIsLayoutReady] = useState(false);
@@ -418,7 +418,11 @@ export default function Editor(props) {
         <div className="editor-container__editor">
           <div ref={editorRef}>
             {editorConfig && (
-              <CKEditor editor={ClassicEditor} config={editorConfig} />
+              <CKEditor
+                onChange={props.onChange}
+                editor={ClassicEditor}
+                config={editorConfig}
+              />
             )}
           </div>
         </div>

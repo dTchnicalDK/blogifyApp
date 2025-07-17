@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IoAddSharp } from "react-icons/io5";
 import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
@@ -17,12 +17,16 @@ import {
 } from "@/components/ui/select";
 import { ClassicEditor } from "ckeditor5";
 import Editor from "@/components/CkEditor";
+import { userContext } from "@/contexts/UserContexProvider";
+import Spinner from "@/components/Spinner";
 
 const AddBlog = () => {
   const [blog, setBlog] = useState();
   const [reRender, setRerender] = useState(false);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+  const { loggedUser, login, logOut } = useContext(userContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   //fetching category
   useEffect(() => {
@@ -40,94 +44,151 @@ const AddBlog = () => {
     fetchData();
   }, [reRender]);
 
+  //checking if user logged in
+  const authenticateUser = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:2000/api/user/authenticate",
+        { withCredentials: true }
+      );
+
+      if (response.data.user) {
+        login(response.data.user);
+      } else {
+        throw new Error("No user data received");
+      }
+    } catch (error) {
+      console.error("user authentication error:", error);
+
+      toast.error(
+        error.response?.data?.msg ||
+          "Session expired or unauthorized. Please login again.",
+        { position: "top-center" }
+      );
+
+      if ([401, 403, 500].includes(error.response?.status)) {
+        logOut();
+        navigate("/login");
+      }
+    }
+    // finally {
+    //   setIsLoading(false);
+    // }
+  };
+  useEffect(() => {
+    if (!loggedUser) {
+      const insertUser = async () => {
+        await authenticateUser();
+      };
+    }
+    setBlog({ ...blog, author: loggedUser._id });
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setBlog({ ...blog, [name]: value });
-    console.log("blog object ", blog);
+    // console.log("from change logged user id", loggedUser._id);
+    // console.log("blog object ", blog);
   };
 
   const handleSelect = (SelectValue) => {
     setBlog({ ...blog, category: SelectValue });
   };
 
-  const handleEditorChange = (event, editor) => {
-    event.preventDefault();
-    console.log("editor triggered");
+  const handleEditorData = (event, editor) => {
+    // event.preventDefault();
+    // console.log("editor triggered");
     const data = editor.getData();
-    console.log("editor data ", data);
+    setBlog({ ...blog, blogContent: data });
+    // console.log("editor data ", data);
   };
 
   const handleSubmit = async (e) => {
-    // e.preventDefault();
-    // // checking wether empty fields----------
-    // if (!blog.blogTitle.trim() || !blog.content.trim()) {
-    //   return toast.error("Please fill in all fields");
-    // }
-    // try {
-    //   const addedBlog = await axios.post(
-    //     `${baseUrl}/api/blogs/createblog`,
-    //     blog,
-    //     { withCredentials: true }
-    //   );
-    //   navigate("/user/categories");
-    //   toast.success(addedBlog.data.msg);
-    // } catch (error) {
-    //   console.log("frontend add blog error", error);
-    //   toast.error(error.message);
-    // }
+    e.preventDefault();
+    // checking wether empty fields----------
+    if (
+      !blog.blogTitle.trim()
+      //  || !blog.content?.trim()
+    ) {
+      return toast.error("Please fill in all fields");
+    }
+
+    setIsLoading(true);
+    try {
+      const addedBlog = await axios.post(
+        `${baseUrl}/api/blogs/createblog`,
+        blog,
+        { withCredentials: true }
+      );
+      setIsLoading(false);
+      navigate("/user/blogs-Details");
+      toast.success(addedBlog.data.msg);
+      // console.log("added blog ", addedBlog);
+    } catch (error) {
+      setIsLoading(false);
+      console.log("frontend add blog error", error);
+      toast.error(error.response.data.msg);
+    }
+    // console.log("data to submit ", blog);
   };
 
   return (
     <div className="container">
-      {" "}
-      <Card>
-        <CardHeader>you can add new Blogs from here</CardHeader>
-        <CardContent className="">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4.5 mt-12">
-            {/* -----select button starts here------------------ */}
-            <Select onValueChange={handleSelect}>
-              <SelectTrigger className="w-[180px]">
-                {/* <SelectValue placeholder="select category">select</SelectValue> */}
-                <SelectValue placeholder="select category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((cat) => {
-                  return (
-                    // <>
-                    <SelectItem value={cat._id} key={cat._id}>
-                      {cat.categoryName}
-                    </SelectItem>
-                    // </>
-                  );
-                })}
-              </SelectContent>
-            </Select>
-            <label htmlFor="blogTitle">Enter Blog Title here: </label>
-            <Input
-              type="text"
-              name="blogTitle"
-              placeholder="Enter title for blog"
-              onChange={handleChange}
-            />
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <Card>
+          <CardHeader>you can add new Blogs from here</CardHeader>
+          <CardContent className="">
+            <form
+              onSubmit={handleSubmit}
+              className="flex flex-col gap-4.5 mt-12"
+            >
+              {/* -----select button starts here------------------ */}
+              <Select onValueChange={handleSelect}>
+                <SelectTrigger className="w-[180px]">
+                  {/* <SelectValue placeholder="select category">select</SelectValue> */}
+                  <SelectValue placeholder="select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((cat) => {
+                    return (
+                      // <>
+                      <SelectItem value={cat._id} key={cat._id}>
+                        {cat.categoryName}
+                      </SelectItem>
+                      // </>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+              <label htmlFor="blogTitle">Enter Blog Title here: </label>
+              <Input
+                type="text"
+                name="blogTitle"
+                placeholder="Enter title for blog"
+                onChange={handleChange}
+              />
 
-            {/* ------ including ck editor------------ */}
-            <Editor
-              initialData=""
-              editor={ClassicEditor}
-              onChange={handleEditorChange}
-            />
-            <div className="flex justify-center gap-12">
-              <Button type="submit" className="">
-                Add now
-              </Button>
-              <Button variant="destructive">
-                <Link to="/user/categories">Cancel</Link>
-              </Button>
-            </div>
-          </form>
-          {/* </div> */}
-        </CardContent>
-      </Card>
+              {/* ------ including ck editor------------ */}
+              <Editor
+                // initialData=""
+                // editor={ClassicEditor}
+                props={{ initialData: "", onChange: handleEditorData }}
+              />
+              <div className="flex justify-center gap-12">
+                <Button type="submit" className="">
+                  Add now
+                </Button>
+                <Button variant="destructive">
+                  <Link to="/user/categories">Cancel</Link>
+                </Button>
+              </div>
+            </form>
+            {/* </div> */}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

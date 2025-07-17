@@ -20,23 +20,25 @@ const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 const BlogDetails = () => {
   const { categories, setCategories } = useContext(CategoriesContext);
   const [reRender, setRerender] = useState(false);
+  const [blogs, setBlogs] = useState([]);
   const navigate = useNavigate();
 
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       try {
-  //         const fetchedAllBlogs = await axios.get(
-  //           `${baseUrl}/api/blogs/getblogs`,
-  //           { withCredentials: true }
-  //         );
-  //         console.log("get all blgs", fetchedAllBlogs);
-  //       } catch (error) {
-  //         console.log("error fetching blogs", error);
-  //         toast.error(error.message);
-  //       }
-  //     };
-  //     fetchData();
-  //   }, [reRender]);
+  //fetching blogs
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const fetchedAllBlogs = await axios.get(
+          `${baseUrl}/api/blogs/getblogs`,
+          { withCredentials: true }
+        );
+        setBlogs(fetchedAllBlogs.data.blogs);
+      } catch (error) {
+        console.log("error fetching blogs", error);
+        toast.error(error.message);
+      }
+    };
+    fetchData();
+  }, [reRender]);
 
   //   const handleEdit = (id) => {
   //     navigate(`/user/categories/update/${id}`);
@@ -61,6 +63,7 @@ const BlogDetails = () => {
   //   };
   return (
     <div className="relative w-full p-12">
+      {console.log("get all blgs", blogs)}
       <div className="m-3 fixed z-10 md:left-75 md:top-20">
         <Button asChild>
           <Link to="/user/blog/add">
@@ -69,7 +72,7 @@ const BlogDetails = () => {
         </Button>
       </div>
 
-      {categories && categories.length > 0 ? (
+      {blogs && blogs.length > 0 ? (
         <Table className=" ">
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
@@ -84,13 +87,15 @@ const BlogDetails = () => {
               </TableHead>
             </TableRow>
           </TableHeader>
-          {/* <TableBody>
-            {categories.map((cat, idx) => {
+          <TableBody>
+            {blogs.map((blog, idx) => {
               return (
                 <TableRow key={idx}>
                   <TableCell className="font-medium">{idx + 1}</TableCell>
-                  <TableCell>{cat.categoryName}</TableCell>
-                  <TableCell>{cat.categorySlug}</TableCell>
+                  <TableCell>{blog.blogTitle}</TableCell>
+                  <TableCell>{blog.category?.categoryName}</TableCell>
+                  <TableCell>{blog.author?.displayName}</TableCell>
+                  <TableCell>{blog.createdAt}</TableCell>
                   <TableCell className="text-right ">
                     <Button
                       variant="secondary"
@@ -118,7 +123,7 @@ const BlogDetails = () => {
                 </TableRow>
               );
             })}
-          </TableBody> */}
+          </TableBody>
         </Table>
       ) : (
         <div>
