@@ -65,7 +65,6 @@ export const addblog = async (req, res, next) => {
 };
 /////////////////////getting all blogs/////////////////////////
 export const getUserBlogs = async (req, res, next) => {
-  // const { author } = req.body;
   try {
     const blogs = await Blog.find()
       .populate("author", "displayName") // avatar role
@@ -73,7 +72,7 @@ export const getUserBlogs = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .lean()
       .exec();
-    console.log("blogs response", blogs);
+    // console.log("blogs response", blogs);
     if (!blogs && blogs.length <= 0) {
       return next(handleError(404, "no data found"));
     }
