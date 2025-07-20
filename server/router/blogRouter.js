@@ -5,11 +5,13 @@ import {
   deleteBlogById,
   getBlogById,
   getUserBlogs,
+  updateBlog,
 } from "../controllers/blogController.js";
 
 blogRouter.post("/createblog", addblog);
 blogRouter.get("/getblogs", getUserBlogs);
-blogRouter.put("/getblog/:id", getBlogById);
+blogRouter.get("/getblog/:id", getBlogById);
+blogRouter.put("/update-blog/:id", updateBlog);
 blogRouter.delete("/deleteblog/:id", deleteBlogById);
 
 export { blogRouter };

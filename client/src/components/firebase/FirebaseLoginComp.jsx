@@ -34,7 +34,7 @@ const FirebaseLoginComp = () => {
         console.log("res from backend", savedUser.data);
         toast.success(savedUser.data.msg);
         login(savedUser.data.user);
-        console.log("user saved in context is:--", loggedUser);
+        // console.log("user saved in context is:--", loggedUser);
       } else {
         console.log("no response from google");
       }

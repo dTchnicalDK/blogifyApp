@@ -1,7 +1,9 @@
+import mongoose from "mongoose";
 import { handleError } from "../helper/errorHandler.js";
 import { Blog } from "../models/blogModel.js";
-import { encode } from "entities";
+import { decode, encode } from "entities";
 import jwt from "jsonwebtoken";
+import { Categories } from "../models/categoriesModel.js";
 
 ////////////////////////creating blog//////////////////////////////////////////////
 export const addblog = async (req, res, next) => {
@@ -85,17 +87,81 @@ export const getUserBlogs = async (req, res, next) => {
 
 ///////////////getBlogById///////////////////////////////
 export const getBlogById = async (req, res, next) => {
+  // console.log("get blog by id backend hit");
+  const blogId = req.params;
+  console.log("blog id inside backend", blogId);
   try {
+    const response = await Blog.findById({ _id: blogId.id })
+      .populate("category", "categoryName")
+      .populate("author", "displayName")
+      .lean()
+      .exec();
+    // console.log("res", JSON.stringify(response));
+    const sterlizedResponse = {
+      ...response,
+      blogContent: decode(response.blogContent),
+    };
+    res.status(200).json({
+      message: "blog fetched from db",
+      // data: response,
+      data: sterlizedResponse,
+    });
   } catch (error) {
-    console.log("server error while getting blog", error);
+    console.log("gettin blog by id error", error.message);
+    next(handleError(error.status, error.message));
   }
 };
 
 ///////////////editBlogById///////////////////////////////
-export const editBlogById = async (req, res, next) => {
+export const updateBlog = async (req, res, next) => {
+  const { id } = req.params;
+  const { blogContent, blogTitle, category } = req.body;
+
   try {
+    // Basic validation
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid blog ID",
+      });
+    }
+
+    if (!blogTitle || !blogContent || !category) {
+      return res.status(400).json({
+        success: false,
+        message: "Title, content, and category are required",
+      });
+    }
+
+    // Verify the category exists
+    const categoryExists = await Categories.findById(category);
+    if (!categoryExists) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid category ID",
+      });
+    }
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      id,
+      { blogContent, blogTitle, category },
+      {
+        new: true,
+      }
+    );
+    if (!updatedBlog) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Blog not found" });
+    }
+    console.log("update route hit, updatedBlog", updatedBlog);
+    res.status(200).json({
+      success: true,
+      message: "Blog updated successfully",
+      data: updatedBlog,
+    });
   } catch (error) {
     console.log("server error while editBlogById ", error);
+    next(handleError(error.status, error.message));
   }
 };
 

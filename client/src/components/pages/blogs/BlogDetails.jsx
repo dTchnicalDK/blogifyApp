@@ -43,27 +43,28 @@ const BlogDetails = () => {
     fetchData();
   }, [reRender]);
 
-  //   const handleEdit = (id) => {
-  //     navigate(`/user/categories/update/${id}`);
-  //   };
+  const handleEdit = (id) => {
+    console.log("handle edit executed");
+    navigate(`/user/blogs/update/${id}`);
+  };
 
-  //   const handleDelete = async (id) => {
-  //     try {
-  //       const deletedCategory = await axios.delete(
-  //         `${baseUrl}/api/categories/delete/${id}`,
-  //         { withCredentials: true }
-  //       );
-  //       if (deletedCategory) {
-  //         setRerender(() => (reRender ? false : true));
-  //         toast.success(deletedCategory.data.msg);
-  //       } else {
-  //         toast.error("something went wrong");
-  //       }
-  //     } catch (error) {
-  //       console.log("error deleting category", error);
+  // const handleDelete = async (id) => {
+  //   try {
+  //     const deletedCategory = await axios.delete(
+  //       `${baseUrl}/api/categories/delete/${id}`,
+  //       { withCredentials: true }
+  //     );
+  //     if (deletedCategory) {
+  //       setRerender(() => (reRender ? false : true));
+  //       toast.success(deletedCategory.data.msg);
+  //     } else {
+  //       toast.error("something went wrong");
   //     }
-  //     // navigate(`/user/categories/update/${id}`);
-  //   };
+  //   } catch (error) {
+  //     console.log("error deleting category", error);
+  //   }
+  //   // navigate(`/user/categories/update/${id}`);
+  // };
   return (
     <div className="relative w-full p-12">
       {loading ? (
@@ -111,7 +112,7 @@ const BlogDetails = () => {
                           size="icon"
                           className="size-8 btn-hover"
                           onClick={() => {
-                            handleEdit(cat._id);
+                            handleEdit(blog._id);
                           }}
                         >
                           <RiEdit2Fill />
