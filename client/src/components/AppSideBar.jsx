@@ -17,8 +17,11 @@ import { TbCategory } from "react-icons/tb";
 import { ImBlog } from "react-icons/im";
 import { FaRegCommentDots } from "react-icons/fa6";
 import { FaUserSecret } from "react-icons/fa6";
+import { useContext } from "react";
+import { CategoriesContext } from "@/contexts/CategoryContextProvider";
 
 const AppSideBar = () => {
+  const { categories } = useContext(CategoriesContext);
   return (
     <div>
       <Sidebar>
@@ -29,9 +32,10 @@ const AppSideBar = () => {
           <SidebarGroup />
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton>
-                <IoHomeOutline />
-                <Link>home</Link>
+              <SidebarMenuButton asChild>
+                <Link to="/user">
+                  <IoHomeOutline /> Home
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
@@ -62,24 +66,16 @@ const AppSideBar = () => {
             <SidebarGroup>
               <SidebarGroupLabel>categories</SidebarGroupLabel>
               <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton>
-                    <GoDot />
-                    <Link>New group item</Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton>
-                    <GoDot />
-                    <Link>New group item</Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton>
-                    <GoDot />
-                    <Link>New group item</Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                {categories.map((cat) => {
+                  return (
+                    <SidebarMenuItem key={cat._id}>
+                      <SidebarMenuButton>
+                        <GoDot />
+                        <Link>{cat.categoryName}</Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroup>
           </SidebarMenu>

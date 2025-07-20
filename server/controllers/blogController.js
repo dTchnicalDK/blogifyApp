@@ -19,7 +19,6 @@ export const addblog = async (req, res, next) => {
     const sanitizedTitle = blogTitle.trim();
     const isDuplicateTitle = await Blog.findOne({ blogTitle: sanitizedTitle });
     if (isDuplicateTitle) {
-      console.log("duplicate title");
       return next(handleError(903, "title already exits, choose another"));
     }
     //creating and saving data to database
@@ -32,11 +31,11 @@ export const addblog = async (req, res, next) => {
       // slug,
     });
     const createdBlog = await blog.save();
-    console.log(`blog saved`, createdBlog);
+
     if (!createdBlog) {
       return next(handleError(500, "blog saving error"));
     }
-    res.status(200).json({ msg: "data saved in db", createdBlog });
+    res.status(200).json({ message: "blog created successfully", createdBlog });
   } catch (error) {
     console.log("backend blog creation error", error);
     next(handleError(500, error.message));
@@ -89,7 +88,7 @@ export const getUserBlogs = async (req, res, next) => {
 export const getBlogById = async (req, res, next) => {
   // console.log("get blog by id backend hit");
   const blogId = req.params;
-  console.log("blog id inside backend", blogId);
+  // console.log("blog id inside backend", blogId);
   try {
     const response = await Blog.findById({ _id: blogId.id })
       .populate("category", "categoryName")
@@ -153,7 +152,7 @@ export const updateBlog = async (req, res, next) => {
         .status(404)
         .json({ success: false, message: "Blog not found" });
     }
-    console.log("update route hit, updatedBlog", updatedBlog);
+    // console.log("update route hit, updatedBlog", updatedBlog);
     res.status(200).json({
       success: true,
       message: "Blog updated successfully",
@@ -167,8 +166,26 @@ export const updateBlog = async (req, res, next) => {
 
 ///////////////deleteBlogById///////////////////////////////
 export const deleteBlogById = async (req, res, next) => {
-  try {
-  } catch (error) {
-    console.log("server error while deleteBlogById ", error);
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({
+      message: "id not received at backend",
+      success: false,
+      // data: deletedData,
+    });
   }
+  const deletedData = await Blog.findByIdAndDelete(id);
+  if (!deletedData) {
+    res.status(500).json({
+      msg: "failed to delete",
+      success: false,
+      // data: deletedData,
+    });
+  }
+
+  res.status(200).json({
+    message: "blog deleted successfully",
+    data: deletedData,
+  });
 };

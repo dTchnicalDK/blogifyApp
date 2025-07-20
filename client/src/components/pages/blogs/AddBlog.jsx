@@ -122,12 +122,12 @@ const AddBlog = () => {
       );
       setIsLoading(false);
       navigate("/user/blogs-Details");
-      toast.success(addedBlog.data.msg);
+      toast.success(addedBlog.data.message);
       // console.log("added blog ", addedBlog);
     } catch (error) {
       setIsLoading(false);
       console.log("frontend add blog error", error);
-      toast.error(error.response.data.msg);
+      toast.error(error.response.data.message);
     }
     // console.log("data to submit ", blog);
   };
@@ -171,11 +171,7 @@ const AddBlog = () => {
               />
 
               {/* ------ including ck editor------------ */}
-              <Editor
-                // initialData=""
-                // editor={ClassicEditor}
-                props={{ initialData: "", onChange: handleEditorData }}
-              />
+              <Editor props={{ initialData: "", onChange: handleEditorData }} />
               <div className="flex justify-center gap-12">
                 <Button type="submit" className="">
                   Add now

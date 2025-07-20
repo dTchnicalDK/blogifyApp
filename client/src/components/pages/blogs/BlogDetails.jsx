@@ -48,23 +48,32 @@ const BlogDetails = () => {
     navigate(`/user/blogs/update/${id}`);
   };
 
-  // const handleDelete = async (id) => {
-  //   try {
-  //     const deletedCategory = await axios.delete(
-  //       `${baseUrl}/api/categories/delete/${id}`,
-  //       { withCredentials: true }
-  //     );
-  //     if (deletedCategory) {
-  //       setRerender(() => (reRender ? false : true));
-  //       toast.success(deletedCategory.data.msg);
-  //     } else {
-  //       toast.error("something went wrong");
-  //     }
-  //   } catch (error) {
-  //     console.log("error deleting category", error);
-  //   }
-  //   // navigate(`/user/categories/update/${id}`);
-  // };
+  const handleDelete = async (id) => {
+    setLoading(true);
+    try {
+      const deletedBlog = await axios.delete(
+        `${baseUrl}/api/blogs/deleteblog/${id}`,
+        { withCredentials: true }
+      );
+      setLoading(false);
+      console.log("response", deletedBlog);
+      if (deletedBlog) {
+        setRerender(() => (reRender ? false : true));
+        toast.success(deletedBlog.data.message);
+      } else {
+        toast.error(deletedBlog.data.data.message || "something went wrong");
+      }
+    } catch (error) {
+      console.log("error deleting blog", error.message);
+      toast.error(
+        error.response.message || error.message || "something went wrong"
+      );
+    }
+
+    if (loading) {
+      return <Spinner />;
+    }
+  };
   return (
     <div className="relative w-full p-12">
       {loading ? (
@@ -124,7 +133,7 @@ const BlogDetails = () => {
                           size="icon"
                           className="btn-hover text-destructive"
                           onClick={() => {
-                            handleDelete(cat._id);
+                            handleDelete(blog._id);
                           }}
                         >
                           <RiDeleteBin5Fill />
