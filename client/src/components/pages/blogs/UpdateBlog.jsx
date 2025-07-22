@@ -62,53 +62,11 @@ const UpdateBlog = () => {
     fetchData();
   }, [reRender]);
 
-  // console.log("blog id ", id);
-
-  //checking if user logged in
-  // const authenticateUser = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       "http://localhost:2000/api/user/authenticate",
-  //       { withCredentials: true }
-  //     );
-
-  //     if (response.data.user) {
-  //       login(response.data.user);
-  //     } else {
-  //       throw new Error("No user data received");
-  //     }
-  //   } catch (error) {
-  //     console.error("user authentication error:", error);
-
-  //     toast.error(
-  //       error.response?.data?.msg ||
-  //         "Session expired or unauthorized. Please login again.",
-  //       { position: "top-center" }
-  //     );
-
-  //     if ([401, 403, 500].includes(error.response?.status)) {
-  //       logOut();
-  //       navigate("/login");
-  //     }
-  //   }
-  // finally {
-  //   setIsLoading(false);
-  // }
-  // };
-  // useEffect(() => {
-  //   if (!loggedUser) {
-  //     const insertUser = async () => {
-  //       await authenticateUser();
-  //     };
-  //   }
-  //   setBlog({ ...blog, author: loggedUser._id });
-  // }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setBlog({ ...blog, [name]: value });
     // console.log("from change logged user id", loggedUser._id);
-    console.log("blog object ", blog);
+    // console.log("blog object ", blog);
   };
 
   const handleSelect = (SelectValue) => {

@@ -40,29 +40,6 @@ export const addblog = async (req, res, next) => {
     console.log("backend blog creation error", error);
     next(handleError(500, error.message));
   }
-  // try {
-  //   const { blogTitle, content, slug } = req.body;
-  //   //   const { token } = req.cookie
-  //   //   const tokenDecodedData = await jwt.verify(token, process.env.JWT_TOKEN_SECRET, )
-
-  //   if (!blogTitle || !content) {
-  //     return next(handleError(400, "Required fields can't be blank"));
-  //   }
-  //   // const createdBlog = { title, content };
-  //   const blog = new Blog({
-  //     blogTitle,
-  //     content,
-  //     slug: slug
-  //       ? `${slug}-${Math.floor(Math.random() * 1000 + 1)}`
-  //       : undefined,
-  //   });
-  //   const createdBlog = await blog.save();
-
-  //   res.status(201).json({ msg: "your createdblog is", createdBlog });
-  // } catch (error) {
-  //   console.log("server error while adding blog", error);
-  //   next(handleError(500, error.message));
-  // }
 };
 /////////////////////getting all blogs/////////////////////////
 export const getUserBlogs = async (req, res, next) => {

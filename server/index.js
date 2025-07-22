@@ -9,6 +9,7 @@ import { connectDb } from "./configurations/serverNDBconnection.js";
 import cookieParser from "cookie-parser";
 import { blogRouter } from "./router/blogRouter.js";
 import { categoryRouter } from "./router/categoryRouter.js";
+import fileRouter from "./router/fileRouter.js";
 
 //middlewares
 app.use(
@@ -31,6 +32,7 @@ app.use(cookieParser());
 
 //routes
 
+app.use("/api/file", fileRouter);
 app.use("/api/user", userRouter);
 app.use("/api/blogs", blogRouter);
 app.use("/api/categories", categoryRouter);

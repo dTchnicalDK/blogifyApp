@@ -56,7 +56,7 @@ const BlogDetails = () => {
         { withCredentials: true }
       );
       setLoading(false);
-      console.log("response", deletedBlog);
+      // console.log("response", deletedBlog);
       if (deletedBlog) {
         setRerender(() => (reRender ? false : true));
         toast.success(deletedBlog.data.message);

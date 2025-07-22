@@ -21,7 +21,7 @@ import { userContext } from "@/contexts/UserContexProvider";
 import Spinner from "@/components/Spinner";
 
 const AddBlog = () => {
-  const [blog, setBlog] = useState();
+  const [blog, setBlog] = useState({});
   const [reRender, setRerender] = useState(false);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
@@ -106,11 +106,8 @@ const AddBlog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // checking wether empty fields----------
-    if (
-      !blog.blogTitle.trim()
-      //  || !blog.content?.trim()
-    ) {
-      return toast.error("Please fill in all fields");
+    if (!blog || !blog.blogContent || !blog.blogTitle) {
+      return toast.error("all fields are mandatory, fill first!");
     }
 
     setIsLoading(true);
@@ -127,7 +124,11 @@ const AddBlog = () => {
     } catch (error) {
       setIsLoading(false);
       console.log("frontend add blog error", error);
-      toast.error(error.response.data.message);
+      toast.error(
+        error.response.data.message || error.message || "internal server error"
+      );
+    } finally {
+      setIsLoading(false);
     }
     // console.log("data to submit ", blog);
   };
@@ -169,6 +170,13 @@ const AddBlog = () => {
                 placeholder="Enter title for blog"
                 onChange={handleChange}
               />
+              {/* <label htmlFor="blogTitle">your slug here: </label>
+              <Input
+                type="text"
+                name="blogTitle"
+                placeholder="Enter title for blog"
+                onChange={handleChange}
+              /> */}
 
               {/* ------ including ck editor------------ */}
               <Editor props={{ initialData: "", onChange: handleEditorData }} />
