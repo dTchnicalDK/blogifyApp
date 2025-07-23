@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
@@ -46,6 +46,7 @@ function Login() {
     // return <Navigate to={"/udashboard"} />;
     return <Navigate to={"/user"} />;
   }
+
   return (
     <div>
       <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">

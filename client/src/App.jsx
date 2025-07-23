@@ -1,6 +1,6 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Register from "./components/pages/Register";
 import Login from "./components/pages/Login";
 import Blogs from "./components/pages/Blogs";
@@ -20,6 +20,8 @@ import path from "path";
 import AddBlog from "./components/pages/blogs/AddBlog";
 import UpdateBlog from "./components/pages/blogs/UpdateBlog";
 import BlogDetails from "./components/pages/blogs/blogDetails";
+import axios from "axios";
+import { meta } from "@eslint/js";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");

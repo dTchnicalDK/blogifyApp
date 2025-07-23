@@ -66,7 +66,7 @@ const AppSideBar = () => {
             <SidebarGroup>
               <SidebarGroupLabel>categories</SidebarGroupLabel>
               <SidebarMenu>
-                {categories.map((cat) => {
+                {categories?.map((cat) => {
                   return (
                     <SidebarMenuItem key={cat._id}>
                       <SidebarMenuButton>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Outlet } from "react-router";
 import AppSideBar from "../AppSideBar";
 import { SidebarProvider } from "../ui/sidebar";
@@ -19,7 +19,7 @@ const UserLayout = () => {
           <div id="sidebar">
             <AppSideBar />
           </div>
-          <main className="border-2 border-green-700 w-full flex flex-col justify-center items-center">
+          <main className=" w-full flex flex-col justify-center items-center py-3.5 px-2.5">
             <Outlet />
             <footer className="mt-[20%]">footer</footer>
           </main>
