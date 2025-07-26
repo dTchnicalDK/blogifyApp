@@ -49,7 +49,6 @@ const BlogCard = ({ props = defaultBlog }) => {
 
   return (
     <div className="border-2 border-blue-500 w-[300px] min-w-[300px] h-full flex-shrink-0 m-2 p-4 flex flex-col gap-3 shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-shadow duration-300">
-      {console.log("props", props)}
       {/* Image Container */}
       <div className="w-full h-[200px] overflow-hidden rounded-lg">
         <img

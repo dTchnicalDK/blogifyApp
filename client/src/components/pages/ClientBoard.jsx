@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { userContext } from "../../contexts/UserContexProvider";
 import { toast } from "react-toastify";
 import Spinner from "../Spinner";
@@ -17,40 +17,40 @@ const ClientBoard = () => {
   const navigate = useNavigate();
 
   // authenticatin User
-  useEffect(() => {
-    const authenticateUser = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get(
-          "http://localhost:2000/api/user/authenticate",
-          { withCredentials: true }
-        );
+  // useEffect(() => {
+  //   const authenticateUser = async () => {
+  //     setIsLoading(true);
+  //     try {
+  //       const response = await axios.get(
+  //         "http://localhost:2000/api/user/authenticate",
+  //         { withCredentials: true }
+  //       );
 
-        if (response.data.user) {
-          login(response.data.user);
-        } else {
-          throw new Error("No user data received");
-        }
-      } catch (error) {
-        console.error("Dashboard authentication error:", error);
+  //       if (response.data.user) {
+  //         login(response.data.user);
+  //       } else {
+  //         throw new Error("No user data received");
+  //       }
+  //     } catch (error) {
+  //       console.error("Dashboard authentication error:", error);
 
-        toast.error(
-          error.response?.data?.msg ||
-            "Session expired or unauthorized. Please login again.",
-          { position: "top-center" }
-        );
+  //       toast.error(
+  //         error.response?.data?.msg ||
+  //           "Session expired or unauthorized. Please login again.",
+  //         { position: "top-center" }
+  //       );
 
-        if ([401, 403, 500].includes(error.response?.status)) {
-          logOut();
-          navigate("/login");
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  //       if ([401, 403, 500].includes(error.response?.status)) {
+  //         logOut();
+  //         navigate("/login");
+  //       }
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    authenticateUser();
-  }, [login, logOut, navigate]);
+  //   authenticateUser();
+  // }, [login, logOut, navigate]);
 
   //loading blogs
   useEffect(() => {
@@ -75,13 +75,17 @@ const ClientBoard = () => {
     fetchData();
   }, []);
 
+  const handleSingleBlog = (singleBlog) => {
+    console.log("handle single blog ran", singleBlog);
+    navigate(`single-blogs/${singleBlog._id}`);
+  };
+
   if (isLoading) {
     return <Spinner />;
   }
 
   return (
     <div>
-      {console.log("blogs", blogs)}
       <Card className="px-3.5 py-3.5">
         <h1 className="text-4xl text-orange-700 font-bold">
           Welcome Mr. {loggedUser?.email}
@@ -89,12 +93,19 @@ const ClientBoard = () => {
         <pre>{JSON.stringify(loggedUser, null, 2)}</pre>
       </Card>
       <div className="w-full flex justify-between flex-wrap">
-        {/* <Card > */}
         {blogs &&
           blogs.map((blog) => {
-            return <BlogCard props={blog} />;
+            return (
+              // <Link to="single-blogs/:id">
+              <div
+                onClick={() => {
+                  handleSingleBlog(blog);
+                }}
+              >
+                <BlogCard props={blog} key={blog._id} />
+              </div>
+            );
           })}
-        {/* </Card> */}
       </div>
     </div>
   );

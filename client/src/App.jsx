@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router";
 import React, { useEffect, useState } from "react";
 import Register from "./components/pages/Register";
 import Login from "./components/pages/Login";
-import Blogs from "./components/pages/Blogs";
+// import Blogs from "./components/pages/Blogs";
 import LayoutDefault from "./components/layouts/LayoutDefault";
 import LandingPage from "./components/pages/LandingPage";
 import UserDashboard from "./components/pages/UserDashboard";
@@ -22,6 +22,7 @@ import UpdateBlog from "./components/pages/blogs/UpdateBlog";
 import BlogDetails from "./components/pages/blogs/blogDetails";
 import axios from "axios";
 import { meta } from "@eslint/js";
+import SingleBlog from "./components/pages/blogs/SingleBlog";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
@@ -45,10 +46,10 @@ function App() {
             <Login setUser={setLoggedInUser} LoggedInUser={LoggedInUser} />
           ),
         },
-        {
-          path: "blogs",
-          element: <Blogs />,
-        },
+        // {
+        //   path: "blogs",
+        //   element: <Blogs />,
+        // },
         {
           path: "udashboard",
           element: (
@@ -78,7 +79,7 @@ function App() {
         { path: "categories/add", element: <AddCategories /> },
         { path: "categories/update/:id", element: <CategorieUpdate /> },
         // blogs routes
-        { path: "user-blogs/:id", element: <Blogs /> },
+        { path: "single-blogs/:id", element: <SingleBlog /> },
         { path: "blogs-details", element: <BlogDetails /> },
         { path: "blog/add", element: <AddBlog /> },
         { path: "blogs/update/:id", element: <UpdateBlog /> },
