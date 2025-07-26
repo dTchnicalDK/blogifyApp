@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
+import { userContext } from "@/contexts/UserContexProvider";
+import { toast } from "react-toastify";
+import axios from "axios";
+const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
-export default function CommentTransLitrate() {
-  const [text, setText] = useState("");
+export default function CommentTransLitrate({ props }) {
+  const [text, setText] = useState();
+  const { loggedUser } = useContext(userContext);
 
   // Update state on typing
   const handleChange = (e) => setText(e.target.value);
@@ -29,7 +34,7 @@ export default function CommentTransLitrate() {
         `https://inputtools.google.com/request?text=${word}&itc=hi-t-i0-und&num=1&cp=0&cs=1&ie=utf-8&oe=utf-8`
       );
       const data = await response.json();
-      console.log("response", data);
+      // console.log("response", data);
       if (data[0] === "SUCCESS") {
         return data[1][0][1][0]; // First suggestion
       }
@@ -39,9 +44,29 @@ export default function CommentTransLitrate() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("comment ", text);
+    //basic validation
+    if (!text) {
+      return toast.error("write comment first (frontEnd)");
+    }
+    const commentData = {
+      author: loggedUser._id,
+      blog: props.blogId,
+      comment: text,
+    };
+    try {
+      const response = await axios.post(
+        `${baseUrl}/api/comments/create`,
+        commentData
+      );
+
+      toast.success(response.data.messsage);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response?.message || error.message);
+    }
+    // console.log("comment ", commentData);
   };
 
   return (

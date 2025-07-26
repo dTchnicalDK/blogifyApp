@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import DOMPurify from "dompurify";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 import { toast } from "react-toastify";
 import defaultAvatar from "@/assets/profileImg.svg";
@@ -106,7 +106,11 @@ const SingleBlog = () => {
                       English{" "}
                     </Button>
                   </div>
-                  {translate ? <CommentTransLitrate /> : <CommentComp />}
+                  {translate ? (
+                    <CommentTransLitrate props={{ blogId: blogObj._id }} />
+                  ) : (
+                    <CommentComp props={{ blogId: blogObj._id }} />
+                  )}
                 </div>
               </CardContent>
             </Card>
