@@ -4,6 +4,9 @@ import { Button } from "./ui/button";
 import { userContext } from "@/contexts/UserContexProvider";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { MdOutlineForward } from "react-icons/md";
+import defaultAvatar from "@/assets/profileImg.svg";
+import { Link } from "react-router";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 export default function CommentTransLitrate({ props }) {
@@ -70,23 +73,39 @@ export default function CommentTransLitrate({ props }) {
   };
 
   return (
-    <div className="py-2">
-      <h2 className="mb-2.5">
-        Type in English "aajkal" → Converts to Hindi "आजकल" after pressing Space
-        key
-      </h2>
-      <Textarea
-        value={text}
-        onChange={handleChange}
-        onKeyDown={handleKeyDown}
-        rows={6}
-        cols={50}
-        placeholder="Type here..."
-        // style={{ fontSize: "18px", padding: "10px" }}
-      />
-      <Button className="mt-5.5" onClick={handleSubmit}>
-        comment
-      </Button>
+    <div>
+      <h2 className="my-.5">Type "aajkal" → get "आजकल" on space key press</h2>
+      <div className="flex justify-between items-center gap-1.5">
+        <Link>
+          <div>
+            <span>
+              <img
+                src={props?.blogObj?.author?.photoURL || defaultAvatar}
+                // {blogObj.author.photoURL}
+                height={"40px"}
+                width={"40px"}
+                alt="avatar"
+              />
+            </span>
+          </div>
+        </Link>
+        <div className="relative flex w-full">
+          <Textarea
+            placeholder="Type here..."
+            value={text}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            className="relative"
+          />
+          <Button
+            variant="ghost"
+            onClick={handleSubmit}
+            className="absolute right-3 top-3"
+          >
+            <MdOutlineForward />
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

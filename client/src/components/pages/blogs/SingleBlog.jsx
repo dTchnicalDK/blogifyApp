@@ -8,9 +8,20 @@ import defaultAvatar from "@/assets/profileImg.svg";
 import defaultBlogImage from "@/assets/logo2.jpg";
 import { FaRegComments } from "react-icons/fa";
 import { GrLike } from "react-icons/gr";
+import { PiShareFatLight } from "react-icons/pi";
 import CommentTransLitrate from "@/components/CommentTransLitrate";
 import { Button } from "@/components/ui/button";
 import CommentComp from "@/components/CommentComp";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const SingleBlog = () => {
@@ -87,8 +98,77 @@ const SingleBlog = () => {
                 </div>
 
                 <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }}></div>
+                <div className="action w-full flex justify-around items-center py-2.5 m-2.5 border-t-2 border-t-slate-300 text-slate-500 ">
+                  <Button variant="ghost" className="w-36.5 ">
+                    <GrLike className="text-[1em] w-[1em] h-[1em]" />
+                  </Button>
 
-                <div className="comments border-t-2 border-t-slate-300 pt-2 my-5 py-3">
+                  {/* ////////////comment dialog box/////////////////// */}
+                  <Dialog>
+                    <DialogTrigger>
+                      <Button variant="ghost" className="w-36.5">
+                        <FaRegComments />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Comments</DialogTitle>
+                      </DialogHeader>
+
+                      <div className="comments h-[30vh] overflow-y-auto ">
+                        {/* //////single comment/////// */}
+                        <div className="flex justify-start items-start gap-1.5 mb-1">
+                          <p>
+                            <img
+                              src={blogObj?.author?.photoURL || defaultAvatar}
+                              height={"30px"}
+                              width={"30px"}
+                              alt="avatar"
+                            />
+                          </p>
+                          <input
+                            value="this is dummy comment"
+                            disabled
+                            className="bg-slate-50 rounded-2xl p-1"
+                          />
+                        </div>
+
+                        {/* /////single comment end here///////// */}
+                      </div>
+                      <div className=" pt-2 my-5 py-3">
+                        <div className="flex gap-5">
+                          <Button
+                            variant={translate ? "" : "secondary"}
+                            onClick={() => setTranslate(true)}
+                          >
+                            {" "}
+                            हिन्दी{" "}
+                          </Button>
+                          <Button
+                            variant={translate ? "secondary" : ""}
+                            onClick={() => setTranslate(false)}
+                          >
+                            {" "}
+                            English{" "}
+                          </Button>
+                        </div>
+                        {translate ? (
+                          <CommentTransLitrate
+                            props={{ blogId: blogObj._id }}
+                          />
+                        ) : (
+                          <CommentComp props={{ blogObj }} />
+                        )}
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                  <Button variant="ghost" className="w-36.5">
+                    <PiShareFatLight />
+                  </Button>
+                </div>
+
+                {/* //////////////////////comment secment////////////////////////// */}
+                {/* <div className=" pt-2 my-5 py-3">
                   <h1 className="text-3xl font-bold py-4">Comments</h1>
                   <div className="flex gap-5">
                     <Button
@@ -111,7 +191,8 @@ const SingleBlog = () => {
                   ) : (
                     <CommentComp props={{ blogId: blogObj._id }} />
                   )}
-                </div>
+                </div> */}
+                {/* <CommentList /> */}
               </CardContent>
             </Card>
           </div>

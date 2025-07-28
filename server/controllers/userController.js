@@ -69,7 +69,7 @@ export const loginUser = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // true in production
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: 10 * 60 * 1000, // 10 minutes in milliseconds
+      maxAge: 30 * 60 * 1000, // 10 minutes in milliseconds
       // domain: Remove this line for localhost testing
     });
 
