@@ -63,13 +63,13 @@ export const getUserBlogs = async (req, res, next) => {
 
 ///////////////getBlogById///////////////////////////////
 export const getBlogById = async (req, res, next) => {
-  console.log("get blog by id backend hit");
+  // console.log("get blog by id backend hit");
   const blogId = req.params;
   // console.log("blog id inside backend", blogId);
   try {
     const response = await Blog.findById({ _id: blogId.id })
       .populate("category", "categoryName")
-      .populate("author", "displayName")
+      .populate("author", "displayName photoURL")
       .lean()
       .exec();
     // console.log("res", JSON.stringify(response));

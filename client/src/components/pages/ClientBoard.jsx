@@ -16,42 +16,6 @@ const ClientBoard = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // authenticatin User
-  // useEffect(() => {
-  //   const authenticateUser = async () => {
-  //     setIsLoading(true);
-  //     try {
-  //       const response = await axios.get(
-  //         "http://localhost:2000/api/user/authenticate",
-  //         { withCredentials: true }
-  //       );
-
-  //       if (response.data.user) {
-  //         login(response.data.user);
-  //       } else {
-  //         throw new Error("No user data received");
-  //       }
-  //     } catch (error) {
-  //       console.error("Dashboard authentication error:", error);
-
-  //       toast.error(
-  //         error.response?.data?.msg ||
-  //           "Session expired or unauthorized. Please login again.",
-  //         { position: "top-center" }
-  //       );
-
-  //       if ([401, 403, 500].includes(error.response?.status)) {
-  //         logOut();
-  //         navigate("/login");
-  //       }
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   authenticateUser();
-  // }, [login, logOut, navigate]);
-
   //loading blogs
   useEffect(() => {
     const fetchData = async () => {
@@ -76,7 +40,6 @@ const ClientBoard = () => {
   }, []);
 
   const handleSingleBlog = (singleBlog) => {
-    console.log("handle single blog ran", singleBlog);
     navigate(`single-blogs/${singleBlog._id}`);
   };
 
@@ -101,8 +64,9 @@ const ClientBoard = () => {
                 onClick={() => {
                   handleSingleBlog(blog);
                 }}
+                key={blog._id}
               >
-                <BlogCard props={blog} key={blog._id} />
+                <BlogCard props={blog} />
               </div>
             );
           })}

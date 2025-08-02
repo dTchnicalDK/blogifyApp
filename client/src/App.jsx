@@ -3,7 +3,6 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router";
 import React, { useEffect, useState } from "react";
 import Register from "./components/pages/Register";
 import Login from "./components/pages/Login";
-// import Blogs from "./components/pages/Blogs";
 import LayoutDefault from "./components/layouts/LayoutDefault";
 import LandingPage from "./components/pages/LandingPage";
 import UserDashboard from "./components/pages/UserDashboard";
@@ -20,8 +19,6 @@ import path from "path";
 import AddBlog from "./components/pages/blogs/AddBlog";
 import UpdateBlog from "./components/pages/blogs/UpdateBlog";
 import BlogDetails from "./components/pages/blogs/blogDetails";
-import axios from "axios";
-import { meta } from "@eslint/js";
 import SingleBlog from "./components/pages/blogs/SingleBlog";
 
 function App() {

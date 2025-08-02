@@ -9,18 +9,17 @@ import { toast } from "react-toastify";
 import { Spinner } from "react-bootstrap";
 import moment from "moment";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
+const defaultBlog = {
+  blogTitle:
+    "New Spaces features make it easier to stay secure, compliant, and in control",
+  createOn: "June 2025",
+  featuredImage: "/images/blogImg.png",
+};
 
 const BlogCard = ({ props = defaultBlog }) => {
   // const [blogs, setBlogs] = useState([]);
   const [reRender, setRerender] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const defaultBlog = {
-    blogTitle:
-      "New Spaces features make it easier to stay secure, compliant, and in control",
-    createOn: "June 2025",
-    featuredImage: "/images/blogImg.png",
-  };
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -79,7 +78,7 @@ const BlogCard = ({ props = defaultBlog }) => {
                 <div className="flex items-center gap-2">
                   <span>
                     <img
-                      src={props ? props.author.photoURL : logo}
+                      src={props ? props.author?.photoURL : logo}
                       alt="avtar"
                       height="50px"
                       width="50px"

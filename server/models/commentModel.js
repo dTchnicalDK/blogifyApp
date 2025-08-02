@@ -9,7 +9,7 @@ const commentSchema = mongoose.Schema(
     },
     parentBlog: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Blogs",
+      ref: "Blog",
       required: true,
     },
     comments: {
