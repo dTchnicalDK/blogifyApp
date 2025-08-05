@@ -1,15 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Textarea } from "./ui/textarea";
-import { Button } from "./ui/button";
 import { toast } from "react-toastify";
-import { userContext } from "@/contexts/UserContexProvider";
 import axios from "axios";
-import { MdOutlineForward } from "react-icons/md";
 import defaultAvatar from "@/assets/profileImg.svg";
-import { Link } from "react-router";
 import DoComment from "./DoComment";
-import { DialogContent } from "./ui/dialog";
-
+import moment from "moment";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const CommentComp = ({ props }) => {
@@ -28,7 +22,7 @@ const CommentComp = ({ props }) => {
         if (!fetchedComments) {
           toast.error("couldn't load blog, try again!");
         }
-        console.log("response comment", fetchedComments.data.data.comments);
+        // console.log("response comment", fetchedComments.data.data.comments);
         setComments(fetchedComments.data.data);
       } catch (error) {
         console.log("error fetching blogs", error);
@@ -47,8 +41,7 @@ const CommentComp = ({ props }) => {
           comments.map((comm) => {
             return (
               <div className="single-comment mb-2.5" key={comm._id}>
-                {/* {console.log("comment", comm)} */}
-                <div className="flex justify-start items-start gap-1.5 mb-1 ">
+                <div className="relative flex justify-start items-start gap-1.5 mb-1 ">
                   <p>
                     <img
                       src={comm?.author?.photoURL || defaultAvatar}
@@ -58,6 +51,9 @@ const CommentComp = ({ props }) => {
                       className="rounded-full"
                     />
                   </p>
+                  <small className="absolute right-0 bottom-0 text-slate-500">
+                    {moment(comm?.createdAt).format("HH:mm  DD-MM-YY")}
+                  </small>
                   <p className=" w-full bg-slate-50 rounded-2xl p-1 wrap-break-word line-clamp-2">
                     {comm?.comments || ""}
                   </p>

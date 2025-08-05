@@ -53,7 +53,7 @@ const ClientBoard = () => {
         <h1 className="text-4xl text-orange-700 font-bold">
           Welcome Mr. {loggedUser?.email}
         </h1>
-        <pre>{JSON.stringify(loggedUser, null, 2)}</pre>
+        {/* <pre>{JSON.stringify(loggedUser, null, 2)}</pre> */}
       </Card>
       <div className="w-full flex justify-between flex-wrap">
         {blogs &&

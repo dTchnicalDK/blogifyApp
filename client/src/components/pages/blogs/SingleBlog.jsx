@@ -23,12 +23,17 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { fetchComments } from "@/components/utility/Utility.js";
+import LikeCountCom from "@/components/LikeCountCom";
+import { userContext } from "@/contexts/UserContexProvider";
+import LikeButton from "@/components/LikeButton";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const SingleBlog = () => {
   const { id } = useParams();
   const [blogObj, setBlogObj] = useState();
   const [translate, setTranslate] = useState(true);
+  const { loggedUser, login } = useContext(userContext);
+  // console.log("logged user SingleBlog", loggedUser.data.user._id);
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -75,11 +80,12 @@ const SingleBlog = () => {
                     </Link>
                   </div>
                   <div>
-                    <div className="flex justify-end items-center gap-3">
-                      <GrLike /> <span>20</span>
-                      <FaRegComments />
-                      <span>60</span>
-                    </div>
+                    <LikeCountCom
+                      props={{
+                        blogId: blogObj?._id,
+                        userId: loggedUser?.data.user._id,
+                      }}
+                    />
                     <p className="text-slate-400">
                       {blogObj.category.categoryName}
                     </p>
@@ -101,9 +107,12 @@ const SingleBlog = () => {
                 <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }}></div>
 
                 <div className="action w-full flex justify-around items-center py-2.5 m-2.5  text-slate-500 text-2xl ">
-                  <div className=" px-8 rounded-2xl py-1.5 flex justify-center items-center hover:bg-slate-100 cursor-pointer">
-                    <GrLike className="text-[1em] w-[1em] h-[1em]" />
-                  </div>
+                  <LikeButton
+                    props={{
+                      blogId: blogObj?._id,
+                      userId: loggedUser?.data.user._id,
+                    }}
+                  />
 
                   {/* ////////////comment dialog box/////////////////// */}
                   <Dialog>

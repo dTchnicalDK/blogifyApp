@@ -8,6 +8,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Spinner } from "react-bootstrap";
 import moment from "moment";
+import LikeCountCom from "./LikeCountCom";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 const defaultBlog = {
   blogTitle:
@@ -95,7 +96,7 @@ const BlogCard = ({ props = defaultBlog }) => {
                   Created on: {moment(props.createdAt).format("DD-MM-YYYY")}{" "}
                 </p>
               </div>
-              <div
+              {/* <div
                 id="right"
                 className="flex justify-between items-center gap-2"
               >
@@ -107,7 +108,8 @@ const BlogCard = ({ props = defaultBlog }) => {
                   <GrLike className="inline-block m-1" />
                   <small>20</small>
                 </span>
-              </div>
+              </div> */}
+              <LikeCountCom />
             </div>
 
             {/* Date */}
