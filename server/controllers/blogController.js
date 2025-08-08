@@ -166,3 +166,37 @@ export const deleteBlogById = async (req, res, next) => {
     data: deletedData,
   });
 };
+
+/////////////////////getting Related Blogs/////////////////////////
+export const getRelatedBlogs = async (req, res, next) => {
+  const { category, currentblog } = req.params;
+
+  console.log("related blog categories params", category, currentblog);
+  try {
+    const blogs = await Blog.find({
+      category,
+      _id: { $ne: currentblog },
+    })
+      .populate("author", "photoURL displayName") // avatar role
+      .populate("category", "categoryName") //  slug
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
+    console.log("res blogs", blogs);
+    // console.log("blogs response", blogs);
+    if (!blogs && blogs.length <= 0) {
+      return next(handleError(404, "no data found"));
+    }
+    res.status(200).json({ message: "your blogs are", blogs });
+  } catch (error) {
+    console.log("getting blogs error", error);
+    next(
+      handleError(
+        error.response.status || 500,
+        error.response.message ||
+          error.message ||
+          "something went wrong, fetching related blog"
+      )
+    );
+  }
+};

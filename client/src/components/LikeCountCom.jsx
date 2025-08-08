@@ -17,7 +17,7 @@ const LikeCountCom = ({ props }) => {
           `${baseUrl}/api/likes/like-count/${props.blogId}`
         );
         setLikeCount(resLikeCount.data.data);
-        console.log("like count ..", likeCount);
+        // console.log("like count ..", likeCount);
         // setBlogObj(blog.data.data);
       } catch (error) {
         console.log("fe likeCount fetching error", error);
@@ -37,7 +37,7 @@ const LikeCountCom = ({ props }) => {
     <div id="right" className="flex justify-between items-center gap-2">
       <span>
         <FaRegComments className="inline-block m-1" />
-        <small>20</small>
+        <small>{props?.commentCount}</small>
       </span>{" "}
       <span>
         <GrLike className="inline-block m-1" />

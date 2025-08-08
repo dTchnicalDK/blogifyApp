@@ -10,7 +10,6 @@ const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const ClientBoard = () => {
   const { loggedUser, login, logOut } = useContext(userContext);
-  const [isLoading, setIsLoading] = useState(true);
   const [blogs, setBlogs] = useState([]);
   const [reRender, setRerender] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -20,7 +19,7 @@ const ClientBoard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setIsLoading(true);
+        setLoading(true);
         const fetchedAllBlogs = await axios.get(
           `${baseUrl}/api/blogs/getblogs`,
           { withCredentials: true }
@@ -33,17 +32,17 @@ const ClientBoard = () => {
         console.log("error fetching blogs", error);
         toast.error(error.message);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
     fetchData();
-  }, []);
+  }, [loggedUser]);
 
   const handleSingleBlog = (singleBlog) => {
     navigate(`single-blogs/${singleBlog._id}`);
   };
 
-  if (isLoading) {
+  if (loading) {
     return <Spinner />;
   }
 

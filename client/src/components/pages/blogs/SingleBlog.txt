@@ -27,7 +27,6 @@ import LikeCountCom from "@/components/LikeCountCom";
 import { userContext } from "@/contexts/UserContexProvider";
 import LikeButton from "@/components/LikeButton";
 import { Spinner } from "react-bootstrap";
-import RelatedBlog from "@/components/RelatedBlog";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const SingleBlog = () => {
@@ -35,8 +34,10 @@ const SingleBlog = () => {
   const [blogObj, setBlogObj] = useState();
   const [commentCount, setCommentCount] = useState(0);
   const [translate, setTranslate] = useState(true);
+  // const { loggedUser, login, refreshUser } = useContext(userContext);
   const { loggedUser, isLoading: userLoading } = useContext(userContext);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  // console.log("logged user SingleBlog", loggedUser.data.user._id);
 
   useEffect(() => {
     // Only fetch blog if user data is loaded (or determined to be null)
@@ -221,13 +222,9 @@ const SingleBlog = () => {
               </CardContent>
             </Card>
           </div>
-
-          <div>
-            <h1 className="font-bold">Related Blogs</h1>
-            <RelatedBlog />
-            <RelatedBlog />
-            <RelatedBlog />
-            <RelatedBlog />
+          <div className="recent-blog w-[25%] hidden md:block">
+            {" "}
+            <Card></Card>
           </div>
         </div>
       ) : (

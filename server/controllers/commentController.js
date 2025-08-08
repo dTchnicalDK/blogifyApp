@@ -27,7 +27,29 @@ export const createComment = async (req, res, next) => {
   }
 };
 
-//////getting all commnets of blog///////
+//////comment count of blog///////
+export const getCommentCount = async (req, res, next) => {
+  try {
+    const { blogid } = req.params;
+    // console.log("blogid", blogid);
+    //   ---basic validations----
+    if (!blogid) {
+      return next(400, "required fields are missing!");
+    }
+    const commentCount = await Comments.countDocuments({ parentBlog: blogid });
+    res
+      .status(201)
+      .json({ messsage: "get comment route hit", data: commentCount });
+  } catch (error) {
+    console.log("get commnet error", error);
+    next(
+      handleError(
+        error.status || 500,
+        error.response?.messsage || error.messsage || "internal server error"
+      )
+    );
+  }
+};
 export const getAllComments = async (req, res, next) => {
   try {
     const { blogId } = req.params;
