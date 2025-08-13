@@ -57,7 +57,7 @@ const CategoryBlog = () => {
         <> no blog to display</>
       ) : (
         <>
-          <h1 className="text-4xl text-orange-700 font-bold">
+          <h1 className="text-2xl text-violet-900 font-bold">
             Category: {blogs[0]?.category?.categoryName}
           </h1>
 

@@ -18,56 +18,34 @@ const defaultBlog = {
 };
 
 const BlogCard = ({ props = defaultBlog }) => {
-  // const [blogs, setBlogs] = useState([]);
   const [reRender, setRerender] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const fetchedAllBlogs = await axios.get(
-  //         `${baseUrl}/api/blogs/getblogs`,
-  //         { withCredentials: true }
-  //       );
-  //       if (!fetchedAllBlogs) {
-  //         toast.error("couldn't load blog, try again!");
-  //       }
-  //       setBlogs(fetchedAllBlogs.data.blogs);
-  //     } catch (error) {
-  //       console.log("error fetching blogs", error);
-  //       toast.error(error.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [reRender]);
   if (loading) {
     return <Spinner />;
   }
 
   return (
-    <div className="border-2 border-blue-500 w-[300px] min-w-[300px] h-full flex-shrink-0 m-2 p-4 flex flex-col gap-3 shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-shadow duration-300">
+    <div className="border-2 border-blue-500 w-[85vw] md:w-[300px] h-[40vh] md:h-full mx-auto  mb-3 flex-shrink-0  p-4 flex justify-between md:flex-col gap-3 shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-shadow duration-300 ">
       {/* Image Container */}
-      <div className="w-full h-[200px] overflow-hidden rounded-lg">
+      <div className="h-full w-full md:w-full md:h-[200px]  md:overflow-hidden rounded-lg ">
         <img
           src={"/images/blogImg.png"}
           alt="blog cover"
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          className=" md:w-full h-full rounded-sm object-cover hover:scale-105 transition-transform duration-300"
         />
       </div>
 
       {/* Content Container */}
-      <div className="flex flex-col flex-grow gap-2">
+      <div className="flex flex-col flex-grow gap-2 w-7/12  md:w-full ">
         {/* Title with line clamping */}
-        <h2 className="text-lg font-bold line-clamp-2 min-h-[3.5rem]">
+        <h2 className="text-3xl font-sans text-sky-900 font-semibold capitalize line-clamp-3 min-h-[3.5rem]">
           {props.blogTitle}
         </h2>
         {/* Read More Link */}
         <div className="mt-auto ">
           <Link
-            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 text-2xl py-2 transition-colors duration-200"
+            className="flex items-center gap-2 text-blue-600 hover:text-blue-800 text-xl py-.5 transition-colors duration-200"
             aria-label={`Read more about ${props.blogTitle}`}
           >
             Read more
@@ -96,20 +74,12 @@ const BlogCard = ({ props = defaultBlog }) => {
                   Created on: {moment(props.createdAt).format("DD-MM-YYYY")}{" "}
                 </p>
               </div>
-              {/* <div
-                id="right"
-                className="flex justify-between items-center gap-2"
-              >
-                <span>
-                  <FaRegComments className="inline-block m-1" />
-                  <small>20</small>
-                </span>{" "}
-                <span>
-                  <GrLike className="inline-block m-1" />
-                  <small>20</small>
-                </span>
-              </div> */}
-              <LikeCountCom />
+
+              {/* <LikeCountCom /> */}
+              <div>
+                <h3>Category</h3>
+                <h3>{props?.category?.categoryName}</h3>
+              </div>
             </div>
 
             {/* Date */}

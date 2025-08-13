@@ -47,14 +47,14 @@ const ClientBoard = () => {
   }
 
   return (
-    <div>
-      <Card className="px-3.5 py-3.5">
-        <h1 className="text-4xl text-orange-700 font-bold">
-          Welcome Mr. {loggedUser?.email}
-        </h1>
-        {/* <pre>{JSON.stringify(loggedUser, null, 2)}</pre> */}
-      </Card>
-      <div className="w-full flex justify-between flex-wrap">
+    <div className="w-full flex flex-col justify-around">
+      {/* <Card className="px-3.5 py-3.5 "> */}
+      <h1 className="text-4xl text-orange-700 font-bold text-center mb-2">
+        Welcome Mr. {loggedUser?.displayName || loggedUser?.email}
+      </h1>
+      {/* <pre>{JSON.stringify(loggedUser, null, 2)}</pre> */}
+      {/* </Card> */}
+      <div className="w-full flex justify-around flex-wrap ">
         {blogs &&
           blogs.map((blog) => {
             return (

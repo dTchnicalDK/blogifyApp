@@ -105,8 +105,8 @@ const SingleBlog = () => {
   return (
     <>
       {blogObj ? (
-        <div className="container flex p-2">
-          <div className="single-blog-detais w-full px-2">
+        <div className="container flex flex-col md:flex-row p-2">
+          <div className="single-blog-detais w-full px-2 mb-12.5">
             <Card>
               <CardHeader>
                 {/* author like comment section  */}
@@ -222,14 +222,11 @@ const SingleBlog = () => {
             </Card>
           </div>
 
-          <div>
+          <div className="">
             <h1 className="font-bold">Related Blogs</h1>
             <RelatedBlog
               props={{ currentBlog: blogObj?._id, category: blogObj?.category }}
             />
-            <RelatedBlog />
-            <RelatedBlog />
-            <RelatedBlog />
           </div>
         </div>
       ) : (

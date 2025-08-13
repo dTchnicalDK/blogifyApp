@@ -48,7 +48,7 @@ const RelatedBlog = ({ props }) => {
   return (
     <>
       {relatedBlogs.length <= 0 ? (
-        <h1>no related data </h1>
+        <h1>no related Blogs </h1>
       ) : (
         <>
           {relatedBlogs.map((blog) => {
