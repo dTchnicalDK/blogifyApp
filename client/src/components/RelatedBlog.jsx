@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import blogImg from "@/assets/logo2.jpg";
 import { Link, useNavigate } from "react-router";
-import { Card } from "./ui/card";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { Spinner } from "react-bootstrap";
@@ -77,7 +76,7 @@ const RelatedBlog = ({ props }) => {
                 </Link>
               </div>
             );
-          })}{" "}
+          })}
         </>
       )}
     </>

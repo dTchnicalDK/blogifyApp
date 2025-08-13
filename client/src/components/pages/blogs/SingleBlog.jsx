@@ -98,7 +98,7 @@ const SingleBlog = () => {
   const sanitizedHtml = DOMPurify.sanitize(blogObj?.blogContent);
 
   if (isLoading || !blogObj) {
-    return <Spinner />;
+    return <p>Loading...</p>;
   }
   //safely parsing ckEditor content
 

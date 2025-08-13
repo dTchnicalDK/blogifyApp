@@ -88,6 +88,39 @@ export const getBlogById = async (req, res, next) => {
   }
 };
 
+///////////////getBlogById///////////////////////////////
+export const getBlogByCategory = async (req, res, next) => {
+  // console.log("get blog by id backend hit");
+  const { categoryId } = req.params;
+
+  if (!categoryId) {
+    return next(handleError(400, "send category name to fetch data be"));
+  }
+
+  try {
+    const response = await Blog.find({ category: categoryId })
+      .populate("category", "categoryName")
+      .populate("author", "displayName photoURL")
+      .lean()
+      .exec();
+
+    res.status(200).json({
+      message: "category blog fetched from db",
+      // data: response,
+      data: response,
+      success: true,
+    });
+  } catch (error) {
+    console.log("gettin blog by id error", error.message);
+    next(
+      handleError(
+        error.status,
+        error.message || "internal server error, fetching category blog"
+      )
+    );
+  }
+};
+
 ///////////////editBlogById///////////////////////////////
 export const updateBlog = async (req, res, next) => {
   const { id } = req.params;

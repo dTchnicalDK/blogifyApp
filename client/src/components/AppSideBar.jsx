@@ -22,6 +22,11 @@ import { CategoriesContext } from "@/contexts/CategoryContextProvider";
 
 const AppSideBar = () => {
   const { categories } = useContext(CategoriesContext);
+
+  const handleCategoryBlog = (categoryId) => {
+    console.log("handleCategoryBlog triggered");
+  };
+
   return (
     <div>
       <Sidebar>
@@ -69,9 +74,13 @@ const AppSideBar = () => {
                 {categories?.map((cat) => {
                   return (
                     <SidebarMenuItem key={cat._id}>
-                      <SidebarMenuButton>
+                      <SidebarMenuButton
+                      // onClick={() => handleCategoryBlog(cat._id)}
+                      >
                         <GoDot />
-                        <Link>{cat.categoryName}</Link>
+                        <Link to={`category-blogs/${cat._id}`}>
+                          {cat.categoryName}
+                        </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   );

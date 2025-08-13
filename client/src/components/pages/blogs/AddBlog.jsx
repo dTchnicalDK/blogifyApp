@@ -87,8 +87,6 @@ const AddBlog = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setBlog({ ...blog, [name]: value });
-    // console.log("from change logged user id", loggedUser._id);
-    // console.log("blog object ", blog);
   };
 
   const handleSelect = (SelectValue) => {
@@ -96,11 +94,8 @@ const AddBlog = () => {
   };
 
   const handleEditorData = (event, editor) => {
-    // event.preventDefault();
-    // console.log("editor triggered");
     const data = editor.getData();
     setBlog({ ...blog, blogContent: data });
-    // console.log("editor data ", data);
   };
 
   const handleSubmit = async (e) => {

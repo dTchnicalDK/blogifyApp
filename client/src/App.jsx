@@ -20,6 +20,7 @@ import AddBlog from "./components/pages/blogs/AddBlog";
 import UpdateBlog from "./components/pages/blogs/UpdateBlog";
 import BlogDetails from "./components/pages/blogs/blogDetails";
 import SingleBlog from "./components/pages/blogs/SingleBlog";
+import CategoryBlog from "./components/pages/blogs/CategoryBlog";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
@@ -77,6 +78,7 @@ function App() {
         { path: "categories/update/:id", element: <CategorieUpdate /> },
         // blogs routes
         { path: "single-blogs/:id", element: <SingleBlog /> },
+        { path: "category-blogs/:categoryid", element: <CategoryBlog /> },
         { path: "blogs-details", element: <BlogDetails /> },
         { path: "blog/add", element: <AddBlog /> },
         { path: "blogs/update/:id", element: <UpdateBlog /> },
