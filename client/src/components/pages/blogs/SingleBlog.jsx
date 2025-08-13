@@ -224,7 +224,9 @@ const SingleBlog = () => {
 
           <div>
             <h1 className="font-bold">Related Blogs</h1>
-            <RelatedBlog />
+            <RelatedBlog
+              props={{ currentBlog: blogObj?._id, category: blogObj?.category }}
+            />
             <RelatedBlog />
             <RelatedBlog />
             <RelatedBlog />

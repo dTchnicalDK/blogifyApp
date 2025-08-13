@@ -187,7 +187,9 @@ export const getRelatedBlogs = async (req, res, next) => {
     if (!blogs && blogs.length <= 0) {
       return next(handleError(404, "no data found"));
     }
-    res.status(200).json({ message: "your blogs are", blogs });
+    res
+      .status(200)
+      .json({ message: "Related blogs Are:--", blogs, success: true });
   } catch (error) {
     console.log("getting blogs error", error);
     next(
