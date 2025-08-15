@@ -235,3 +235,41 @@ export const getRelatedBlogs = async (req, res, next) => {
     );
   }
 };
+
+/////////////////////searching  Blogs/////////////////////////
+export const getSerchedBlogs = async (req, res, next) => {
+  const { q } = req.query;
+
+  try {
+    if (!q || q.trim() == " ") {
+      return next(handleError(400, "first, type something to search"));
+    }
+    const blogs = await Blog.find({
+      $or: [
+        { blogTitle: { $regex: q, $options: "i" } },
+        { blogContent: { $regex: q, $options: "i" } },
+      ],
+    })
+
+      .populate("author", "name avatar role")
+      .populate("category", "name slug")
+      .lean()
+      .exec();
+    if (blogs.length == 0) {
+      return res
+        .status(200)
+        .json({ message: "no blogs matched", data: [], success: true });
+    }
+    res
+      .status(200)
+      .json({ message: "Related blogs Are:--", data: blogs, success: true });
+  } catch (error) {
+    console.log("searching blogs error", error);
+    next(
+      handleError(
+        error.status || 500,
+        error.message || "something went wrong, searching blogs"
+      )
+    );
+  }
+};

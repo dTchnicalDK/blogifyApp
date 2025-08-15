@@ -21,6 +21,7 @@ import UpdateBlog from "./components/pages/blogs/UpdateBlog";
 import BlogDetails from "./components/pages/blogs/blogDetails";
 import SingleBlog from "./components/pages/blogs/SingleBlog";
 import CategoryBlog from "./components/pages/blogs/CategoryBlog";
+import SearchPage from "./components/pages/SearchPage";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
@@ -82,6 +83,7 @@ function App() {
         { path: "blogs-details", element: <BlogDetails /> },
         { path: "blog/add", element: <AddBlog /> },
         { path: "blogs/update/:id", element: <UpdateBlog /> },
+        { path: "search", element: <SearchPage /> },
       ],
     },
   ]);

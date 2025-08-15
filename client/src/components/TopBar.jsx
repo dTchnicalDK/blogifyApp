@@ -22,21 +22,17 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 const TopBar = () => {
-  const { loggedUser, logOut } = useContext(userContext);
+  const { loggedUser, logout } = useContext(userContext);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      const res = await axios.get("http://localhost:2000/api/user/logout", {
-        withCredentials: true,
-      });
-      //   console.log("check logout", res);
-      logOut();
-      toast.info(res.data.msg);
+      await logout();
       navigate("/login");
+      toast.info("logged out successfully");
     } catch (error) {
       console.log("logout error", error);
-      toast.error(error.response?.msg || "logout error");
+      toast.error(error.response?.msg || error.message || "logout error");
     }
   };
 

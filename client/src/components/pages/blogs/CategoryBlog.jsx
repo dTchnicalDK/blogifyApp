@@ -53,7 +53,7 @@ const CategoryBlog = () => {
 
   return (
     <div className="w-full">
-      {!blogs ? (
+      {!blogs || blogs.length < 0 ? (
         <> no blog to display</>
       ) : (
         <>

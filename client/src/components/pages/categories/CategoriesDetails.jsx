@@ -61,7 +61,7 @@ const CategoriesDetails = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full p-4">
       <div className="m-3 fixed z-10 md:left-80">
         <Button asChild>
           <Link to="/user/categories/add">

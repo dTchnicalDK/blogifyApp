@@ -46,11 +46,13 @@ const UserContextProvider = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
-      await axios.post(
-        `${baseUrl}/api/user/logout`,
-        {},
-        { withCredentials: true }
-      );
+      if (loggedUser) {
+        await axios.post(
+          `${baseUrl}/api/user/logout`,
+          {},
+          { withCredentials: true }
+        );
+      }
       setLoggedUser(null);
     } catch (err) {
       console.error("Logout error:", err);
