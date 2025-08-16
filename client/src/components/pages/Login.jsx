@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Don't forget the CSS
 import { userContext } from "../../contexts/UserContexProvider";
 import FirebaseLoginComp from "../firebase/FirebaseLoginComp";
+import siteLogo from "@/assets/logo2.jpg";
 
 function Login() {
   const { loggedUser, login } = useContext(userContext);
@@ -49,13 +50,23 @@ function Login() {
 
   return (
     <div>
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            Login Here
-          </h2>
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center py-2 px-4">
+        <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-4">
+          <div className="upper-side flex justify-start items-center">
+            <div className="w-18 ">
+              <Link to={"/"}>
+                <img src={siteLogo} alt="logo" className="rounded-full" />
+              </Link>
+            </div>
+
+            <div className="g-login-section w-2/3 flex flex-col justify-center items-center">
+              <h2 className="text-2xl font-bold text-gray-500 mb-2 text-center">
+                Login Here
+              </h2>
+              <FirebaseLoginComp />
+            </div>
+          </div>
           <div className="relative flex justify-center border-b-2 border-b-slate-400 mb-10 pb-5">
-            <FirebaseLoginComp />
             <span className="absolute bottom-[-10px] bg-white px-2 rounded-full">
               or
             </span>

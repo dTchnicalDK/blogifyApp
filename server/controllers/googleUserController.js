@@ -1,3 +1,4 @@
+import { handleError } from "../helper/errorHandler.js";
 import { User } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 const tokenSecretCode = process.env.JWT_TOKEN_SECRET;
@@ -12,7 +13,7 @@ const sanitizeUser = (user) => {
   return userObj;
 };
 
-export const registerGoogleUser = async (req, res) => {
+export const registerGoogleUser = async (req, res, next) => {
   try {
     const { uid, email, displayName, photoURL, password } = req.body;
 
@@ -51,6 +52,9 @@ export const registerGoogleUser = async (req, res) => {
     });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Server error" });
+    next(
+      handleError(err.status || 500, err.message || "google login server error")
+    );
+    // res.status(500).json({ error: "Server error" });
   }
 };

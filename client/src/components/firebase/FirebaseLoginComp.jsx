@@ -1,19 +1,17 @@
 import { signInWithPopup } from "firebase/auth";
-
 import { auth, googleProvider } from "./firebase";
 import { Button } from "../ui/button";
-import { useNavigate } from "react-router";
 import { useContext, useEffect, useState } from "react";
 import { userContext } from "@/contexts/UserContexProvider";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { FcGoogle } from "react-icons/fc";
-import { Spinner } from "react-bootstrap";
+import Spinner from "../Spinner";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const FirebaseLoginComp = () => {
   const { loggedUser, login, logOut } = useContext(userContext);
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const signInWithGoogle = async () => {
     try {
@@ -27,26 +25,32 @@ const FirebaseLoginComp = () => {
           photoURL,
           password: Math.random().toString(),
         };
-        // console.log("google response received, trying push data in db");
 
+        setIsLoading(true);
         const savedUser = await axios.post(
           `${baseUrl}/api/user/register-google`,
           googleLoggedUser,
           { withCredentials: true }
         );
-        // console.log("res from backend", savedUser.data);
 
         toast.success(savedUser.data.msg);
         login(savedUser.data.user);
-        // console.log("user saved in context is:--", loggedUser);
+        // console.log("loggedInUser details", savedUser.data.user);
       } else {
         toast.error("no response from google");
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error.message || error.response.message || "gLogin error");
       console.log("google login error", error);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    <Spinner />;
+  }
+
   return (
     <div>
       <Button
@@ -55,9 +59,8 @@ const FirebaseLoginComp = () => {
         className="cursor-pointer"
       >
         <FcGoogle />
-        Sign in with Google
+        <p className="text-xl">Sign in with Google</p>
       </Button>
-      {/* {loggedUser ? `welcome ${loggedUser}` : "login first"} */}
     </div>
   );
 };
