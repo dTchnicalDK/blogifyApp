@@ -1,10 +1,8 @@
-// import CKEditor from "@/components/CkEditor";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { IoAddSharp } from "react-icons/io5";
 import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
@@ -15,10 +13,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-// import { ClassicEditor } from "ckeditor5";
-// import Editor from "@/components/CkEditor";
 import { userContext } from "@/contexts/UserContexProvider";
 import Spinner from "@/components/Spinner";
+import { Textarea } from "@/components/ui/textarea";
 
 const AddBlog = () => {
   const [blog, setBlog] = useState({});
@@ -55,13 +52,15 @@ const AddBlog = () => {
       if (response.data.user) {
         login(response.data.user);
       } else {
-        throw new Error("No user data received");
+        navigate("/login");
+        toast.error("Loing first to add blog");
       }
     } catch (error) {
       console.error("user authentication error:", error);
 
       toast.error(
         error.response?.data?.msg ||
+          error.message ||
           "Session expired or unauthorized. Please login again.",
         { position: "top-center" }
       );
@@ -70,10 +69,9 @@ const AddBlog = () => {
         logOut();
         navigate("/login");
       }
+    } finally {
+      setIsLoading(false);
     }
-    // finally {
-    //   setIsLoading(false);
-    // }
   };
   useEffect(() => {
     if (!loggedUser) {
@@ -93,31 +91,23 @@ const AddBlog = () => {
     setBlog({ ...blog, category: SelectValue });
   };
 
-  const handleEditorData = (event, editor) => {
-    const data = editor.getData();
-    setBlog({ ...blog, blogContent: data });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     // checking wether empty fields----------
     if (!blog || !blog.blogContent || !blog.blogTitle) {
       return toast.error("all fields are mandatory, fill first!");
     }
-
-    setIsLoading(true);
     try {
+      setIsLoading(true);
       const addedBlog = await axios.post(
         `${baseUrl}/api/blogs/createblog`,
         blog,
         { withCredentials: true }
       );
-      setIsLoading(false);
+
       navigate("/user/blogs-Details");
       toast.success(addedBlog.data.message);
-      // console.log("added blog ", addedBlog);
     } catch (error) {
-      setIsLoading(false);
       console.log("frontend add blog error", error);
       toast.error(
         error.response.data.message || error.message || "internal server error"
@@ -125,7 +115,6 @@ const AddBlog = () => {
     } finally {
       setIsLoading(false);
     }
-    // console.log("data to submit ", blog);
   };
 
   return (
@@ -165,16 +154,13 @@ const AddBlog = () => {
                 placeholder="Enter title for blog"
                 onChange={handleChange}
               />
-              {/* <label htmlFor="blogTitle">your slug here: </label>
-              <Input
+              {/* -----------------------blog content----------- */}
+              <Textarea
                 type="text"
-                name="blogTitle"
-                placeholder="Enter title for blog"
+                name="blogContent"
+                placeholder="Enter blog content"
                 onChange={handleChange}
-              /> */}
-
-              {/* ------ including ck editor------------ */}
-              {/* <Editor props={{ initialData: "", onChange: handleEditorData }} /> */}
+              />
               <div className="flex justify-center gap-12">
                 <Button type="submit" className="">
                   Add now
@@ -184,7 +170,6 @@ const AddBlog = () => {
                 </Button>
               </div>
             </form>
-            {/* </div> */}
           </CardContent>
         </Card>
       )}

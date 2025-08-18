@@ -25,11 +25,12 @@ export const addblog = async (req, res, next) => {
     const blog = new Blog({
       author,
       blogTitle,
-      blogContent: encode(blogContent),
+      blogContent,
       category,
       // featuredImage,
       // slug,
     });
+
     const createdBlog = await blog.save();
 
     if (!createdBlog) {
