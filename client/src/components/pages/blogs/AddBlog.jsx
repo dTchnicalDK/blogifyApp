@@ -1,4 +1,4 @@
-import CKEditor from "@/components/CkEditor";
+// import CKEditor from "@/components/CkEditor";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,8 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ClassicEditor } from "ckeditor5";
-import Editor from "@/components/CkEditor";
+// import { ClassicEditor } from "ckeditor5";
+// import Editor from "@/components/CkEditor";
 import { userContext } from "@/contexts/UserContexProvider";
 import Spinner from "@/components/Spinner";
 
@@ -174,7 +174,7 @@ const AddBlog = () => {
               /> */}
 
               {/* ------ including ck editor------------ */}
-              <Editor props={{ initialData: "", onChange: handleEditorData }} />
+              {/* <Editor props={{ initialData: "", onChange: handleEditorData }} /> */}
               <div className="flex justify-center gap-12">
                 <Button type="submit" className="">
                   Add now

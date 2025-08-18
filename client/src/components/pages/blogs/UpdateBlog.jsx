@@ -1,4 +1,4 @@
-import CKEditor from "@/components/CkEditor";
+// import CKEditor from "@/components/CkEditor";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,8 +15,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ClassicEditor } from "ckeditor5";
-import Editor from "@/components/CkEditor";
+// import { ClassicEditor } from "ckeditor5";
+// import Editor from "@/components/CkEditor";
 import { userContext } from "@/contexts/UserContexProvider";
 import Spinner from "@/components/Spinner";
 import { Toast } from "bootstrap";
@@ -175,13 +175,14 @@ const UpdateBlog = () => {
 
               {/* ------ including ck editor------------ */}
               {blog?.blogContent !== undefined ? (
-                <Editor
-                  props={{
-                    initialData: blog.blogContent, // No template literal needed
-                    onChange: handleEditorData,
-                  }}
-                />
+                <></>
               ) : (
+                // <Editor
+                //   props={{
+                //     initialData: blog.blogContent, // No template literal needed
+                //     onChange: handleEditorData,
+                //   }}
+                // />
                 <div>Loading editor...</div> // Or null/skeleton
               )}
               <div className="flex justify-center gap-12">
