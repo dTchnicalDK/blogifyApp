@@ -6,11 +6,11 @@ import UserContexProvider from "./contexts/UserContexProvider.jsx";
 import CategoryContextProvider from "./contexts/CategoryContextProvider";
 
 createRoot(document.getElementById("root")).render(
-  // <StrictMode>
-  <UserContexProvider>
-    <CategoryContextProvider>
-      <App />
-    </CategoryContextProvider>
-  </UserContexProvider>
-  // </StrictMode>
+  <StrictMode>
+    <UserContexProvider>
+      <CategoryContextProvider>
+        <App />
+      </CategoryContextProvider>
+    </UserContexProvider>
+  </StrictMode>
 );

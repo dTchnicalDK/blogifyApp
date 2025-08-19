@@ -25,7 +25,9 @@ const fileFilter = (req, file, cb) => {
     cb(null, true);
   }
 };
-const upload = multer({ storage: storage, fileFilter: fileFilter }).single(
-  "avatar"
-);
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+});
+// .single("featuredImage")
 export default upload;

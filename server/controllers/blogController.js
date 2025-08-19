@@ -4,6 +4,7 @@ import { Blog } from "../models/blogModel.js";
 import { decode, encode } from "entities";
 import jwt from "jsonwebtoken";
 import { Categories } from "../models/categoriesModel.js";
+import cloudinary from "../configurations/cloudinaryConfig.js";
 
 ////////////////////////creating blog//////////////////////////////////////////////
 export const addblog = async (req, res, next) => {
@@ -21,13 +22,20 @@ export const addblog = async (req, res, next) => {
     if (isDuplicateTitle) {
       return next(handleError(903, "title already exits, choose another"));
     }
+
+    // Upload an image to cloudinary
+    const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+      folder: "blogify/blogs",
+    });
+
+    // console.log(uploadResult);
     //creating and saving data to database
     const blog = new Blog({
       author,
       blogTitle,
       blogContent,
       category,
-      // featuredImage,
+      featuredImage: uploadResult.secure_url,
       // slug,
     });
 
@@ -36,10 +44,13 @@ export const addblog = async (req, res, next) => {
     if (!createdBlog) {
       return next(handleError(500, "blog saving error"));
     }
-    res.status(200).json({ message: "blog created successfully", createdBlog });
+    res.status(200).json({
+      message: "blog created successfully",
+      createdBlog,
+    });
   } catch (error) {
     console.log("backend blog creation error", error);
-    next(handleError(500, error.message));
+    next(handleError(error.status, error.message || "internal server error"));
   }
 };
 /////////////////////getting all blogs/////////////////////////

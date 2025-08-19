@@ -30,7 +30,7 @@ const BlogCard = ({ props = defaultBlog }) => {
       {/* Image Container */}
       <div className="h-full w-full md:w-full md:h-[200px]  md:overflow-hidden rounded-lg ">
         <img
-          src={"/images/blogImg.png"}
+          src={props.featuredImage || "/images/blogImg.png"}
           alt="blog cover"
           className=" md:w-full h-full rounded-sm object-cover hover:scale-105 transition-transform duration-300"
         />

@@ -16,6 +16,9 @@ import {
 import { userContext } from "@/contexts/UserContexProvider";
 import Spinner from "@/components/Spinner";
 import { Textarea } from "@/components/ui/textarea";
+import sampleImg from "@/assets/logo2.jpg";
+import { IoMdAdd } from "react-icons/io";
+import Dropzone from "react-dropzone";
 
 const AddBlog = () => {
   const [blog, setBlog] = useState({});
@@ -24,6 +27,8 @@ const AddBlog = () => {
   const navigate = useNavigate();
   const { loggedUser, login, logOut } = useContext(userContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   //fetching category
   useEffect(() => {
@@ -41,6 +46,12 @@ const AddBlog = () => {
     fetchData();
   }, [reRender]);
 
+  const handleFileSelection = (file) => {
+    const fileObj = URL.createObjectURL(file[0]);
+    setPreview(fileObj);
+    setSelectedFile(file[0]);
+    console.log("selected file", fileObj);
+  };
   //checking if user logged in
   const authenticateUser = async () => {
     try {
@@ -97,15 +108,27 @@ const AddBlog = () => {
     if (!blog || !blog.blogContent || !blog.blogTitle) {
       return toast.error("all fields are mandatory, fill first!");
     }
+
+    let formData = new FormData();
+
+    for (const key in blog) {
+      formData.append(`${key}`, blog[key]);
+    }
+    if (selectedFile) {
+      formData.append("featuredImage", selectedFile);
+    }
+    // const data = Object.fromEntries(formData);
+    // console.log(data);
+
     try {
       setIsLoading(true);
       const addedBlog = await axios.post(
         `${baseUrl}/api/blogs/createblog`,
-        blog,
+        formData,
         { withCredentials: true }
       );
-
       navigate("/user/blogs-Details");
+      // console.log("res from created blog", addedBlog);
       toast.success(addedBlog.data.message);
     } catch (error) {
       console.log("frontend add blog error", error);
@@ -129,24 +152,28 @@ const AddBlog = () => {
               onSubmit={handleSubmit}
               className="flex flex-col gap-4.5 mt-12"
             >
-              {/* -----select button starts here------------------ */}
-              <Select onValueChange={handleSelect}>
-                <SelectTrigger className="w-[180px]">
-                  {/* <SelectValue placeholder="select category">select</SelectValue> */}
-                  <SelectValue placeholder="select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((cat) => {
-                    return (
-                      // <>
-                      <SelectItem value={cat._id} key={cat._id}>
-                        {cat.categoryName}
-                      </SelectItem>
-                      // </>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
+              <div className="container w-full flex justify-between ">
+                <div className="select-category">
+                  {/* -----select button starts here------------------ */}
+                  <Select onValueChange={handleSelect}>
+                    <SelectTrigger className="w-[180px]">
+                      {/* <SelectValue placeholder="select category">select</SelectValue> */}
+                      <SelectValue placeholder="select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => {
+                        return (
+                          // <>
+                          <SelectItem value={cat._id} key={cat._id}>
+                            {cat.categoryName}
+                          </SelectItem>
+                          // </>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
               <label htmlFor="blogTitle">Enter Blog Title here: </label>
               <Input
                 type="text"
@@ -154,6 +181,29 @@ const AddBlog = () => {
                 placeholder="Enter title for blog"
                 onChange={handleChange}
               />
+              <Dropzone
+                onDrop={(acceptedFiles) => handleFileSelection(acceptedFiles)}
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <section>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      {/* ------------------selected image----start------------------- */}
+                      <div className="selected-image border-2 border-dashed w-1/4 realative cursor-pointer group ">
+                        <div className="size-70 text-9xl text-lime-300 hidden group-hover:flex justify-center items-center absolute ">
+                          <IoMdAdd />
+                        </div>
+                        <img
+                          src={preview ? preview : sampleImg}
+                          alt="chosenFile"
+                          className="size-70  bg-center p-2"
+                        />
+                      </div>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
+
               {/* -----------------------blog content----------- */}
               <Textarea
                 type="text"
