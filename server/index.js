@@ -7,9 +7,9 @@ const dbUri = process.env.MONGODB_ATLAS_URI;
 import userRouter from "./router/userRouter.js";
 import { connectDb } from "./configurations/serverNDBconnection.js";
 import cookieParser from "cookie-parser";
-import { blogRouter } from "./router/blogRouter.js";
+import blogRouter from "./router/blogRouter.js";
 import { categoryRouter } from "./router/categoryRouter.js";
-import fileRouter from "./router/fileRouter.js";
+// import fileRouter from "./router/fileRouter.js";
 import commentRouter from "./router/commentRouter.js";
 import likeRouter from "./router/likeRouter.js";
 
@@ -34,7 +34,7 @@ app.use(cookieParser());
 
 //routes
 
-app.use("/api/file", fileRouter);
+// app.use("/api/file", fileRouter);
 app.use("/api/user", userRouter);
 app.use("/api/blogs", blogRouter);
 app.use("/api/categories", categoryRouter);

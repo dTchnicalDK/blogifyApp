@@ -1,10 +1,8 @@
-// import CKEditor from "@/components/CkEditor";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { IoAddSharp } from "react-icons/io5";
 import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
@@ -15,10 +13,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-// import { ClassicEditor } from "ckeditor5";
-// import Editor from "@/components/CkEditor";
 import { userContext } from "@/contexts/UserContexProvider";
 import Spinner from "@/components/Spinner";
+import { Textarea } from "@/components/ui/textarea";
+import sampleImg from "@/assets/logo2.jpg";
+import { IoMdAdd } from "react-icons/io";
+import Dropzone from "react-dropzone";
 
 const AddBlog = () => {
   const [blog, setBlog] = useState({});
@@ -27,6 +27,8 @@ const AddBlog = () => {
   const navigate = useNavigate();
   const { loggedUser, login, logOut } = useContext(userContext);
   const [isLoading, setIsLoading] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   //fetching category
   useEffect(() => {
@@ -44,6 +46,12 @@ const AddBlog = () => {
     fetchData();
   }, [reRender]);
 
+  const handleFileSelection = (file) => {
+    const fileObj = URL.createObjectURL(file[0]);
+    setPreview(fileObj);
+    setSelectedFile(file[0]);
+    console.log("selected file", fileObj);
+  };
   //checking if user logged in
   const authenticateUser = async () => {
     try {
@@ -55,13 +63,15 @@ const AddBlog = () => {
       if (response.data.user) {
         login(response.data.user);
       } else {
-        throw new Error("No user data received");
+        navigate("/login");
+        toast.error("Loing first to add blog");
       }
     } catch (error) {
       console.error("user authentication error:", error);
 
       toast.error(
         error.response?.data?.msg ||
+          error.message ||
           "Session expired or unauthorized. Please login again.",
         { position: "top-center" }
       );
@@ -70,10 +80,9 @@ const AddBlog = () => {
         logOut();
         navigate("/login");
       }
+    } finally {
+      setIsLoading(false);
     }
-    // finally {
-    //   setIsLoading(false);
-    // }
   };
   useEffect(() => {
     if (!loggedUser) {
@@ -93,11 +102,6 @@ const AddBlog = () => {
     setBlog({ ...blog, category: SelectValue });
   };
 
-  const handleEditorData = (event, editor) => {
-    const data = editor.getData();
-    setBlog({ ...blog, blogContent: data });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     // checking wether empty fields----------
@@ -105,19 +109,28 @@ const AddBlog = () => {
       return toast.error("all fields are mandatory, fill first!");
     }
 
-    setIsLoading(true);
+    let formData = new FormData();
+
+    for (const key in blog) {
+      formData.append(`${key}`, blog[key]);
+    }
+    if (selectedFile) {
+      formData.append("featuredImage", selectedFile);
+    }
+    // const data = Object.fromEntries(formData);
+    // console.log(data);
+
     try {
+      setIsLoading(true);
       const addedBlog = await axios.post(
         `${baseUrl}/api/blogs/createblog`,
-        blog,
+        formData,
         { withCredentials: true }
       );
-      setIsLoading(false);
       navigate("/user/blogs-Details");
+      // console.log("res from created blog", addedBlog);
       toast.success(addedBlog.data.message);
-      // console.log("added blog ", addedBlog);
     } catch (error) {
-      setIsLoading(false);
       console.log("frontend add blog error", error);
       toast.error(
         error.response.data.message || error.message || "internal server error"
@@ -125,7 +138,6 @@ const AddBlog = () => {
     } finally {
       setIsLoading(false);
     }
-    // console.log("data to submit ", blog);
   };
 
   return (
@@ -140,24 +152,28 @@ const AddBlog = () => {
               onSubmit={handleSubmit}
               className="flex flex-col gap-4.5 mt-12"
             >
-              {/* -----select button starts here------------------ */}
-              <Select onValueChange={handleSelect}>
-                <SelectTrigger className="w-[180px]">
-                  {/* <SelectValue placeholder="select category">select</SelectValue> */}
-                  <SelectValue placeholder="select category" />
-                </SelectTrigger>
-                <SelectContent>
-                  {categories.map((cat) => {
-                    return (
-                      // <>
-                      <SelectItem value={cat._id} key={cat._id}>
-                        {cat.categoryName}
-                      </SelectItem>
-                      // </>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
+              <div className="container w-full flex justify-between ">
+                <div className="select-category">
+                  {/* -----select button starts here------------------ */}
+                  <Select onValueChange={handleSelect}>
+                    <SelectTrigger className="w-[180px]">
+                      {/* <SelectValue placeholder="select category">select</SelectValue> */}
+                      <SelectValue placeholder="select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => {
+                        return (
+                          // <>
+                          <SelectItem value={cat._id} key={cat._id}>
+                            {cat.categoryName}
+                          </SelectItem>
+                          // </>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
               <label htmlFor="blogTitle">Enter Blog Title here: </label>
               <Input
                 type="text"
@@ -165,16 +181,36 @@ const AddBlog = () => {
                 placeholder="Enter title for blog"
                 onChange={handleChange}
               />
-              {/* <label htmlFor="blogTitle">your slug here: </label>
-              <Input
-                type="text"
-                name="blogTitle"
-                placeholder="Enter title for blog"
-                onChange={handleChange}
-              /> */}
+              <Dropzone
+                onDrop={(acceptedFiles) => handleFileSelection(acceptedFiles)}
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <section>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      {/* ------------------selected image----start------------------- */}
+                      <div className="selected-image border-2 border-dashed w-1/4 realative cursor-pointer group ">
+                        <div className="size-70 text-9xl text-lime-300 hidden group-hover:flex justify-center items-center absolute ">
+                          <IoMdAdd />
+                        </div>
+                        <img
+                          src={preview ? preview : sampleImg}
+                          alt="chosenFile"
+                          className="size-70  bg-center p-2"
+                        />
+                      </div>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
 
-              {/* ------ including ck editor------------ */}
-              {/* <Editor props={{ initialData: "", onChange: handleEditorData }} /> */}
+              {/* -----------------------blog content----------- */}
+              <Textarea
+                type="text"
+                name="blogContent"
+                placeholder="Enter blog content"
+                onChange={handleChange}
+              />
               <div className="flex justify-center gap-12">
                 <Button type="submit" className="">
                   Add now
@@ -184,7 +220,6 @@ const AddBlog = () => {
                 </Button>
               </div>
             </form>
-            {/* </div> */}
           </CardContent>
         </Card>
       )}
