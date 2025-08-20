@@ -105,7 +105,7 @@ const SingleBlog = () => {
   return (
     <>
       {blogObj ? (
-        <div className="container flex flex-col md:flex-row p-2">
+        <div className="container flex flex-col md:flex-row p-2 ">
           <div className="single-blog-detais w-full px-2 mb-12.5">
             <Card>
               <CardHeader>
@@ -121,7 +121,7 @@ const SingleBlog = () => {
                             height={"40px"}
                             width={"40px"}
                             alt="avatar"
-                            className="rounded-full"
+                            className="rounded-full "
                           />
                         </span>
                         <span className="text-slate-400">
@@ -145,7 +145,7 @@ const SingleBlog = () => {
                   </div>
                 </div>
               </CardHeader>
-              <CardHeader className="text-2xl text-center font-bold">
+              <CardHeader className="text-3xl text-center font-serif font-semibold text-teal-500">
                 <h1>{blogObj?.blogTitle}</h1>
               </CardHeader>
               <CardContent>
@@ -153,8 +153,9 @@ const SingleBlog = () => {
                   <img
                     src={blogObj?.featuredImage || defaultBlogImage}
                     alt="blog-image"
-                    height={"300px"}
-                    width={"300px"}
+                    // height={"300px"}
+                    // width={"300px"}
+                    className="w-full mb5"
                   />
                 </div>
                 <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }}></div>
@@ -222,7 +223,7 @@ const SingleBlog = () => {
             </Card>
           </div>
 
-          <div className="">
+          <div className="md:w-2/6">
             <h1 className="font-bold">Related Blogs</h1>
             <RelatedBlog
               props={{ currentBlog: blogObj?._id, category: blogObj?.category }}

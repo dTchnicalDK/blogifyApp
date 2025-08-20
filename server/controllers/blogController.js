@@ -136,7 +136,11 @@ export const getBlogByCategory = async (req, res, next) => {
 ///////////////editBlogById///////////////////////////////
 export const updateBlog = async (req, res, next) => {
   const { id } = req.params;
-  const { blogContent, blogTitle, category } = req.body;
+
+  const { blogTitle, blogContent, category, author } = req.body;
+  // const data = Object.fromEntries(req.body);
+  console.log("blogs at be", id, blogContent, blogTitle, category, author);
+  console.log("file at be", req.file);
 
   try {
     // Basic validation
@@ -146,14 +150,12 @@ export const updateBlog = async (req, res, next) => {
         message: "Invalid blog ID",
       });
     }
-
     if (!blogTitle || !blogContent || !category) {
       return res.status(400).json({
         success: false,
         message: "Title, content, and category are required",
       });
     }
-
     // Verify the category exists
     const categoryExists = await Categories.findById(category);
     if (!categoryExists) {
@@ -162,13 +164,25 @@ export const updateBlog = async (req, res, next) => {
         message: "Invalid category ID",
       });
     }
+    console.log("category found", categoryExists);
+
+    // Upload an image to cloudinary
+    const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+      folder: "blogify/blogs",
+    });
     const updatedBlog = await Blog.findByIdAndUpdate(
-      id,
-      { blogContent, blogTitle, category },
+      { _id: id },
+      {
+        blogContent,
+        blogTitle,
+        category,
+        featuredImage: uploadResult.secure_url,
+      },
       {
         new: true,
       }
     );
+
     if (!updatedBlog) {
       return res
         .status(404)

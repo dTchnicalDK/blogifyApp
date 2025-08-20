@@ -20,6 +20,10 @@ import {
 import { userContext } from "@/contexts/UserContexProvider";
 import Spinner from "@/components/Spinner";
 import { Toast } from "bootstrap";
+import Dropzone from "react-dropzone";
+import noImage from "@/assets/noImage.jpg";
+import { IoMdAdd } from "react-icons/io";
+import { Textarea } from "@/components/ui/textarea";
 // import { decode } from "entities";
 
 const UpdateBlog = () => {
@@ -29,20 +33,24 @@ const UpdateBlog = () => {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const { loggedUser, login, logOut } = useContext(userContext);
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const fetchBlogToEdit = async (blogId) => {
     try {
       const fetchedblog = await axios.get(
         `${baseUrl}/api/blogs/getblog/${blogId}`
       );
-
+      // console.log("blog to be edited", fetchedblog);
       setBlog(fetchedblog.data.data);
-      // setCategories(fetchedblog.data.data.category.categoryName);
-      // console.log("category", fetchedblog.data.data.category.categoryName);
     } catch (error) {
       console.log("blog to edit fetchig error", error.message);
+      toast.error(
+        error.message || error.response.message || "error fetching blog to edit"
+      );
     }
   };
   // fetching category
@@ -57,6 +65,11 @@ const UpdateBlog = () => {
         fetchBlogToEdit(id);
       } catch (error) {
         console.log("error fetching category", error);
+        toast.error(
+          error.message ||
+            error.response.message ||
+            "error fetching categorie edit"
+        );
       }
     };
     fetchData();
@@ -65,12 +78,17 @@ const UpdateBlog = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setBlog({ ...blog, [name]: value });
-    // console.log("from change logged user id", loggedUser._id);
-    // console.log("blog object ", blog);
   };
 
   const handleSelect = (SelectValue) => {
     setBlog({ ...blog, category: SelectValue });
+    // console.log("category", SelectValue);
+  };
+  const handleFileSelection = (file) => {
+    const fileObj = URL.createObjectURL(file[0]);
+    setPreview(fileObj);
+    setSelectedFile(file[0]);
+    console.log("selected file", fileObj);
   };
 
   const handleEditorData = (event, editor) => {
@@ -82,7 +100,6 @@ const UpdateBlog = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
 
     // Validation
     if (
@@ -90,32 +107,38 @@ const UpdateBlog = () => {
       !blog?.blogContent?.trim() ||
       !blog?.category
     ) {
-      toast.error("Please fill all fields");
-      setIsLoading(false);
-      return;
+      return toast.error("all fields are mandatory, fill first!");
     }
+    let formData = new FormData();
 
+    for (const key in blog) {
+      formData.append(`${key}`, blog[key]);
+    }
+    // console.log("selected fiel", selectedFile);
+    if (selectedFile) {
+      formData.append("featuredImage", selectedFile);
+    }
+    const data = Object.fromEntries(formData);
+    // console.log("formdata at fe", data);
     try {
+      setIsLoading(true);
       const response = await axios.put(
         `${baseUrl}/api/blogs/update-blog/${id}`,
-        {
-          blogTitle: blog.blogTitle,
-          blogContent: blog.blogContent,
-          category: blog.category,
-        },
+
+        formData,
+        //   blogTitle: blog.blogTitle,
+        //   blogContent: blog.blogContent,
+        //   category: blog.category,
+
         {
           withCredentials: true,
-          // headers: {
-          //   'Content-Type': 'application/json'
-          // }
         }
       );
+      // console.log("blog update response fe", response);
 
       if (response.data.success) {
         toast.success("Blog updated successfully");
         navigate("/user/blogs-Details");
-      } else {
-        throw new Error(response.data.message || "Failed to update blog");
       }
     } catch (error) {
       console.error("Frontend update error:", error);
@@ -143,24 +166,19 @@ const UpdateBlog = () => {
               className="flex flex-col gap-4.5 mt-12"
             >
               {/* -----select button starts here------------------ */}
-              <Select
-                onValueChange={handleSelect}
-                value={blog?.category?._id || ""}
-              >
+              <Select onValueChange={handleSelect} value={blog?.category?._id}>
                 <SelectTrigger className="w-[180px]">
-                  {/* <SelectValue placeholder="select category">select</SelectValue> */}
                   <SelectValue placeholder="select category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {categories?.map((cat) => {
-                    return (
-                      // <>
-                      <SelectItem value={cat._id} key={cat._id}>
-                        {cat.categoryName}
-                      </SelectItem>
-                      // </>
-                    );
-                  })}
+                  {categories &&
+                    categories.map((cat) => {
+                      return (
+                        <SelectItem value={cat._id} key={cat._id}>
+                          {cat.categoryName}
+                        </SelectItem>
+                      );
+                    })}
                 </SelectContent>
               </Select>
 
@@ -172,10 +190,44 @@ const UpdateBlog = () => {
                 value={blog?.blogTitle}
                 onChange={handleChange}
               />
+              <Dropzone
+                onDrop={(acceptedFiles) => handleFileSelection(acceptedFiles)}
+              >
+                {({ getRootProps, getInputProps }) => (
+                  <section>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      {/* ------------------selected image----start------------------- */}
+                      <div className="selected-image size-70 border-2 border-dashed  realative cursor-pointer group ">
+                        <div className=" size-70 rounded-sm text-9xl text-white  bg-black/50 hidden group-hover:flex justify-center items-center absolute ">
+                          <IoMdAdd />
+                        </div>
+                        <img
+                          src={
+                            preview ? preview : blog?.featuredImage || noImage
+                          }
+                          alt="chosenFile"
+                          className="size-70  bg-center p-2"
+                        />
+                      </div>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
 
               {/* ------ including ck editor------------ */}
               {blog?.blogContent !== undefined ? (
-                <></>
+                <>
+                  {" "}
+                  {/* -----------------------blog content----------- */}
+                  <Textarea
+                    type="text"
+                    name="blogContent"
+                    placeholder="Enter blog content"
+                    value={blog?.blogContent}
+                    onChange={handleChange}
+                  />
+                </>
               ) : (
                 // <Editor
                 //   props={{

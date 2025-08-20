@@ -43,6 +43,10 @@ const BlogDetails = () => {
     fetchData();
   }, [reRender]);
 
+  const handleBlogLink = (blogid) => {
+    navigate(`/user/single-blogs/${blogid}`);
+  };
+
   const handleEdit = (id) => {
     console.log("handle edit executed");
     navigate(`/user/blogs/update/${id}`);
@@ -109,7 +113,14 @@ const BlogDetails = () => {
                   return (
                     <TableRow key={idx}>
                       <TableCell className="font-medium">{idx + 1}</TableCell>
-                      <TableCell>{blog.blogTitle}</TableCell>
+                      <TableCell>
+                        <span
+                          onClick={() => handleBlogLink(blog._id)}
+                          className="cursor-pointer"
+                        >
+                          {blog.blogTitle}
+                        </span>
+                      </TableCell>
                       <TableCell>{blog.category?.categoryName}</TableCell>
                       <TableCell>{blog.author?.displayName}</TableCell>
                       <TableCell>

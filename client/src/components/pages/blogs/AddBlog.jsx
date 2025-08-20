@@ -17,6 +17,7 @@ import { userContext } from "@/contexts/UserContexProvider";
 import Spinner from "@/components/Spinner";
 import { Textarea } from "@/components/ui/textarea";
 import sampleImg from "@/assets/logo2.jpg";
+import noImage from "@/assets/noImage.jpg";
 import { IoMdAdd } from "react-icons/io";
 import Dropzone from "react-dropzone";
 
@@ -189,12 +190,12 @@ const AddBlog = () => {
                     <div {...getRootProps()}>
                       <input {...getInputProps()} />
                       {/* ------------------selected image----start------------------- */}
-                      <div className="selected-image border-2 border-dashed w-1/4 realative cursor-pointer group ">
-                        <div className="size-70 text-9xl text-lime-300 hidden group-hover:flex justify-center items-center absolute ">
+                      <div className="selected-image size-70 border-2 border-dashed  realative cursor-pointer group ">
+                        <div className=" size-70 rounded-sm text-9xl text-white  bg-black/50 hidden group-hover:flex justify-center items-center absolute ">
                           <IoMdAdd />
                         </div>
                         <img
-                          src={preview ? preview : sampleImg}
+                          src={preview ? preview : noImage}
                           alt="chosenFile"
                           className="size-70  bg-center p-2"
                         />
