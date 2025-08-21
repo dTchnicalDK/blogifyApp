@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import Spinner from "../Spinner";
 import { Card } from "../ui/card";
 import BlogCard from "../BlogCard";
+import { Button } from "../ui/button";
+import { IoAddSharp } from "react-icons/io5";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const ClientBoard = () => {
@@ -47,10 +49,23 @@ const ClientBoard = () => {
   }
 
   return (
-    <div className="w-full flex flex-col justify-around">
-      <h1 className="text-4xl text-orange-700 font-bold text-center mb-2">
-        Welcome Mr. {loggedUser?.displayName || loggedUser?.email}
-      </h1>
+    <div className="w-full flex flex-col justify-around relative">
+      {!loggedUser ? (
+        <h1>welcome guest</h1>
+      ) : (
+        <h1 className="text-4xl text-orange-700 font-bold text-center mb-2">
+          Welcome Mr. {loggedUser?.displayName || loggedUser?.email}
+        </h1>
+      )}
+      <div className=" m-5 md:m-4">
+        <Button asChild>
+          <Link to={loggedUser ? "/user/blog/add" : "/login"}>
+            {/* /user/blog/add */}
+            <IoAddSharp /> Add New Blog
+          </Link>
+        </Button>
+      </div>
+
       <div className="w-full flex justify-around flex-wrap gap-x-2.5 gap-y-5 ">
         {blogs &&
           blogs.map((blog) => {

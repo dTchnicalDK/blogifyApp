@@ -8,6 +8,7 @@ import { Separator } from "../ui/separator";
 import { FaRegEdit } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
+import profileLogo from "@/assets/profileImg.svg";
 
 const UpdateProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -54,15 +55,19 @@ const UpdateProfile = () => {
   };
 
   return (
-    <div className=" container flex justify-center items-center">
-      <div id="wrapper" className="flex flex-col justify-center items-start ">
-        <h2 className="m-auto">Profile Information</h2>
-
+    <div>
+      <div
+        id="wrapper"
+        className="w-full flex flex-col justify-center items-start "
+      >
         {!isEditing ? (
           <div className="profile-view flex flex-col justify-center items-center">
+            <h2 className="m-auto text-2xl text-slate-600 font-bold capitalize">
+              your profile informations
+            </h2>
             <div className="profile-photo relative">
               <img
-                src={loggedUser ? loggedUser.photoURL : ""}
+                src={loggedUser ? loggedUser.photoURL : profileLogo}
                 alt="photo"
                 className="rounded-full w-50 h-50 mt-3"
               />
@@ -70,19 +75,20 @@ const UpdateProfile = () => {
               <strong>{loggedUser.email}</strong>
             </div>
             <Separator />
-            <div id="informations" className="mt-12">
-              <div className="profile-field">
-                <strong>Name:</strong> {profile.displayName}
+            <div id="informations" className="mt-12 w-full">
+              <div className="profile-field flex justify-between items-center">
+                <strong>Name:</strong> <span>{profile.displayName}</span>
               </div>
-              <div className="profile-field">
-                <strong>Bio:</strong> {profile.bio}
+              <div className="profile-field flex justify-between items-center">
+                <strong>Bio:</strong> <span> {profile.bio}</span>
               </div>
-              <div className="profile-field">
-                <strong>Location:</strong> {profile.location}
+              <div className="profile-field flex justify-between items-center">
+                <strong>Location:</strong> <span> {profile.location}</span>
               </div>
               <Separator />
-              <div className="profile-field mt-3">
-                <strong>Last updated:</strong> {loggedUser.updatedAt}
+              <div className="profile-field flex justify-between items-center">
+                <strong>Last updated:</strong>{" "}
+                <span> {loggedUser.updatedAt}</span>
               </div>
             </div>
 
@@ -94,11 +100,30 @@ const UpdateProfile = () => {
             </Button>
           </div>
         ) : (
-          <div className="profile-edit">
+          <div className="profile-edit ">
+            <h2 className=" text-center text-2xl text-slate-600 font-bold capitalize">
+              update your profile here
+            </h2>
             <div
               id="edit-wrapper"
-              className="border-2 border-amber-700 p-12 min-w-2xl"
+              className=" w-full justify-center items-center p-12 min-w-2xl"
             >
+              <div className="profile-photo group relative w-1/2 m-auto">
+                <div className="w-full rounded-full bg-lime-400">
+                  <img
+                    src={loggedUser ? loggedUser.photoURL : ""}
+                    alt="photo"
+                    className="rounded-full w-full "
+                  />
+                </div>
+                <div className="overlay  absolute border-2 border-red-800 bg-black/50 w-full h-full z-30 top-0 left-0 rounded-full hidden justify-center items-center group-hover:flex">
+                  <FaRegEdit className=" text-6xl text-white/50 cursor-pointer" />
+                </div>
+              </div>
+              <div className="w-full flex justify-center items-center my-2">
+                <strong className="text-slate-600">{loggedUser.email}</strong>
+              </div>
+              <Separator />
               <div className="form-group">
                 <label>id:</label>
                 <Input
@@ -139,15 +164,17 @@ const UpdateProfile = () => {
                 />
               </div>
 
-              <Button onClick={handleSave} className="save-button mt-3">
-                Save Changes
-              </Button>
-              <Button
-                onClick={() => setIsEditing(false)}
-                className="cancel-button"
-              >
-                Cancel
-              </Button>
+              <div className="buttons w-full flex justify-around m-5">
+                <Button onClick={handleSave} className="bg-green-700">
+                  update Changes
+                </Button>
+                <Button
+                  onClick={() => setIsEditing(false)}
+                  className="bg-red-500"
+                >
+                  Cancel Changes
+                </Button>
+              </div>
             </div>
           </div>
         )}
