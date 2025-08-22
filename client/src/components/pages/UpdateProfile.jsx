@@ -1,27 +1,34 @@
 import { userContext } from "@/contexts/UserContexProvider";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Card } from "../ui/card";
 import { Separator } from "../ui/separator";
 import { FaRegEdit } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
 import profileLogo from "@/assets/profileImg.svg";
+import Dropzone from "react-dropzone";
+import Spinner from "../Spinner";
+import moment from "moment";
+const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const UpdateProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { loggedUser, login, logout } = useContext(userContext);
   const navigate = useNavigate();
+  const [profile, setProfile] = useState(loggedUser);
+  const [selectedfile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState(null);
 
-  const [profile, setProfile] = useState({
-    displayName: "John Doe",
-    id: `${loggedUser?._id}`,
-    bio: "Software developer with 5 years of experience",
-    location: "New York, USA",
-  });
-
+  // console.log("before settin loggedUser", loggedUser);
+  useEffect(() => {
+    const updateUser = async () => {
+      setProfile(loggedUser);
+    };
+    updateUser();
+  }, []);
   const handleEditClick = () => {
     setIsEditing(!isEditing);
   };
@@ -38,24 +45,74 @@ const UpdateProfile = () => {
     return <Navigate to={"/login"} />;
   }
 
-  const handleSave = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:2000/api/user/update",
-        profile,
-        { withCredentials: true }
-      );
-      toast.success(response.data);
-    } catch (error) {
-      console.log("error while updateting prifile", error);
-      toast(error);
+  const handleFileSelect = (acceptedFiles) => {
+    if (acceptedFiles && acceptedFiles.length > 0) {
+      const file = acceptedFiles[0];
+      setSelectedFile(file);
+      const fileUrl = URL.createObjectURL(file);
+      setPreview(fileUrl);
     }
-
-    setIsEditing(false);
+    // console.log("file", file);
+    // console.log("file url", fileUrl);
   };
+  const handleSave = async (e) => {
+    e.preventDefault();
 
+    // Validation
+    if (
+      !profile?.displayName?.trim() ||
+      !profile?.bio?.trim() ||
+      !profile?.location.trim()
+    ) {
+      return toast.error("all fields are mandatory, fill first!");
+    }
+    let formData = new FormData();
+    delete profile.createdAt;
+    delete profile.updatedAt;
+    delete profile.uid;
+
+    for (const key in profile) {
+      formData.append(`${key}`, profile[key]);
+    }
+    // console.log("selected fiel", selectedfile);
+    if (selectedfile) {
+      formData.append("photoURL", selectedfile);
+    }
+    const data = Object.fromEntries(formData);
+    console.log("formdata at fe", data);
+    try {
+      setIsLoading(true);
+      const response = await axios.put(
+        `${baseUrl}/api/user/update/${loggedUser._id}`,
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+      if (response.data.success) {
+        // login(response.data.data);
+        // console.log("set data in loggedUser", response.data.data);
+      }
+      toast.success("profile updated successfully");
+      // console.log("update response fe", response);
+      // navigate("/user/blogs-Details");
+    } catch (error) {
+      console.error("Frontend update error:", error);
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          "Failed to update profile"
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  if (isLoading || !loggedUser) {
+    return <Spinner />;
+  }
   return (
     <div>
+      {/* {console.log("useEffect ran", profile)} */}
       <div
         id="wrapper"
         className="w-full flex flex-col justify-center items-start "
@@ -69,7 +126,7 @@ const UpdateProfile = () => {
               <img
                 src={loggedUser ? loggedUser.photoURL : profileLogo}
                 alt="photo"
-                className="rounded-full w-50 h-50 mt-3"
+                className="rounded-full w-50 h-50 object-cover"
               />
               <FaRegEdit className="absolute right-7 top-7 text-4xl text-slate-100 cursor-pointer" />
               <strong>{loggedUser.email}</strong>
@@ -88,7 +145,10 @@ const UpdateProfile = () => {
               <Separator />
               <div className="profile-field flex justify-between items-center">
                 <strong>Last updated:</strong>{" "}
-                <span> {loggedUser.updatedAt}</span>
+                <span>
+                  {" "}
+                  {moment(loggedUser.updatedAt).format("DD-MM-YYYY HH-MM-SS")}
+                </span>
               </div>
             </div>
 
@@ -100,25 +160,38 @@ const UpdateProfile = () => {
             </Button>
           </div>
         ) : (
-          <div className="profile-edit ">
+          <div className="w-full max-w-md mx-auto ">
             <h2 className=" text-center text-2xl text-slate-600 font-bold capitalize">
               update your profile here
             </h2>
             <div
               id="edit-wrapper"
-              className=" w-full justify-center items-center p-12 min-w-2xl"
+              className=" profile-photo group relative mb-4"
             >
-              <div className="profile-photo group relative w-1/2 m-auto">
-                <div className="w-full rounded-full bg-lime-400">
+              <div className="profile-photo group relative  m-auto">
+                {/* ------------------------dropzone------------------- */}
+                <div className="w-32 h-32 mx-auto rounded-full overflow-hidden">
                   <img
-                    src={loggedUser ? loggedUser.photoURL : ""}
+                    src={preview ? preview : loggedUser.photoURL || profileLogo}
                     alt="photo"
-                    className="rounded-full w-full "
+                    className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="overlay  absolute border-2 border-red-800 bg-black/50 w-full h-full z-30 top-0 left-0 rounded-full hidden justify-center items-center group-hover:flex">
-                  <FaRegEdit className=" text-6xl text-white/50 cursor-pointer" />
-                </div>
+                <Dropzone
+                  onDrop={(acceptedFiles) => handleFileSelect(acceptedFiles)}
+                >
+                  {({ getRootProps, getInputProps }) => (
+                    <section>
+                      <div {...getRootProps()}>
+                        <input {...getInputProps()} />
+                        <div className="overlay  absolute border-2 border-red-800 bg-black/50 w-full h-full z-30 top-0 left-0 rounded-full hidden justify-center items-center group-hover:flex">
+                          <FaRegEdit className=" text-6xl text-white/50 cursor-pointer" />
+                        </div>
+                      </div>
+                    </section>
+                  )}
+                </Dropzone>
+                {/* ------------------------end------------------- */}
               </div>
               <div className="w-full flex justify-center items-center my-2">
                 <strong className="text-slate-600">{loggedUser.email}</strong>

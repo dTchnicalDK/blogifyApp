@@ -27,7 +27,6 @@ function Login() {
         formData,
         { withCredentials: true }
       );
-      // console.log("userLoginRespose inside loggin", userLoginRespose?.data);
       if (!userLoginRespose.data.user) {
         throw new Error("login failure");
       }

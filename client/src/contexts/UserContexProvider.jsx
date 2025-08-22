@@ -25,7 +25,8 @@ const UserContextProvider = ({ children }) => {
       const response = await axios.get(`${baseUrl}/api/user/authenticate`, {
         withCredentials: true,
       });
-      setLoggedUser(response.data); // Assuming user data is in response.data
+      // console.log("response inside context", response);
+      setLoggedUser(response.data.user); // Assuming user data is in response.data
     } catch (err) {
       setError(err);
       setLoggedUser(null);

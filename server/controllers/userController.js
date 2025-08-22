@@ -2,6 +2,8 @@ import { User } from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
+import { handleError } from "../helper/errorHandler.js";
+import cloudinary from "../configurations/cloudinaryConfig.js";
 const tokenSecretCode = process.env.JWT_TOKEN_SECRET;
 
 //------------------function to register user-----------------------------
@@ -90,15 +92,40 @@ export const userLogOut = (req, res) => {
 };
 
 ////update profile -----------------------------------------------
-export const updateProfile = async (req, res) => {
-  const { id, displayName, bio, location } = req.body;
-  const userOnDb = await User.findById(
-    { id }
-    // { displayName, bio, location },
-    // { new: true }
-  );
-  res.status(200).json({
-    msg: "Data updated successfully",
-    userOnDb,
-  });
+export const updateProfile = async (req, res, next) => {
+  const { _id, email, displayName, photoURL, bio, location } = req.body;
+  // console.log("req.body", _id, email, displayName, photoURL, bio, location);
+  const userOnDb = await User.findById({ _id });
+  console.log("user got from db", userOnDb);
+  try {
+    // Upload an image to cloudinary
+    const uploadResult = await cloudinary.uploader.upload(req.file.path, {
+      folder: "blogify/profiles",
+    });
+    // photoURL: uploadResult.secure_url;
+    const updatedProfile = await User.findByIdAndUpdate(
+      _id,
+      {
+        displayName,
+        photoURL: uploadResult.secure_url,
+        bio,
+        location,
+      },
+      { new: true }
+    ).select("-password");
+    console.log("updated profile", updateProfile);
+    res.status(201).json({
+      msg: "Profile Data updated successfully",
+      success: true,
+      data: updatedProfile,
+    });
+  } catch (error) {
+    console.log("profile update error", error);
+    next(
+      handleError(
+        error.status,
+        error.message || "profile update, internal server error"
+      )
+    );
+  }
 };

@@ -11,11 +11,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import UserLayout from "./components/layouts/UserLayout";
 import ClientBoard from "./components/pages/ClientBoard";
 import UpdateProfile from "./components/pages/UpdateProfile";
-import Profile from "./components/pages/Profile";
 import CategoriesDetails from "./components/pages/categories/CategoriesDetails";
 import CategorieUpdate from "./components/pages/categories/CategorieUpdate";
 import AddCategories from "./components/pages/categories/AddCategories";
-import path from "path";
 import AddBlog from "./components/pages/blogs/AddBlog";
 import UpdateBlog from "./components/pages/blogs/UpdateBlog";
 import BlogDetails from "./components/pages/blogs/blogDetails";
@@ -71,7 +69,7 @@ function App() {
       ),
       children: [
         { index: true, element: <ClientBoard /> },
-        { path: "profile", element: <Profile /> },
+        // { path: "profile", element: <Profile /> },
         { path: "update-profile", element: <UpdateProfile /> },
         // categories routes
         { path: "categories", element: <CategoriesDetails /> },
