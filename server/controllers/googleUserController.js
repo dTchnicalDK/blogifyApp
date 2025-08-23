@@ -19,7 +19,7 @@ export const registerGoogleUser = async (req, res, next) => {
 
     // Check if user exists
     let user = await User.findOne({ uid });
-    console.log("user from db", user);
+    // console.log("user from db", user);
 
     if (!user) {
       // Create new user
@@ -35,7 +35,7 @@ export const registerGoogleUser = async (req, res, next) => {
     //   //remove user password
     const userWithoutPassword = sanitizeUser(user);
     // Creating token
-    const token = await jwt.sign(userWithoutPassword, tokenSecretCode);
+    const token = jwt.sign(userWithoutPassword, tokenSecretCode);
 
     // Setting cookie
     res.cookie("token", token, {

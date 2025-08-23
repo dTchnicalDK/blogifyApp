@@ -1,7 +1,6 @@
 import { User } from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
 import { handleError } from "../helper/errorHandler.js";
 import cloudinary from "../configurations/cloudinaryConfig.js";
 const tokenSecretCode = process.env.JWT_TOKEN_SECRET;
@@ -33,6 +32,28 @@ export const registerUser = async (req, res) => {
     });
   } catch (error) {
     console.log("user registration error", error);
+  }
+};
+//------------------function to get all users-----------------------------
+export const getAllusers = async (req, res, next) => {
+  // console.log("route hit");
+  try {
+    const fetchedUsers = await User.find()
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
+    // console.log("fetchedUsers", fetchedUsers);
+    res
+      .status(200)
+      .json({ success: true, message: "user fetched", data: fetchedUsers });
+  } catch (error) {
+    console.log("user registration error", error);
+    next(
+      handleError(
+        error.status || 500,
+        error.message || "internal server error, fetching user"
+      )
+    );
   }
 };
 
@@ -87,8 +108,19 @@ export const loginUser = async (req, res) => {
 
 ////user logout -----------------------------------------------
 export const userLogOut = (req, res) => {
-  res.clearCookie("token");
-  res.status(200).json({ msg: "user loggedOut successfully" });
+  try {
+    res.clearCookie("token");
+    res.status(200).json({
+      success: true,
+      message: "User logged out successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Logout failed",
+      error: error.message,
+    });
+  }
 };
 
 ////update profile -----------------------------------------------
@@ -115,7 +147,7 @@ export const updateProfile = async (req, res, next) => {
     ).select("-password");
     console.log("updated profile", updateProfile);
     res.status(201).json({
-      msg: "Profile Data updated successfully",
+      message: "Profile Data updated successfully",
       success: true,
       data: updatedProfile,
     });
@@ -125,6 +157,28 @@ export const updateProfile = async (req, res, next) => {
       handleError(
         error.status,
         error.message || "profile update, internal server error"
+      )
+    );
+  }
+};
+
+//------------------function delete users-----------------------------
+export const deleteUser = async (req, res, next) => {
+  const { id } = req.params;
+  console.log("route hit", id);
+
+  try {
+    const deletedUser = await User.findByIdAndDelete(id);
+    console.log("deletedUser be", deletedUser);
+    return res
+      .status(200)
+      .json({ message: "user deleted successfully!", data: deletedUser });
+  } catch (error) {
+    console.log("user registration error", error);
+    next(
+      handleError(
+        error.status || 500,
+        error.message || "internal server error, fetching user"
       )
     );
   }

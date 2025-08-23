@@ -64,7 +64,7 @@ const AppSideBar = () => {
             <SidebarMenuItem>
               <SidebarMenuButton>
                 <FaUserSecret />
-                <Link>users</Link>
+                <Link to={"/user/details"}>users</Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
 

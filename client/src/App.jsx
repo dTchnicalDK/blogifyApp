@@ -20,6 +20,7 @@ import BlogDetails from "./components/pages/blogs/blogDetails";
 import SingleBlog from "./components/pages/blogs/SingleBlog";
 import CategoryBlog from "./components/pages/blogs/CategoryBlog";
 import SearchPage from "./components/pages/SearchPage";
+import UserDetails from "./components/pages/UserDetails";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
@@ -43,10 +44,7 @@ function App() {
             <Login setUser={setLoggedInUser} LoggedInUser={LoggedInUser} />
           ),
         },
-        // {
-        //   path: "blogs",
-        //   element: <Blogs />,
-        // },
+
         {
           path: "udashboard",
           element: (
@@ -69,12 +67,14 @@ function App() {
       ),
       children: [
         { index: true, element: <ClientBoard /> },
-        // { path: "profile", element: <Profile /> },
         { path: "update-profile", element: <UpdateProfile /> },
+        { path: "details", element: <UserDetails /> },
+
         // categories routes
         { path: "categories", element: <CategoriesDetails /> },
         { path: "categories/add", element: <AddCategories /> },
         { path: "categories/update/:id", element: <CategorieUpdate /> },
+
         // blogs routes
         { path: "single-blogs/:id", element: <SingleBlog /> },
         { path: "category-blogs/:categoryid", element: <CategoryBlog /> },

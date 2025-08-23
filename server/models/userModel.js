@@ -22,6 +22,11 @@ const userSchema = mongoose.Schema(
     Mobile: {
       type: Number,
     },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
   },
 
   { timestamps: true }

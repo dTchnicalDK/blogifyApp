@@ -1,5 +1,7 @@
 import { Router } from "express";
 import {
+  deleteUser,
+  getAllusers,
   loginUser,
   registerUser,
   updateProfile,
@@ -15,6 +17,8 @@ userRouter.post("/register", registerUser);
 userRouter.post("/register-google", registerGoogleUser);
 userRouter.post("/login", loginUser);
 userRouter.get("/logout", userLogOut);
+userRouter.get("/all-users", getAllusers);
+userRouter.delete("/delete/:id", deleteUser);
 userRouter.put("/update/:id", upload.single("photoURL"), updateProfile);
 
 //secured route

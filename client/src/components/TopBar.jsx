@@ -20,6 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const TopBar = () => {
   const { loggedUser, logout } = useContext(userContext);
@@ -27,9 +28,13 @@ const TopBar = () => {
 
   const handleLogout = async () => {
     try {
+      const logOutStatus = await axios.get(`${baseUrl}/api/user/logout`, {
+        withCredentials: true,
+      });
       await logout();
       navigate("/login");
-      toast.info("logged out successfully");
+      console.log("logout status", logOutStatus);
+      toast.info(logOutStatus.data.message);
     } catch (error) {
       console.log("logout error", error);
       toast.error(error.response?.msg || error.message || "logout error");

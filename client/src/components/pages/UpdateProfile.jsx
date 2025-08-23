@@ -52,8 +52,6 @@ const UpdateProfile = () => {
       const fileUrl = URL.createObjectURL(file);
       setPreview(fileUrl);
     }
-    // console.log("file", file);
-    // console.log("file url", fileUrl);
   };
   const handleSave = async (e) => {
     e.preventDefault();
@@ -74,7 +72,7 @@ const UpdateProfile = () => {
     for (const key in profile) {
       formData.append(`${key}`, profile[key]);
     }
-    // console.log("selected fiel", selectedfile);
+
     if (selectedfile) {
       formData.append("photoURL", selectedfile);
     }
@@ -90,16 +88,15 @@ const UpdateProfile = () => {
         }
       );
       if (response.data.success) {
-        // login(response.data.data);
-        // console.log("set data in loggedUser", response.data.data);
+        login(response.data.data);
       }
       toast.success("profile updated successfully");
-      // console.log("update response fe", response);
-      // navigate("/user/blogs-Details");
+      setIsEditing(false);
     } catch (error) {
       console.error("Frontend update error:", error);
       toast.error(
-        error.response?.data?.message ||
+        error?.response?.data.message ||
+          error.response.data.msg ||
           error.message ||
           "Failed to update profile"
       );
@@ -112,7 +109,6 @@ const UpdateProfile = () => {
   }
   return (
     <div>
-      {/* {console.log("useEffect ran", profile)} */}
       <div
         id="wrapper"
         className="w-full flex flex-col justify-center items-start "
@@ -128,7 +124,7 @@ const UpdateProfile = () => {
                 alt="photo"
                 className="rounded-full w-50 h-50 object-cover"
               />
-              <FaRegEdit className="absolute right-7 top-7 text-4xl text-slate-100 cursor-pointer" />
+
               <strong>{loggedUser.email}</strong>
             </div>
             <Separator />
@@ -160,93 +156,97 @@ const UpdateProfile = () => {
             </Button>
           </div>
         ) : (
-          <div className="w-full max-w-md mx-auto ">
+          <div className="w-full mx-auto ">
             <h2 className=" text-center text-2xl text-slate-600 font-bold capitalize">
               update your profile here
             </h2>
             <div
               id="edit-wrapper"
-              className=" profile-photo group relative mb-4"
+              className=" profile-photo group relative w-[60vw] flex flex-col items-center "
             >
-              <div className="profile-photo group relative  m-auto">
+              <div className="">
                 {/* ------------------------dropzone------------------- */}
-                <div className="w-32 h-32 mx-auto rounded-full overflow-hidden">
+                <div className="relative size-50 md:size-70 cursor-pointer">
                   <img
                     src={preview ? preview : loggedUser.photoURL || profileLogo}
                     alt="photo"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full rounded-full object-cover"
                   />
-                </div>
-                <Dropzone
-                  onDrop={(acceptedFiles) => handleFileSelect(acceptedFiles)}
-                >
-                  {({ getRootProps, getInputProps }) => (
-                    <section>
-                      <div {...getRootProps()}>
-                        <input {...getInputProps()} />
-                        <div className="overlay  absolute border-2 border-red-800 bg-black/50 w-full h-full z-30 top-0 left-0 rounded-full hidden justify-center items-center group-hover:flex">
-                          <FaRegEdit className=" text-6xl text-white/50 cursor-pointer" />
+
+                  <Dropzone
+                    onDrop={(acceptedFiles) => handleFileSelect(acceptedFiles)}
+                  >
+                    {({ getRootProps, getInputProps }) => (
+                      <section>
+                        <div {...getRootProps()}>
+                          <input {...getInputProps()} />
+
+                          <div className="size-full absolute z-30 bg-black/50 top-0 left-0 rounded-full hidden justify-center items-center group-hover:flex">
+                            <FaRegEdit className=" text-6xl text-white/50 cursor-pointer" />
+                          </div>
                         </div>
-                      </div>
-                    </section>
-                  )}
-                </Dropzone>
-                {/* ------------------------end------------------- */}
+                      </section>
+                    )}
+                  </Dropzone>
+                  {/* ------------------------end------------------- */}
+                </div>
               </div>
               <div className="w-full flex justify-center items-center my-2">
                 <strong className="text-slate-600">{loggedUser.email}</strong>
               </div>
               <Separator />
-              <div className="form-group">
-                <label>id:</label>
-                <Input
-                  type="text"
-                  disabled
-                  name="id"
-                  value={loggedUser._id}
-                  // onChange={handleInputChange}
-                />
-              </div>
-              <div className="form-group">
-                <label>Name:</label>
-                <Input
-                  type="text"
-                  name="displayName"
-                  value={profile.displayName}
-                  onChange={handleInputChange}
-                />
-              </div>
+              <div className="form w-full  container p-5">
+                <div className="form-group ">
+                  <label>id:</label>
+                  <Input
+                    type="text"
+                    disabled
+                    name="id"
+                    value={loggedUser._id}
+                    // onChange={handleInputChange}
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Name:</label>
+                  <Input
+                    type="text"
+                    name="displayName"
+                    value={profile.displayName}
+                    onChange={handleInputChange}
+                  />
+                </div>
 
-              <div className="form-group">
-                <label>Bio:</label>
-                <Input
-                  type="text"
-                  name="bio"
-                  value={profile.bio}
-                  onChange={handleInputChange}
-                />
-              </div>
+                <div className="form-group">
+                  <label>Bio:</label>
+                  <Input
+                    type="text"
+                    name="bio"
+                    value={profile.bio}
+                    onChange={handleInputChange}
+                  />
+                </div>
 
-              <div className="form-group">
-                <label>Location:</label>
-                <Input
-                  type="text"
-                  name="location"
-                  value={profile.location}
-                  onChange={handleInputChange}
-                />
-              </div>
+                <div className="form-group">
+                  <label>Location:</label>
+                  <Input
+                    type="text"
+                    name="location"
+                    value={profile.location}
+                    onChange={handleInputChange}
+                  />
+                </div>
 
-              <div className="buttons w-full flex justify-around m-5">
-                <Button onClick={handleSave} className="bg-green-700">
-                  update Changes
-                </Button>
-                <Button
-                  onClick={() => setIsEditing(false)}
-                  className="bg-red-500"
-                >
-                  Cancel Changes
-                </Button>
+                <div className="buttons w-full flex justify-around m-5">
+                  <Button onClick={handleSave} className="bg-green-700">
+                    update Changes
+                  </Button>
+                  <Button
+                    onClick={() => setIsEditing(false)}
+                    className="bg-red-500"
+                  >
+                    Cancel Changes
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
