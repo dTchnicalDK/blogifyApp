@@ -32,7 +32,9 @@ const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const SingleBlog = () => {
   const { id } = useParams();
-  const [blogObj, setBlogObj] = useState();
+  const [blogObj, setBlogObj] = useState({
+    author: { displayName: "inactive", email: "unknown", photoURL: "" },
+  });
   const [commentCount, setCommentCount] = useState(0);
   const [translate, setTranslate] = useState(true);
   const { loggedUser, isLoading: userLoading } = useContext(userContext);
@@ -45,6 +47,7 @@ const SingleBlog = () => {
         try {
           setIsLoading(true);
           const blog = await axios.get(`${baseUrl}/api/blogs/getblog/${id}`);
+          // console.log("blog data res before set", blog.data.data);
           setBlogObj(blog.data.data);
         } catch (error) {
           console.error("Blog fetch error:", error);
@@ -55,7 +58,7 @@ const SingleBlog = () => {
       };
       fetchBlog();
     }
-  }, [id, userLoading]); // Add userLoading as dependency
+  }, [id, userLoading]); // Add userLoading as dependency //userLoading
 
   // useEffect(() => {
   //   const fetchBlog = async () => {
@@ -93,18 +96,17 @@ const SingleBlog = () => {
     fetchCommentsCount();
   }, [blogObj?._id]);
 
-  // console.log("comment count state", commentCount);
+  // const sanitizedHtml = DOMPurify.sanitize(blogObj?.blogContent);
 
-  const sanitizedHtml = DOMPurify.sanitize(blogObj?.blogContent);
-
-  if (isLoading || !blogObj) {
-    return <p>Loading...</p>;
+  if (!blogObj) {
+    return <Spinner />;
   }
-  //safely parsing ckEditor content
 
   return (
     <>
-      {blogObj ? (
+      {!blogObj ? (
+        <div>No blogs to show</div>
+      ) : (
         <div className="container flex flex-col md:flex-row p-2 ">
           <div className="single-blog-detais w-full px-2 mb-12.5">
             <Card>
@@ -116,7 +118,7 @@ const SingleBlog = () => {
                       <div>
                         <span>
                           <img
-                            src={blogObj.author.photoURL || defaultAvatar}
+                            src={blogObj?.author?.photoURL || defaultAvatar}
                             // {blogObj.author.photoURL}
                             height={"40px"}
                             width={"40px"}
@@ -125,7 +127,7 @@ const SingleBlog = () => {
                           />
                         </span>
                         <span className="text-slate-400">
-                          {blogObj.author.displayName}
+                          {blogObj?.author?.displayName || "inactive user"}
                         </span>
                       </div>
                     </Link>
@@ -140,7 +142,7 @@ const SingleBlog = () => {
                     />
 
                     <p className="text-slate-400">
-                      {blogObj?.category.categoryName}
+                      {blogObj?.category?.categoryName}
                     </p>
                   </div>
                 </div>
@@ -158,7 +160,7 @@ const SingleBlog = () => {
                     className="w-full mb5"
                   />
                 </div>
-                <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }}></div>
+                {/* <div dangerouslySetInnerHTML={{ __html: sanitizedHtml }}></div> */}
 
                 <div className="action w-full flex justify-around items-center py-2.5 m-2.5  text-slate-500 text-2xl ">
                   {!loggedUser || !blogObj ? (
@@ -184,9 +186,13 @@ const SingleBlog = () => {
                         <DialogTitle>Comments</DialogTitle>
                       </DialogHeader>
 
-                      <div className="comments h-[60vh] overflow-y-auto ">
-                        <CommentComp props={blogObj} />
-                      </div>
+                      <DialogContent>
+                        <DialogDescription> comments</DialogDescription>
+                        <div className="comments h-[60vh] overflow-y-auto ">
+                          <CommentComp props={blogObj} />
+                        </div>
+                      </DialogContent>
+
                       {/* ///////////////button section////////////////// */}
                       {/* <div className=" pt-2 my-5 py-3">
                         <div className="flex gap-5">
@@ -225,13 +231,12 @@ const SingleBlog = () => {
 
           <div className="md:w-2/6">
             <h1 className="font-bold">Related Blogs</h1>
+
             <RelatedBlog
-              props={{ currentBlog: blogObj?._id, category: blogObj?.category }}
+              props={{ currentBlog: blogObj._id, category: blogObj.category }}
             />
           </div>
         </div>
-      ) : (
-        <div>No blogs to show</div>
       )}
     </>
   );

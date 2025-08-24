@@ -58,7 +58,7 @@ const AppSideBar = () => {
             <SidebarMenuItem>
               <SidebarMenuButton>
                 <FaRegCommentDots />
-                <Link>Comments</Link>
+                <Link to={"/user/comment-details"}>Comments</Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>

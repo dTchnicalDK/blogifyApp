@@ -21,6 +21,7 @@ import SingleBlog from "./components/pages/blogs/SingleBlog";
 import CategoryBlog from "./components/pages/blogs/CategoryBlog";
 import SearchPage from "./components/pages/SearchPage";
 import UserDetails from "./components/pages/UserDetails";
+import CommentDetails from "./components/pages/CommentDetails";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
@@ -69,6 +70,7 @@ function App() {
         { index: true, element: <ClientBoard /> },
         { path: "update-profile", element: <UpdateProfile /> },
         { path: "details", element: <UserDetails /> },
+        { path: "comment-details", element: <CommentDetails /> },
 
         // categories routes
         { path: "categories", element: <CategoriesDetails /> },

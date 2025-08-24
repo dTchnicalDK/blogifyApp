@@ -50,7 +50,9 @@ export const getCommentCount = async (req, res, next) => {
     );
   }
 };
-export const getAllComments = async (req, res, next) => {
+
+/////////////////AllComments////////////////
+export const getAllCommentsOfBlog = async (req, res, next) => {
   try {
     const { blogId } = req.params;
     //   ---basic validations----
@@ -71,5 +73,27 @@ export const getAllComments = async (req, res, next) => {
   } catch (error) {
     console.log("get commnet error", error);
     next(handleError(500, error.response.messsage || "internal server error"));
+  }
+};
+
+//////getting all comments///////
+export const getAllComments = async (req, res, next) => {
+  try {
+    const comments = await Comments.find()
+      .populate("parentBlog", "blogTitle")
+      .populate("author", "photoURL displayName email")
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
+    // console.log("comments fetched at be", comments);
+    res.status(201).json({ message: "comments fetched", data: comments });
+  } catch (error) {
+    console.log("get commnet error", error);
+    next(
+      handleError(
+        error.status || 500,
+        error.response?.messsage || error.messsage || "internal server error"
+      )
+    );
   }
 };

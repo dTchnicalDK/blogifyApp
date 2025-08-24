@@ -126,15 +126,13 @@ export const userLogOut = (req, res) => {
 ////update profile -----------------------------------------------
 export const updateProfile = async (req, res, next) => {
   const { _id, email, displayName, photoURL, bio, location } = req.body;
-  // console.log("req.body", _id, email, displayName, photoURL, bio, location);
   const userOnDb = await User.findById({ _id });
-  console.log("user got from db", userOnDb);
+  // console.log("user got from db", userOnDb);
   try {
     // Upload an image to cloudinary
     const uploadResult = await cloudinary.uploader.upload(req.file.path, {
       folder: "blogify/profiles",
     });
-    // photoURL: uploadResult.secure_url;
     const updatedProfile = await User.findByIdAndUpdate(
       _id,
       {

@@ -33,7 +33,7 @@ const TopBar = () => {
       });
       await logout();
       navigate("/login");
-      console.log("logout status", logOutStatus);
+      // console.log("logout status", logOutStatus);
       toast.info(logOutStatus.data.message);
     } catch (error) {
       console.log("logout error", error);

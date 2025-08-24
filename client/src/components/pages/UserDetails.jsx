@@ -20,7 +20,7 @@ import Spinner from "../Spinner";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const UserDetails = () => {
-  const [users, setUsers] = useState({ name: "dk" });
+  const [users, setUsers] = useState({});
   const [isReloading, setIsRealoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();

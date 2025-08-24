@@ -20,6 +20,7 @@ const RelatedBlog = ({ props }) => {
         const blog = await axios.get(
           `${baseUrl}/api/blogs/get-related-blog/${props.category._id}/${props.currentBlog}`
         );
+        // console.log("related blogs", blog);
         setRelatedBlogs(blog.data.blogs);
       } catch (error) {
         console.error("Related Blog fetch error:", error);
@@ -35,7 +36,7 @@ const RelatedBlog = ({ props }) => {
     if (props?.category && props?.currentBlog) {
       fetchRelatedBlogs();
     }
-  }, []);
+  }, [props.category]);
 
   const handleGoClickedBlog = (id) => {
     navigate(`/user/single-blogs/${id}`);
