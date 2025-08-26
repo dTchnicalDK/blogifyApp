@@ -48,10 +48,10 @@ const DoComment = ({ blogData, setComments }) => {
 
   return (
     <div>
-      <div className="py-2 ">
-        <h1 className="my.5">you can now type in English</h1>
+      <div className="py-1 ">
+        <h1 className="my.5 text-zinc-700">you can now type in English</h1>
 
-        <div className="flex justify-between items-center gap-1.5 ">
+        <div className="flex justify-between items-center gap-1.5 mt-3">
           <Link>
             <div>
               <span>
@@ -65,7 +65,7 @@ const DoComment = ({ blogData, setComments }) => {
               </span>
             </div>
           </Link>
-          <div className="relative flex w-full bg-white">
+          <div className="relative flex w-full bg-white/50">
             <Textarea
               value={text}
               placeholder="Type here..."

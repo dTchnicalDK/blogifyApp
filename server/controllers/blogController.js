@@ -5,6 +5,7 @@ import { decode, encode } from "entities";
 import jwt from "jsonwebtoken";
 import { Categories } from "../models/categoriesModel.js";
 import cloudinary from "../configurations/cloudinaryConfig.js";
+import fs from "fs";
 
 ////////////////////////creating blog//////////////////////////////////////////////
 export const addblog = async (req, res, next) => {
@@ -43,6 +44,13 @@ export const addblog = async (req, res, next) => {
 
     if (!createdBlog) {
       return next(handleError(500, "blog saving error"));
+    }
+
+    try {
+      fs.unlinkSync(req.file.path);
+      console.log("File deleted successfully (synchronously)");
+    } catch (err) {
+      console.error("Error deleting file (synchronously):", err);
     }
     res.status(200).json({
       message: "blog created successfully",

@@ -3,6 +3,7 @@ import { Outlet } from "react-router";
 import AppSideBar from "../AppSideBar";
 import { SidebarProvider } from "../ui/sidebar";
 import TopBar from "../TopBar";
+import Footer1 from "../Footer1";
 
 const UserLayout = () => {
   return (
@@ -21,7 +22,8 @@ const UserLayout = () => {
           </div>
           <main className=" w-full flex flex-col justify-center items-center py-3.5 px-2.5">
             <Outlet />
-            <footer className="mt-[20%]">footer</footer>
+            {/* <footer className="mt-[20%]">footer</footer> */}
+            <Footer1 className="mt-[20%]" />
           </main>
         </div>
       </SidebarProvider>

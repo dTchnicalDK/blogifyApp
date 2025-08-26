@@ -96,10 +96,10 @@ const SingleBlog = () => {
       {!blogObj ? (
         <div>No blogs to show</div>
       ) : (
-        <div className="container flex flex-col md:flex-row  ">
-          <div className="single-blog-detais w-full px-4 ">
+        <div className="container flex flex-col md:flex-row ">
+          <div className="single-blog-detais w-full px-4">
             <Card>
-              <CardHeader className="text-3xl text-center font-serif font-semibold text-teal-500">
+              <CardHeader className="text-3xl text-center font-serif font-semibold text-zinc-700">
                 <h1>{blogObj?.blogTitle}</h1>
               </CardHeader>
               {/* -----------blog image and content section--------------------- */}
