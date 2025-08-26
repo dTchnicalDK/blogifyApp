@@ -8,7 +8,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Spinner } from "react-bootstrap";
 import moment from "moment";
-import LikeCountCom from "./LikeCountCom";
+// import LikeCountCom from "./LikeCountCom";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 const defaultBlog = {
   blogTitle:

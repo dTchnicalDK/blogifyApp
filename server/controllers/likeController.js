@@ -36,11 +36,30 @@ export const doLike = async (req, res, next) => {
     );
   }
 };
+
 /////////like & comment count of blog(id)/////////
 export const likeCount = async (req, res, next) => {
   try {
     const { blogid } = req.params;
-    // console.log("like blogid", blogid);
+    if (!blogid) {
+      return next(400, "blod id needed to count likes");
+    }
+    const likeCount = await Like.countDocuments();
+    res
+      .status(200)
+      .json({ success: true, message: "like count fetched", data: likeCount });
+  } catch (error) {
+    console.log("error fetching likeCount", error);
+    next(
+      handleError(error.status || 500, error.message || "like fetching error")
+    );
+  }
+};
+
+/////////like & comment count of blog(id)///////// working
+export const commentCount = async (req, res, next) => {
+  try {
+    const { blogid } = req.params;
     if (!blogid) {
       return next(400, "blod id needed to count likes");
     }

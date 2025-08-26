@@ -9,7 +9,7 @@ import { userContext } from "@/contexts/UserContexProvider";
 import axios from "axios";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
-const DoComment = ({ blogData }) => {
+const DoComment = ({ blogData, setComments }) => {
   const [text, setText] = useState();
   const { loggedUser } = useContext(userContext);
 
@@ -36,7 +36,7 @@ const DoComment = ({ blogData }) => {
         commentData
       );
       // console.log("blog added", response);
-
+      setComments((prev) => [...prev, response.data.data]);
       toast.success(response.data.messsage);
       setText("");
     } catch (error) {
@@ -65,7 +65,7 @@ const DoComment = ({ blogData }) => {
               </span>
             </div>
           </Link>
-          <div className="relative flex w-full ">
+          <div className="relative flex w-full bg-white">
             <Textarea
               value={text}
               placeholder="Type here..."
