@@ -27,6 +27,28 @@ export const createComment = async (req, res, next) => {
   }
 };
 
+//////getting all comments///////
+export const getAllComments = async (req, res, next) => {
+  try {
+    const comments = await Comments.find()
+      .populate("parentBlog", "blogTitle")
+      .populate("author", "photoURL displayName email")
+      .sort({ createdAt: -1 })
+      .lean()
+      .exec();
+    // console.log("comments fetched at be", comments);
+    res.status(201).json({ message: "comments fetched", data: comments });
+  } catch (error) {
+    console.log("get commnet error", error);
+    next(
+      handleError(
+        error.status || 500,
+        error.response?.messsage || error.messsage || "internal server error"
+      )
+    );
+  }
+};
+
 //////comment count of blog///////
 export const getCommentCount = async (req, res, next) => {
   try {
@@ -51,7 +73,7 @@ export const getCommentCount = async (req, res, next) => {
   }
 };
 
-/////////////////AllComments////////////////
+/////////////////AllComments of blog////////////////
 export const getAllCommentsOfBlog = async (req, res, next) => {
   try {
     const { blogId } = req.params;
@@ -76,23 +98,55 @@ export const getAllCommentsOfBlog = async (req, res, next) => {
   }
 };
 
-//////getting all comments///////
-export const getAllComments = async (req, res, next) => {
+/////////////////AllComments of A User////////////////
+export const getAllCommentsOfUser = async (req, res, next) => {
+  const { userid } = req.params;
   try {
-    const comments = await Comments.find()
+    //   ---basic validations----
+    if (!userid) {
+      return next(400, "required fields are missing!");
+    }
+
+    const fetchedComments = await Comments.find({ author: userid })
+      .populate("author", "displayName photoURL")
       .populate("parentBlog", "blogTitle")
-      .populate("author", "photoURL displayName email")
       .sort({ createdAt: -1 })
       .lean()
       .exec();
-    // console.log("comments fetched at be", comments);
-    res.status(201).json({ message: "comments fetched", data: comments });
+    res
+      .status(201)
+      .json({ messsage: "get User comment route hit", data: fetchedComments });
   } catch (error) {
-    console.log("get commnet error", error);
+    console.log("get user commnet error", error);
+    next(
+      handleError(
+        500,
+        error.response.messsage || "user comment, internal server error"
+      )
+    );
+  }
+};
+
+///////////////deleteCommentById///////////////////////////////
+export const deleteCommentById = async (req, res, next) => {
+  const { commentid } = req.params;
+  try {
+    if (!commentid) {
+      return res.status(400).json({
+        message: "commentid not received at backend",
+        success: false,
+      });
+    }
+    const deletedData = await Comments.findByIdAndDelete(commentid);
+    res.status(200).json({
+      message: "comment deleted successfully",
+      data: deletedData,
+    });
+  } catch (error) {
     next(
       handleError(
         error.status || 500,
-        error.response?.messsage || error.messsage || "internal server error"
+        error.message || error.msg || "server error! comment delete"
       )
     );
   }

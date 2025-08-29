@@ -82,7 +82,7 @@ const SingleBlog = () => {
   }, [blogObj, refetchCommentCount]);
 
   const handleCommentClick = () => {
-    console.log("comment clicked");
+    // console.log("comment clicked");
     //scrolling to comment input box
     commentRef.current.scrollIntoView({ behavior: "smooth" });
   };

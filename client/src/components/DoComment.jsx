@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { MdOutlineForward } from "react-icons/md";
 import defaultAvatar from "@/assets/profileImg.svg";
-import { Link } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { userContext } from "@/contexts/UserContexProvider";
 import axios from "axios";
@@ -12,6 +12,7 @@ const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 const DoComment = ({ blogData, setComments }) => {
   const [text, setText] = useState();
   const { loggedUser } = useContext(userContext);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setText(e.target.value);
@@ -22,6 +23,10 @@ const DoComment = ({ blogData, setComments }) => {
     //basic validation
     if (!text) {
       return toast.error("write comment first (frontEnd)");
+    }
+    if (!loggedUser) {
+      navigate("/login");
+      return toast.error("Login first!  to comment");
     }
     const commentData = {
       author: loggedUser._id,
@@ -56,7 +61,8 @@ const DoComment = ({ blogData, setComments }) => {
             <div>
               <span>
                 <img
-                  src={blogData?.props?.author?.photoURL || defaultAvatar}
+                  // src={blogData?.props?.author?.photoURL || defaultAvatar}
+                  src={loggedUser?.photoURL || defaultAvatar}
                   height={"40px"}
                   width={"40px"}
                   alt="avatar"

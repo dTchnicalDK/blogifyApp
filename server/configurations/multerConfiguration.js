@@ -29,5 +29,6 @@ const upload = multer({
   storage: storage,
   fileFilter: fileFilter,
 });
+// console.log("upload result", upload);
 // .single("featuredImage")
 export default upload;

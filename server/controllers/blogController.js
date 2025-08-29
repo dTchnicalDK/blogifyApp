@@ -48,7 +48,7 @@ export const addblog = async (req, res, next) => {
 
     try {
       fs.unlinkSync(req.file.path);
-      console.log("File deleted successfully (synchronously)");
+      // console.log("File deleted successfully (synchronously)");
     } catch (err) {
       console.error("Error deleting file (synchronously):", err);
     }
@@ -108,7 +108,7 @@ export const getBlogById = async (req, res, next) => {
   }
 };
 
-///////////////getBlogById///////////////////////////////
+///////////////getBlogByCategory///////////////////////////////
 export const getBlogByCategory = async (req, res, next) => {
   // console.log("get blog by id backend hit");
   const { categoryId } = req.params;
@@ -141,61 +141,85 @@ export const getBlogByCategory = async (req, res, next) => {
   }
 };
 
+///////////////getBlogByUser///////////////////////////////
+export const getBlogByUser = async (req, res, next) => {
+  const { userid } = req.params;
+  if (!userid) {
+    return next(handleError(400, "userid not needed to get data"));
+  }
+
+  try {
+    const response = await Blog.find({ author: userid })
+      .populate("category", "categoryName")
+      .populate("author", "displayName photoURL")
+      .lean()
+      .exec();
+
+    res.status(200).json({
+      message: "blogs of user fetched from db",
+      data: response,
+      success: true,
+    });
+  } catch (error) {
+    console.log("getting blog by user error", error.message);
+    next(
+      handleError(
+        error.status,
+        error.message || "internal server error, fetching user blog"
+      )
+    );
+  }
+};
+
 ///////////////editBlogById///////////////////////////////
 export const updateBlog = async (req, res, next) => {
   const { id } = req.params;
-
-  const { blogTitle, blogContent, category, author } = req.body;
-  // const data = Object.fromEntries(req.body);
-  console.log("blogs at be", id, blogContent, blogTitle, category, author);
-  console.log("file at be", req.file);
+  const { data } = req.body;
+  const reqdata = JSON.parse(data);
 
   try {
     // Basic validation
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!id) {
       return res.status(400).json({
         success: false,
-        message: "Invalid blog ID",
+        message: "id needed to fetch be",
       });
     }
-    if (!blogTitle || !blogContent || !category) {
+    if (!reqdata.blogTitle || !reqdata.blogContent || !reqdata.category) {
       return res.status(400).json({
         success: false,
         message: "Title, content, and category are required",
       });
     }
+
     // Verify the category exists
-    const categoryExists = await Categories.findById(category);
+    const categoryExists = await Categories.findById(reqdata.category);
     if (!categoryExists) {
       return res.status(400).json({
         success: false,
         message: "Invalid category ID",
       });
     }
-    console.log("category found", categoryExists);
 
     // Upload an image to cloudinary
-    const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-      folder: "blogify/blogs",
-    });
-    const updatedBlog = await Blog.findByIdAndUpdate(
-      { _id: id },
-      {
-        blogContent,
-        blogTitle,
-        category,
-        featuredImage: uploadResult.secure_url,
-      },
-      {
-        new: true,
-      }
-    );
-
-    if (!updatedBlog) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Blog not found" });
+    let uploadResult = null;
+    if (req.file) {
+      uploadResult = await cloudinary.uploader.upload(req.file.path, {
+        folder: "blogify/blogs",
+      });
     }
+
+    const dataToReplaceWith = {
+      ...reqdata,
+      featuredImage: uploadResult?.secure_url || reqdata.featuredImage,
+      category: reqdata.category._id ? reqdata.category._id : reqdata.category,
+    };
+
+    // console.log("dataToReplaceWith", dataToReplaceWith);
+    const updatedBlog = await Blog.findByIdAndUpdate(id, dataToReplaceWith, {
+      new: true,
+    });
+
     // console.log("update route hit, updatedBlog", updatedBlog);
     res.status(200).json({
       success: true,
@@ -211,34 +235,42 @@ export const updateBlog = async (req, res, next) => {
 ///////////////deleteBlogById///////////////////////////////
 export const deleteBlogById = async (req, res, next) => {
   const { id } = req.params;
+  try {
+    if (!id) {
+      return res.status(400).json({
+        message: "id not received at backend",
+        success: false,
+        // data: deletedData,
+      });
+    }
+    const deletedData = await Blog.findByIdAndDelete(id);
+    if (!deletedData) {
+      res.status(500).json({
+        msg: "failed to delete",
+        success: false,
+        // data: deletedData,
+      });
+    }
 
-  if (!id) {
-    return res.status(400).json({
-      message: "id not received at backend",
-      success: false,
-      // data: deletedData,
+    res.status(200).json({
+      message: "blog deleted successfully",
+      data: deletedData,
     });
+  } catch (error) {
+    next(
+      handleError(
+        error.status || 500,
+        error.message || error.msg || "internal server error! deleting blog"
+      )
+    );
   }
-  const deletedData = await Blog.findByIdAndDelete(id);
-  if (!deletedData) {
-    res.status(500).json({
-      msg: "failed to delete",
-      success: false,
-      // data: deletedData,
-    });
-  }
-
-  res.status(200).json({
-    message: "blog deleted successfully",
-    data: deletedData,
-  });
 };
 
 /////////////////////getting Related Blogs/////////////////////////
 export const getRelatedBlogs = async (req, res, next) => {
   const { category, currentblog } = req.params;
 
-  console.log("related blog categories params", category, currentblog);
+  // console.log("related blog categories params", category, currentblog);
   try {
     const blogs = await Blog.find({
       category,
@@ -249,7 +281,7 @@ export const getRelatedBlogs = async (req, res, next) => {
       .sort({ createdAt: -1 })
       .lean()
       .exec();
-    console.log("res blogs", blogs);
+    // console.log("res blogs", blogs);
     // console.log("blogs response", blogs);
     if (!blogs && blogs.length <= 0) {
       return next(handleError(404, "no data found"));

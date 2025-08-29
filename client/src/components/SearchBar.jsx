@@ -8,11 +8,9 @@ const SearchBar = () => {
 
   const handleChange = (e) => {
     setQuery(e.target.value);
-    // console.log("handleChange", query);
   };
   const handleSearch = (e) => {
     e.preventDefault();
-    console.log("serch triggered", query);
     navigate(`search?q=${query}`);
   };
 

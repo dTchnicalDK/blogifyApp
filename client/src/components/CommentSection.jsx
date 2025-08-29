@@ -57,7 +57,7 @@ const CommentSection = ({ props, setRefetchCommentCount }) => {
                 <div className="relative flex justify-start items-start gap-2.5 mb-1 ">
                   <p>
                     <img
-                      src={comm?.author?.photoURL || defaultAvatar}
+                      src={comm.author.photoURL || defaultAvatar}
                       height={"30px"}
                       width={"30px"}
                       alt="avatar"

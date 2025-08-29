@@ -29,7 +29,6 @@ const Blogs = () => {
           `${baseUrl}/api/blogs/getblogs`,
           { withCredentials: true }
         );
-        console.log("get all blgs", fetchedAllBlogs);
       } catch (error) {
         console.log("error fetching blogs", error);
         toast.error(error.message);

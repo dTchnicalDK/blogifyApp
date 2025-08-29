@@ -19,13 +19,15 @@ import { FaRegCommentDots } from "react-icons/fa6";
 import { FaUserSecret } from "react-icons/fa6";
 import { useContext } from "react";
 import { CategoriesContext } from "@/contexts/CategoryContextProvider";
+import { userContext } from "@/contexts/UserContexProvider";
 
 const AppSideBar = () => {
   const { categories } = useContext(CategoriesContext);
+  const { loggedUser } = useContext(userContext);
 
-  const handleCategoryBlog = (categoryId) => {
-    console.log("handleCategoryBlog triggered");
-  };
+  // const handleCategoryBlog = (categoryId) => {
+  //   console.log("handleCategoryBlog triggered");
+  // };
 
   return (
     <div>
@@ -43,30 +45,55 @@ const AppSideBar = () => {
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <TbCategory />
-                <Link to={"/user/categories"}>Categories</Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <ImBlog />
-                <Link to={"/user/blogs-Details"}>Blogs</Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <FaRegCommentDots />
-                <Link to={"/user/comment-details"}>Comments</Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <FaUserSecret />
-                <Link to={"/user/details"}>users</Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            {loggedUser &&
+            loggedUser.userStatus === "active" &&
+            loggedUser.role === "admin" ? (
+              <>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <TbCategory />
+                    <Link to={"/admin/categories"}>Categories</Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <FaRegCommentDots />
+                    <Link to={"/admin/comment-details"}>Comments</Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <FaUserSecret />
+                    <Link to={"/admin/details"}>users</Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <ImBlog />
+                    <Link to={"/user/blogs-Details"}>Blogs list</Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </>
+            ) : (
+              <>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <ImBlog />
+                    <Link to={"/user/my-blogs-details"}>MyBlogList</Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <FaRegCommentDots />
+                    <Link to={"/user/user-comments"}>MyComments</Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </>
+            )}
 
             <SidebarGroup>
               <SidebarGroupLabel>categories</SidebarGroupLabel>

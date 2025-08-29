@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   Table,
@@ -15,62 +15,33 @@ import Spinner from "../Spinner";
 import { Button } from "../ui/button";
 import { RiDeleteBin5Fill, RiEdit2Fill } from "react-icons/ri";
 import userLogo from "@/assets/profileImg.svg";
-const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
+import { userContext } from "@/contexts/UserContexProvider";
 
-const CommentDetails = () => {
+const UserCommentsDetails = () => {
+  const { loggedUser } = useContext(userContext);
   const [comments, setComments] = useState([]);
   const [isReloading, setIsRealoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
   const handlecommentLink = (blogid) => {
+    console.log("comment link", blogid);
     navigate(`/user/single-blogs/${blogid}`);
     toast.info("checkout the comment, clicking comment button!");
   };
-
-  const handleEditComment = async (commentid) => {
-    try {
-      setIsLoading(true);
-      const deleteComment = await axios.put(
-        `${baseUrl}/api/comments/delete/${commentid}`
-      );
-      setIsRealoading((prev) => (prev ? false : true));
-    } catch (error) {
-      console.log("comment del error", error);
-      toast.error(
-        error.response.message || error.response.msg || "something went wrong"
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleDelete = async (commentid) => {
-    try {
-      setIsLoading(true);
-      const deleteComment = await axios.delete(
-        `${baseUrl}/api/comments/delete/${commentid}`
-      );
-      setIsRealoading((prev) => (prev ? false : true));
-    } catch (error) {
-      console.log("comment del error", error);
-      toast.error(
-        error.response.message || error.response.msg || "something went wrong"
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // -----------fetching all comments---------------
   useEffect(() => {
     const getComments = async () => {
+      // console.log("userId fe", loggedUser._id);
       try {
         setIsLoading(true);
         const fetchedComments = await axios.get(
-          `${baseUrl}/api/comments/all-comments`
+          `${baseUrl}/api/comments/get-user-comments/${loggedUser._id}`
         );
+
         setComments(fetchedComments.data.data);
+        toast.success(fetchedComments.data.message);
       } catch (error) {
         console.log("error fetching comments fe", error);
         toast.error(
@@ -84,7 +55,7 @@ const CommentDetails = () => {
       }
     };
     getComments();
-  }, [isReloading]);
+  }, []);
 
   if (isLoading) {
     return <Spinner />;
@@ -92,6 +63,7 @@ const CommentDetails = () => {
 
   return (
     <div>
+      {/* {console.log("fetchedComments", comments)} */}
       {comments && comments.length > 0 ? (
         <Table>
           <TableCaption>A list of comments.</TableCaption>
@@ -106,7 +78,7 @@ const CommentDetails = () => {
               <TableHead className="text-right" colsapn="2">
                 Action
               </TableHead>
-              {/* <TableHead className="text-right"></TableHead> */}
+              <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -127,7 +99,7 @@ const CommentDetails = () => {
                   <TableCell>
                     {" "}
                     <span className="cursor-pointer text-wrap">
-                      {comment?.parentBlog?.blogTitle}
+                      {comment.parentBlog.blogTitle}
                     </span>
                   </TableCell>
                   <TableCell>
@@ -144,18 +116,18 @@ const CommentDetails = () => {
                     }
                   </TableCell>
 
-                  {/* <TableCell className="text-right ">
+                  <TableCell className="text-right ">
                     <Button
                       variant="secondary"
                       size="icon"
                       className="size-8 btn-hover"
                       onClick={() => {
-                        handleEditComment(comment._id);
+                        handleEdit(comment._id);
                       }}
                     >
                       <RiEdit2Fill />
                     </Button>
-                  </TableCell> */}
+                  </TableCell>
                   <TableCell className="text-right ">
                     <Button
                       variant="secondary"
@@ -182,4 +154,4 @@ const CommentDetails = () => {
   );
 };
 
-export default CommentDetails;
+export default UserCommentsDetails;

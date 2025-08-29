@@ -22,11 +22,16 @@ import CategoryBlog from "./components/pages/blogs/CategoryBlog";
 import SearchPage from "./components/pages/SearchPage";
 import UserDetails from "./components/pages/UserDetails";
 import CommentDetails from "./components/pages/CommentDetails";
+import ActiveUserAuth from "./components/authComponents/ActiveUserAuth";
+import OnlyAdminAllowed from "./components/authComponents/OnlyAdminAllowed";
+import UserCommentsDetails from "./components/pages/UserComment";
+import MyBlogsList from "./components/pages/blogs/MyBlogsList";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
 
   const router = createBrowserRouter([
+    ///////////////public route/////////////////////
     {
       path: "/",
       element: <LayoutDefault loggedInUser={LoggedInUser} />,
@@ -59,31 +64,86 @@ function App() {
         },
       ],
     },
+    /////////////////user Auth route////////////
     {
       path: "/user",
-      element: (
-        <ProtectedRoute>
-          <UserLayout />
-        </ProtectedRoute>
-      ),
+      element: <UserLayout />,
       children: [
         { index: true, element: <ClientBoard /> },
-        { path: "update-profile", element: <UpdateProfile /> },
-        { path: "details", element: <UserDetails /> },
-        { path: "comment-details", element: <CommentDetails /> },
+        { path: "single-blogs/:id", element: <SingleBlog /> },
+        { path: "search", element: <SearchPage /> },
+        { path: "category-blogs/:categoryid", element: <CategoryBlog /> },
+        {
+          path: "update-profile",
+          element: (
+            <ActiveUserAuth>
+              <UpdateProfile />
+            </ActiveUserAuth>
+          ),
+        },
+        {
+          path: "user-comments",
+          element: (
+            <ActiveUserAuth>
+              <UserCommentsDetails />
+            </ActiveUserAuth>
+          ),
+        },
 
-        // categories routes
+        // blogs routes
+        {
+          path: "blog/add",
+          element: (
+            <ActiveUserAuth>
+              <AddBlog />
+            </ActiveUserAuth>
+          ),
+        },
+
+        {
+          path: "blogs-details",
+          element: (
+            <ActiveUserAuth>
+              <BlogDetails />
+            </ActiveUserAuth>
+          ),
+        },
+        {
+          path: "my-blogs-details",
+          element: (
+            <ActiveUserAuth>
+              <MyBlogsList />
+            </ActiveUserAuth>
+          ),
+        },
+
+        {
+          path: "blogs/update/:id",
+          element: (
+            <ActiveUserAuth>
+              <UpdateBlog />
+            </ActiveUserAuth>
+          ),
+        },
+      ],
+    },
+    /////////////only admin allowed route//////////////////
+    {
+      path: "/admin",
+      element: (
+        <OnlyAdminAllowed>
+          <UserLayout />
+        </OnlyAdminAllowed>
+      ),
+      children: [
+        {
+          path: "details",
+          element: <UserDetails />,
+        },
+        { path: "comment-details", element: <CommentDetails /> },
         { path: "categories", element: <CategoriesDetails /> },
         { path: "categories/add", element: <AddCategories /> },
         { path: "categories/update/:id", element: <CategorieUpdate /> },
-
-        // blogs routes
-        { path: "single-blogs/:id", element: <SingleBlog /> },
-        { path: "category-blogs/:categoryid", element: <CategoryBlog /> },
-        { path: "blogs-details", element: <BlogDetails /> },
-        { path: "blog/add", element: <AddBlog /> },
-        { path: "blogs/update/:id", element: <UpdateBlog /> },
-        { path: "search", element: <SearchPage /> },
       ],
     },
   ]);

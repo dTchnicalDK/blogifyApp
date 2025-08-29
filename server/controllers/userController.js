@@ -163,20 +163,49 @@ export const updateProfile = async (req, res, next) => {
 //------------------function delete users-----------------------------
 export const deleteUser = async (req, res, next) => {
   const { id } = req.params;
-  console.log("route hit", id);
+  // console.log("route hit", id);
 
   try {
-    const deletedUser = await User.findByIdAndDelete(id);
-    console.log("deletedUser be", deletedUser);
+    // const deletedUser = await User.findByIdAndDelete(id);
+    // console.log("deletedUser be", deletedUser);
+    const suspendedUser = await User.findByIdAndUpdate(id, {
+      userStatus: "suspended",
+    });
+    // console.log("suspended", suspendedUser);
     return res
       .status(200)
-      .json({ message: "user deleted successfully!", data: deletedUser });
+      .json({ message: "user deleted successfully!", data: suspendedUser });
   } catch (error) {
     console.log("user registration error", error);
     next(
       handleError(
         error.status || 500,
         error.message || "internal server error, fetching user"
+      )
+    );
+  }
+};
+//------------------function reactivate users-----------------------------
+export const reActivateUser = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const isSuspended = await User.findById(id);
+    console.log("suspended account", isSuspended);
+    if (isSuspended.userStatus === "active") {
+      return res.status(400).json({ message: "user is already active!" });
+    }
+    const suspendedUser = await User.findByIdAndUpdate(id, {
+      userStatus: "active",
+    });
+    // console.log("suspended", suspendedUser);
+    return res.status(200).json({ message: "user activated successfully!" });
+  } catch (error) {
+    console.log("user reActivation  error", error);
+    next(
+      handleError(
+        error.status || 500,
+        error.message || "internal server error, activating user"
       )
     );
   }

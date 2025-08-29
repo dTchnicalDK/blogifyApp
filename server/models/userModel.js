@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 const userSchema = mongoose.Schema(
   {
     email: {
@@ -26,6 +27,11 @@ const userSchema = mongoose.Schema(
       type: String,
       enum: ["user", "admin"],
       default: "user",
+    },
+    userStatus: {
+      type: String,
+      enum: ["active", "suspended", "deleted"],
+      default: "active",
     },
   },
 

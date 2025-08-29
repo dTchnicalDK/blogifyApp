@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -11,13 +12,13 @@ function Register() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    console.log(formData);
+    // console.log(formData);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     //validation if password and repassword matches
     if (formData.password !== formData.rePassword) {
-      return console.log("password don't match");
+      return toast.error("password don't match");
     }
     try {
       const userCreationRespose = await axios.post(

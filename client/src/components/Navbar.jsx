@@ -13,7 +13,7 @@ const NavBar = () => {
   const mobileNavRef = useRef(null);
 
   const handleLogIn = () => {
-    console.log("handleLogIn");
+    // console.log("handleLogIn");
     handleMobileNav();
     navigate("/login");
   };

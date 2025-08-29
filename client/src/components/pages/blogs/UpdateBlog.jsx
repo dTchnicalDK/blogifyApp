@@ -1,10 +1,8 @@
-// import CKEditor from "@/components/CkEditor";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { IoAddSharp } from "react-icons/io5";
 import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
@@ -15,25 +13,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-// import { ClassicEditor } from "ckeditor5";
-// import Editor from "@/components/CkEditor";
 import { userContext } from "@/contexts/UserContexProvider";
 import Spinner from "@/components/Spinner";
-import { Toast } from "bootstrap";
 import Dropzone from "react-dropzone";
 import noImage from "@/assets/noImage.jpg";
 import { IoMdAdd } from "react-icons/io";
 import { Textarea } from "@/components/ui/textarea";
-// import { decode } from "entities";
 
 const UpdateBlog = () => {
-  const [blogToEdit, setBlogToEdit] = useState();
   const [blog, setBlog] = useState();
   const [reRender, setRerender] = useState(false);
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const { loggedUser, login, logOut } = useContext(userContext);
-  // const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
   const [preview, setPreview] = useState(null);
@@ -53,7 +45,7 @@ const UpdateBlog = () => {
       );
     }
   };
-  // fetching category
+  // fetching category preExisting blog data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -75,71 +67,53 @@ const UpdateBlog = () => {
     fetchData();
   }, [reRender]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setBlog({ ...blog, [name]: value });
-  };
-
+  /////category selection///////
   const handleSelect = (SelectValue) => {
     setBlog({ ...blog, category: SelectValue });
-    // console.log("category", SelectValue);
+    console.log("category inside select", blog);
   };
   const handleFileSelection = (file) => {
     const fileObj = URL.createObjectURL(file[0]);
     setPreview(fileObj);
     setSelectedFile(file[0]);
-    console.log("selected file", fileObj);
   };
 
-  const handleEditorData = (event, editor) => {
-    // console.log("editor triggered");
-    const data = editor.getData();
-    setBlog({ ...blog, blogContent: data });
-    // console.log("editor data ", data);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setBlog({ ...blog, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation
+    // // Validation
     if (
-      !blog?.blogTitle?.trim() ||
-      !blog?.blogContent?.trim() ||
-      !blog?.category
+      !blog.blogTitle?.trim() ||
+      !blog.blogContent?.trim() ||
+      !blog.category
     ) {
       return toast.error("all fields are mandatory, fill first!");
     }
     let formData = new FormData();
-
-    for (const key in blog) {
-      formData.append(`${key}`, blog[key]);
-    }
-    // console.log("selected fiel", selectedFile);
+    formData.append("data", JSON.stringify(blog));
     if (selectedFile) {
       formData.append("featuredImage", selectedFile);
     }
-    const data = Object.fromEntries(formData);
-    // console.log("formdata at fe", data);
+
+    // const fdata = Object.fromEntries(formData);
+
     try {
       setIsLoading(true);
       const response = await axios.put(
-        `${baseUrl}/api/blogs/update-blog/${id}`,
-
+        `${baseUrl}/api/blogs/update-blog/${blog._id}`,
         formData,
-        //   blogTitle: blog.blogTitle,
-        //   blogContent: blog.blogContent,
-        //   category: blog.category,
-
         {
           withCredentials: true,
         }
       );
-      // console.log("blog update response fe", response);
 
-      if (response.data.success) {
-        toast.success("Blog updated successfully");
-        navigate("/user/blogs-Details");
-      }
+      toast.success(response.data.message || "success");
+      navigate("/user/blogs-Details");
     } catch (error) {
       console.error("Frontend update error:", error);
       toast.error(
@@ -214,32 +188,18 @@ const UpdateBlog = () => {
                   </section>
                 )}
               </Dropzone>
+              {/* -----------------------blog content----------- */}
+              <Textarea
+                type="text"
+                name="blogContent"
+                placeholder="Enter blog content here"
+                value={blog?.blogContent}
+                onChange={handleChange}
+              />
 
-              {/* ------ including ck editor------------ */}
-              {blog?.blogContent !== undefined ? (
-                <>
-                  {" "}
-                  {/* -----------------------blog content----------- */}
-                  <Textarea
-                    type="text"
-                    name="blogContent"
-                    placeholder="Enter blog content"
-                    value={blog?.blogContent}
-                    onChange={handleChange}
-                  />
-                </>
-              ) : (
-                // <Editor
-                //   props={{
-                //     initialData: blog.blogContent, // No template literal needed
-                //     onChange: handleEditorData,
-                //   }}
-                // />
-                <div>Loading editor...</div> // Or null/skeleton
-              )}
               <div className="flex justify-center gap-12">
                 <Button type="submit" className="">
-                  Add now
+                  Update Now
                 </Button>
                 <Button variant="destructive">
                   <Link to="/user/categories">Cancel</Link>

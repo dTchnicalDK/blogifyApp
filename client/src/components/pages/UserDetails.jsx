@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import moment from "moment";
 import { RiDeleteBin5Fill, RiEdit2Fill } from "react-icons/ri";
+import { SiTicktick } from "react-icons/si";
 import userLogo from "@/assets/profileImg.svg";
 import Spinner from "../Spinner";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
@@ -25,7 +26,11 @@ const UserDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleDelete = async (id) => {
+  const handleDeleteUser = async (id) => {
+    const shouldProceed = confirm("Are you sure! want to Delete user");
+    if (!shouldProceed) {
+      return toast("user delete cancelled");
+    }
     try {
       setIsLoading(true);
       const deleteUser = await axios.delete(
@@ -40,6 +45,33 @@ const UserDetails = () => {
       toast.success(deleteUser.data.message);
     } catch (error) {
       console.log("user delete error", error);
+      toast.error(
+        error.response.data.message || error.response.data.msg || error.message
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEditUser = async (id) => {
+    const shouldProceed = confirm("Are you sure! want to Reactivate user");
+    if (!shouldProceed) {
+      return toast("user Reactivation cancelled !");
+    }
+    try {
+      setIsLoading(true);
+      const reActivateUser = await axios.put(
+        `${baseUrl}/api/user/reactivate/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      // console.log("success", reActivateUser);
+      setIsRealoading(isReloading ? false : true);
+      toast.success(reActivateUser.data.message);
+    } catch (error) {
+      console.log("user reactivation error", error);
       toast.error(
         error.response.data.message || error.response.data.msg || error.message
       );
@@ -94,10 +126,10 @@ const UserDetails = () => {
               <TableHead>email id </TableHead>
               <TableHead>id </TableHead>
               <TableHead>Role </TableHead>
+              <TableHead>Status </TableHead>
               <TableHead> Photo </TableHead>
-              <TableHead className="text-right" colsapn="2">
-                Action
-              </TableHead>
+              <TableHead className="text-right">Reactivate</TableHead>
+              <TableHead className="text-right">Delete</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -105,11 +137,10 @@ const UserDetails = () => {
               return (
                 <TableRow key={idx}>
                   <TableCell className="font-medium">{idx + 1}</TableCell>
-                  {/* <Link to={"/user/update-profile"}> */}
                   <TableCell>
                     <span
                       onClick={() => handleUserLink(user._id)}
-                      className="cursor-pointer"
+                      className="cursor-pointer "
                     >
                       {user.displayName}
                     </span>
@@ -118,6 +149,7 @@ const UserDetails = () => {
                   <TableCell>{user.email}</TableCell>
                   <TableCell>{user._id}</TableCell>
                   <TableCell>{user.role}</TableCell>
+                  <TableCell>{user.userStatus}</TableCell>
                   <TableCell>
                     {
                       <img
@@ -134,10 +166,11 @@ const UserDetails = () => {
                       size="icon"
                       className="size-8 btn-hover"
                       onClick={() => {
-                        handleEdit(user._id);
+                        handleEditUser(user._id);
                       }}
                     >
-                      <RiEdit2Fill />
+                      {/* <RiEdit2Fill /> */}
+                      <SiTicktick className="text-green-600" />
                     </Button>
                   </TableCell>
                   <TableCell className="text-right ">
@@ -146,7 +179,7 @@ const UserDetails = () => {
                       size="icon"
                       className="btn-hover text-destructive"
                       onClick={() => {
-                        handleDelete(user._id);
+                        handleDeleteUser(user._id);
                       }}
                     >
                       <RiDeleteBin5Fill />

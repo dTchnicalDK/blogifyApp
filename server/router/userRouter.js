@@ -3,6 +3,7 @@ import {
   deleteUser,
   getAllusers,
   loginUser,
+  reActivateUser,
   registerUser,
   updateProfile,
   userLogOut,
@@ -19,6 +20,7 @@ userRouter.post("/login", loginUser);
 userRouter.get("/logout", userLogOut);
 userRouter.get("/all-users", getAllusers);
 userRouter.delete("/delete/:id", deleteUser);
+userRouter.put("/reactivate/:id", reActivateUser);
 userRouter.put("/update/:id", upload.single("photoURL"), updateProfile);
 
 //secured route

@@ -51,7 +51,7 @@ const AddBlog = () => {
     const fileObj = URL.createObjectURL(file[0]);
     setPreview(fileObj);
     setSelectedFile(file[0]);
-    console.log("selected file", fileObj);
+    // console.log("selected file", fileObj);
   };
   //checking if user logged in
   const authenticateUser = async () => {

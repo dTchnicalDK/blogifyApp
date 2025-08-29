@@ -37,7 +37,7 @@ export default function CommentTransLitrate({ props }) {
         `https://inputtools.google.com/request?text=${word}&itc=hi-t-i0-und&num=1&cp=0&cs=1&ie=utf-8&oe=utf-8`
       );
       const data = await response.json();
-      // console.log("response", data);
+
       if (data[0] === "SUCCESS") {
         return data[1][0][1][0]; // First suggestion
       }

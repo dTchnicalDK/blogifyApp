@@ -69,6 +69,7 @@ const CategoriesDetails = () => {
           </Link>
         </Button>
       </div>
+      <h1>Categories</h1>
 
       {categories && categories.length >= 1 ? (
         <Table className="mt-12 ">
