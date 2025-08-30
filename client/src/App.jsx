@@ -7,7 +7,6 @@ import LayoutDefault from "./components/layouts/LayoutDefault";
 import LandingPage from "./components/pages/LandingPage";
 import UserDashboard from "./components/pages/UserDashboard";
 import { ToastContainer } from "react-toastify";
-import ProtectedRoute from "./components/ProtectedRoute";
 import UserLayout from "./components/layouts/UserLayout";
 import ClientBoard from "./components/pages/ClientBoard";
 import UpdateProfile from "./components/pages/UpdateProfile";
@@ -53,14 +52,7 @@ function App() {
 
         {
           path: "udashboard",
-          element: (
-            <ProtectedRoute>
-              <UserDashboard
-                setUser={setLoggedInUser}
-                LoggedInUser={LoggedInUser}
-              />
-            </ProtectedRoute>
-          ),
+          element: <UserDashboard />,
         },
       ],
     },
@@ -73,6 +65,7 @@ function App() {
         { path: "single-blogs/:id", element: <SingleBlog /> },
         { path: "search", element: <SearchPage /> },
         { path: "category-blogs/:categoryid", element: <CategoryBlog /> },
+        // { path: "comment-details", element: <UserCommentsDetails /> },
         {
           path: "update-profile",
           element: (

@@ -32,7 +32,8 @@ const CommentDetails = () => {
     try {
       setIsLoading(true);
       const deleteComment = await axios.put(
-        `${baseUrl}/api/comments/delete/${commentid}`
+        `${baseUrl}/api/comments/delete/${commentid}`,
+        { withCredentials: true }
       );
       setIsRealoading((prev) => (prev ? false : true));
     } catch (error) {
@@ -49,7 +50,8 @@ const CommentDetails = () => {
     try {
       setIsLoading(true);
       const deleteComment = await axios.delete(
-        `${baseUrl}/api/comments/delete/${commentid}`
+        `${baseUrl}/api/comments/delete/${commentid}`,
+        { withCredentials: true }
       );
       setIsRealoading((prev) => (prev ? false : true));
     } catch (error) {
@@ -68,7 +70,8 @@ const CommentDetails = () => {
       try {
         setIsLoading(true);
         const fetchedComments = await axios.get(
-          `${baseUrl}/api/comments/all-comments`
+          `${baseUrl}/api/comments/all-comments`,
+          { withCredentials: true }
         );
         setComments(fetchedComments.data.data);
       } catch (error) {

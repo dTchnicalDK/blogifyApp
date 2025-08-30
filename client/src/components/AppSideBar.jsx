@@ -105,7 +105,7 @@ const AppSideBar = () => {
                       // onClick={() => handleCategoryBlog(cat._id)}
                       >
                         <GoDot />
-                        <Link to={`category-blogs/${cat._id}`}>
+                        <Link to={`/user/category-blogs/${cat._id}`}>
                           {cat.categoryName}
                         </Link>
                       </SidebarMenuButton>

@@ -12,16 +12,23 @@ import upload from "../configurations/multerConfiguration.js";
 
 import { authenticateUser } from "../authentication/userAuthentication.js";
 import { registerGoogleUser } from "../controllers/googleUserController.js";
+import { onlyAdminRoute } from "../middlewares/onlyAdminRoute.js";
+import { userProtectedRoute } from "../middlewares/userProtectedRoute.js";
 const userRouter = Router();
 
 userRouter.post("/register", registerUser);
 userRouter.post("/register-google", registerGoogleUser);
 userRouter.post("/login", loginUser);
-userRouter.get("/logout", userLogOut);
-userRouter.get("/all-users", getAllusers);
-userRouter.delete("/delete/:id", deleteUser);
-userRouter.put("/reactivate/:id", reActivateUser);
-userRouter.put("/update/:id", upload.single("photoURL"), updateProfile);
+userRouter.get("/logout", userProtectedRoute, userLogOut);
+userRouter.get("/all-users", onlyAdminRoute, getAllusers);
+userRouter.delete("/delete/:id", userProtectedRoute, deleteUser);
+userRouter.put("/reactivate/:id", onlyAdminRoute, reActivateUser);
+userRouter.put(
+  "/update/:id",
+  userProtectedRoute,
+  upload.single("photoURL"),
+  updateProfile
+);
 
 //secured route
 userRouter.get("/authenticate", authenticateUser);

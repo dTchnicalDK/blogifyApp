@@ -7,7 +7,6 @@ import React, {
   useEffect,
   useState,
 } from "react";
-
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 export const userContext = createContext();
@@ -25,12 +24,18 @@ const UserContextProvider = ({ children }) => {
       const response = await axios.get(`${baseUrl}/api/user/authenticate`, {
         withCredentials: true,
       });
-      // console.log("response inside context", response);
-      setLoggedUser(response.data.user); // Assuming user data is in response.data
-    } catch (err) {
-      setError(err);
-      setLoggedUser(null);
-      console.error("Authentication error:", err);
+      setLoggedUser(response?.data.user);
+    } catch (error) {
+      setError(error);
+      if (error.response?.status === 401) {
+        // 401 is expected for unauthenticated users - not an actual error
+        setLoggedUser(null);
+        // console.log("User not authenticated (expected)");
+      } else {
+        // For other errors, log and set error state
+        console.error("Authentication error:", error);
+        setError(error.message || "Authentication failed");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -78,65 +83,3 @@ const UserContextProvider = ({ children }) => {
 };
 
 export default UserContextProvider;
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-// import Spinner from "@/components/Spinner";
-// import axios from "axios";
-// import React, {
-//   createContext,
-//   useCallback,
-//   useContext,
-//   useEffect,
-//   useState,
-// } from "react";
-// const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
-
-// export const userContext = createContext();
-
-// const UserContexProvider = ({ children }) => {
-//   const [loggedUser, setLoggedUser] = useState(null);
-//   const [isLoading, setIsLoading] = useState(false);
-
-//   //useEffect for rehydration
-//   useEffect(() => {
-//     try {
-//       setIsLoading(true);
-//       const AuthenticatedUser = async () => {
-//         const currenUser = await axios.get(`${baseUrl}/api/user/authenticate`, {
-//           withCredentials: true,
-//         });
-//         if (!currenUser) {
-//           setLoggedUser(null);
-//         }
-//         setLoggedUser(currenUser);
-//         // console.log("currenUser", currenUser);
-//       };
-//       AuthenticatedUser();
-//     } catch (error) {
-//       setLoggedUser(null);
-//       console.log("rehydration error", error);
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   }, []);
-
-//   const login = useCallback((user) => {
-//     setLoggedUser(user);
-//   }, []);
-
-//   const logOut = useCallback(() => {
-//     setLoggedUser(null);
-//   }, []);
-
-//   if (isLoading) {
-//     return <Spinner />;
-//   }
-
-//   return (
-//     <userContext.Provider value={{ loggedUser, login, logOut }}>
-//       {children}
-//     </userContext.Provider>
-//   );
-// };
-
-// export default UserContexProvider;

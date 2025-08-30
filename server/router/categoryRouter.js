@@ -6,12 +6,14 @@ import {
   getAllCategories,
   getCategoryById,
 } from "../controllers/categoriesController.js";
+import { onlyAdminRoute } from "../middlewares/onlyAdminRoute.js";
 const categoryRouter = Router();
 
 categoryRouter.get("/getbyid/:id", getCategoryById);
-categoryRouter.post("/create", createCategory);
 categoryRouter.get("/get", getAllCategories);
-categoryRouter.put("/edit/:id", editCategory);
-categoryRouter.delete("/delete/:id", deleteCategory);
+//////only admin route//////////////////
+categoryRouter.post("/create", onlyAdminRoute, createCategory);
+categoryRouter.put("/edit/:id", onlyAdminRoute, editCategory);
+categoryRouter.delete("/delete/:id", onlyAdminRoute, deleteCategory);
 
 export { categoryRouter };

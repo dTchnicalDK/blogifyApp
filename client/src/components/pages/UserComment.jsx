@@ -37,7 +37,8 @@ const UserCommentsDetails = () => {
       try {
         setIsLoading(true);
         const fetchedComments = await axios.get(
-          `${baseUrl}/api/comments/get-user-comments/${loggedUser._id}`
+          `${baseUrl}/api/comments/get-user-comments/${loggedUser._id}`,
+          { withCredentials: true }
         );
 
         setComments(fetchedComments.data.data);
