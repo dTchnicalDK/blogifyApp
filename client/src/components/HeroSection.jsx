@@ -29,7 +29,7 @@ function HeroSection() {
           <div>
             <Button className="text-2xl px-12 py-8 tracking-widest">
               <>
-                <Link to={"/blogs"}>Explore Now... </Link>
+                <Link to={"/user"}>Explore Now... </Link>
               </>
             </Button>
           </div>

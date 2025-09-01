@@ -38,7 +38,8 @@ const DoComment = ({ blogData, setComments }) => {
     try {
       const response = await axios.post(
         `${baseUrl}/api/comments/create`,
-        commentData
+        commentData,
+        { withCredentials: true }
       );
       // console.log("blog added", response);
       setComments((prev) => [...prev, response.data.data]);

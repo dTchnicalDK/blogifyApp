@@ -25,30 +25,80 @@ const AppSideBar = () => {
   const { categories } = useContext(CategoriesContext);
   const { loggedUser } = useContext(userContext);
 
-  // const handleCategoryBlog = (categoryId) => {
-  //   console.log("handleCategoryBlog triggered");
-  // };
+  switch (loggedUser?.role) {
+    case "user":
+      return (
+        <Sidebar>
+          <SidebarHeader>
+            <img src={logo} alt="" width={"70px"} height={"70px"} />
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarGroup>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/user">
+                      <IoHomeOutline /> Home
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
 
-  return (
-    <div>
-      <Sidebar>
-        <SidebarHeader>
-          <img src={logo} alt="" width={"70px"} height={"70px"} />
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarGroup />
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link to="/user">
-                  <IoHomeOutline /> Home
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            {loggedUser &&
-            loggedUser.userStatus === "active" &&
-            loggedUser.role === "admin" ? (
-              <>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <ImBlog />
+                    <Link to={"/user/my-blogs-details"}>MyBlogList</Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <FaRegCommentDots />
+                    <Link to={"/user/user-comments"}>MyComments</Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroup>
+
+            <SidebarGroup>
+              <SidebarGroupLabel>categories</SidebarGroupLabel>
+              <SidebarMenu>
+                {categories?.map((cat) => {
+                  return (
+                    <SidebarMenuItem key={cat._id}>
+                      <SidebarMenuButton>
+                        <GoDot />
+                        <Link to={`/user/category-blogs/${cat._id}`}>
+                          {cat.categoryName}
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroup>
+          </SidebarContent>
+        </Sidebar>
+      );
+
+      break;
+
+    case "admin":
+      return (
+        <Sidebar>
+          <SidebarHeader>
+            <img src={logo} alt="" width={"70px"} height={"70px"} />
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarGroup>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <Link to="/user">
+                      <IoHomeOutline /> Home
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+
                 <SidebarMenuItem>
                   <SidebarMenuButton>
                     <TbCategory />
@@ -76,24 +126,8 @@ const AppSideBar = () => {
                     <Link to={"/user/blogs-Details"}>Blogs list</Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              </>
-            ) : (
-              <>
-                <SidebarMenuItem>
-                  <SidebarMenuButton>
-                    <ImBlog />
-                    <Link to={"/user/my-blogs-details"}>MyBlogList</Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-
-                <SidebarMenuItem>
-                  <SidebarMenuButton>
-                    <FaRegCommentDots />
-                    <Link to={"/user/user-comments"}>MyComments</Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              </>
-            )}
+              </SidebarMenu>
+            </SidebarGroup>
 
             <SidebarGroup>
               <SidebarGroupLabel>categories</SidebarGroupLabel>
@@ -101,9 +135,7 @@ const AppSideBar = () => {
                 {categories?.map((cat) => {
                   return (
                     <SidebarMenuItem key={cat._id}>
-                      <SidebarMenuButton
-                      // onClick={() => handleCategoryBlog(cat._id)}
-                      >
+                      <SidebarMenuButton>
                         <GoDot />
                         <Link to={`/user/category-blogs/${cat._id}`}>
                           {cat.categoryName}
@@ -114,12 +146,55 @@ const AppSideBar = () => {
                 })}
               </SidebarMenu>
             </SidebarGroup>
-          </SidebarMenu>
-        </SidebarContent>
-        <SidebarFooter />
-      </Sidebar>
-    </div>
-  );
+          </SidebarContent>
+        </Sidebar>
+      );
+      break;
+
+    default:
+      return (
+        <>
+          <Sidebar>
+            <SidebarHeader>
+              <img src={logo} alt="" width={"70px"} height={"70px"} />
+            </SidebarHeader>
+            <SidebarContent>
+              <SidebarGroup>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link to="/user">
+                        <IoHomeOutline /> Home
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroup>
+
+              <SidebarGroup>
+                <SidebarGroupLabel>categories</SidebarGroupLabel>
+                <SidebarMenu>
+                  {categories?.map((cat) => {
+                    return (
+                      <SidebarMenuItem key={cat._id}>
+                        <SidebarMenuButton>
+                          <GoDot />
+                          <Link to={`/user/category-blogs/${cat._id}`}>
+                            {cat.categoryName}
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroup>
+            </SidebarContent>
+          </Sidebar>
+        </>
+      );
+
+      break;
+  }
 };
 
 export default AppSideBar;

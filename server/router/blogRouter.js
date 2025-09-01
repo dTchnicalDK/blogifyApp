@@ -21,7 +21,7 @@ blogRouter.post(
   upload.single("featuredImage"),
   addblog
 );
-blogRouter.get("/getblogs", userProtectedRoute, getUserBlogs);
+blogRouter.get("/getblogs", getUserBlogs);
 blogRouter.get("/get-user-blogs/:userid", userProtectedRoute, getBlogByUser);
 blogRouter.put(
   "/update-blog/:id",
