@@ -21,8 +21,8 @@ userRouter.post("/register-google", registerGoogleUser);
 userRouter.post("/login", loginUser);
 userRouter.get("/logout", userProtectedRoute, userLogOut);
 userRouter.get("/all-users", onlyAdminRoute, getAllusers);
-userRouter.delete("/delete/:id", userProtectedRoute, deleteUser);
-userRouter.put("/reactivate/:id", onlyAdminRoute, reActivateUser);
+userRouter.delete("/delete/:id", onlyAdminRoute, deleteUser);
+userRouter.get("/reactivate/:id", onlyAdminRoute, reActivateUser);
 userRouter.put(
   "/update/:id",
   userProtectedRoute,

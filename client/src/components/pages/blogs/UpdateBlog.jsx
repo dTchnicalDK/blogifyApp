@@ -70,7 +70,7 @@ const UpdateBlog = () => {
   /////category selection///////
   const handleSelect = (SelectValue) => {
     setBlog({ ...blog, category: SelectValue });
-    console.log("category inside select", blog);
+    // console.log("category inside select", blog);
   };
   const handleFileSelection = (file) => {
     const fileObj = URL.createObjectURL(file[0]);

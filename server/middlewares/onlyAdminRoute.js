@@ -3,10 +3,11 @@ import { handleError } from "../helper/errorHandler.js";
 
 export const onlyAdminRoute = async (req, res, next) => {
   try {
-    console.log("admin route middleware");
     const token = req.cookies.token;
+    // console.log("admin route middleware");
+    // console.log("token", JSON.stringify(token));
     if (!token) {
-      return next(handleError(403, "No token provided"));
+      return next(handleError(401, "No token provided"));
     }
     const verifiedUser = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
     // console.log("verifiedUser", verifiedUser);
@@ -15,7 +16,7 @@ export const onlyAdminRoute = async (req, res, next) => {
       verifiedUser.userStatus !== "active" ||
       verifiedUser.role !== "admin"
     ) {
-      return next(handleError(401, "authorized admin access"));
+      return next(handleError(403, "Only Admin Allowed"));
     }
     req.user = verifiedUser;
     // console.log("token", verifiedUser);

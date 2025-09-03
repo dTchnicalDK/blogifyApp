@@ -6,9 +6,11 @@ import "react-toastify/dist/ReactToastify.css"; // Don't forget the CSS
 import { userContext } from "../../contexts/UserContexProvider";
 import FirebaseLoginComp from "../firebase/FirebaseLoginComp";
 import siteLogo from "@/assets/logo2.jpg";
+import Spinner from "../Spinner";
 
 function Login() {
   const { loggedUser, login } = useContext(userContext);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: " ",
@@ -22,31 +24,34 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsLoading(true);
       const userLoginRespose = await axios.post(
         "http://localhost:2000/api/user/login",
         formData,
         { withCredentials: true }
       );
-      if (!userLoginRespose.data.user) {
-        throw new Error("login failure");
-      }
-      // setting user inside user context
+
       login(userLoginRespose.data.user);
-      navigate("/udashboard");
+      navigate("/user");
       toast.success(userLoginRespose.data.msg, { position: "top-right" });
     } catch (error) {
-      console.log("user registration error (frontend): ", error);
-      toast.error(error.response?.data?.msg || "login failed", {
-        position: "top-center",
-      });
+      console.log("user registration error: ", error);
+      toast.error(
+        error.response?.data?.msg ||
+          error.response.data.message ||
+          error.message ||
+          "login failed",
+        {
+          position: "top-center",
+        }
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  if (loggedUser) {
-    // return <Navigate to={"/udashboard"} />;
-    return <Navigate to={"/user"} />;
+  if (isLoading) {
+    return <Spinner />;
   }
-
   return (
     <div>
       <div className="min-h-screen bg-gray-100 flex items-center justify-center py-2 px-4">

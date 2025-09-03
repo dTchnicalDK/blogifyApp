@@ -6,11 +6,13 @@ const authenticateUser = async (req, res, next) => {
 
   try {
     if (!token) {
+      res.clearCookie("token");
       return res.status(401).json({ msg: "no token! Loing first", user: null });
     }
     const user = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
 
     if (!user) {
+      res.clearCookie("token");
       return res
         .status(401)
         .json({ msg: "no user info ! Loing first", user: null });

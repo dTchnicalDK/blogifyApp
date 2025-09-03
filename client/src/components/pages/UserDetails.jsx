@@ -18,6 +18,7 @@ import { RiDeleteBin5Fill, RiEdit2Fill } from "react-icons/ri";
 import { SiTicktick } from "react-icons/si";
 import userLogo from "@/assets/profileImg.svg";
 import Spinner from "../Spinner";
+import { LogOut } from "lucide-react";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const UserDetails = () => {
@@ -53,18 +54,16 @@ const UserDetails = () => {
     }
   };
 
-  const handleEditUser = async (id) => {
+  const handleReactivateUser = async (id) => {
     const shouldProceed = confirm("Are you sure! want to Reactivate user");
     if (!shouldProceed) {
       return toast("user Reactivation cancelled !");
     }
     try {
       setIsLoading(true);
-      const reActivateUser = await axios.put(
+      const reActivateUser = await axios.get(
         `${baseUrl}/api/user/reactivate/${id}`,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
 
       // console.log("success", reActivateUser);
@@ -72,6 +71,10 @@ const UserDetails = () => {
       toast.success(reActivateUser.data.message);
     } catch (error) {
       console.log("user reactivation error", error);
+      if (error.status == 401) {
+        LogOut();
+        navigate("/login");
+      }
       toast.error(
         error.response.data.message || error.response.data.msg || error.message
       );
@@ -166,7 +169,7 @@ const UserDetails = () => {
                       size="icon"
                       className="size-8 btn-hover"
                       onClick={() => {
-                        handleEditUser(user._id);
+                        handleReactivateUser(user._id);
                       }}
                     >
                       {/* <RiEdit2Fill /> */}

@@ -14,9 +14,10 @@ const LikeButton = ({ props }) => {
     try {
       const resDoLike = await axios.post(
         `${baseUrl}/api/likes/add-remove-like`,
-        { userId: props.userId, blogId: props.blogId }
+        { userId: props.userId, blogId: props.blogId },
+        { withCredentials: true }
       );
-      console.log("res do like", resDoLike);
+      // console.log("res do like", resDoLike);
       if (resDoLike.data.data == "liked") {
         setLikeCount((prev) => prev + 1);
         setIsLiked(true);

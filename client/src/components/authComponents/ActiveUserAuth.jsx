@@ -1,6 +1,6 @@
 import { userContext } from "@/contexts/UserContexProvider";
 import React, { useContext } from "react";
-import { Navigate, Outlet } from "react-router";
+import { Navigate } from "react-router";
 import { toast } from "react-toastify";
 
 const ActiveUserAuth = ({ children }) => {
@@ -9,7 +9,7 @@ const ActiveUserAuth = ({ children }) => {
   if (loggedUser && loggedUser.userStatus === "active") {
     return children;
   } else {
-    toast.error("Not authorised ! login with vaid id first!");
+    toast.error("Login first !");
     return <Navigate to={"/login"} replace />;
   }
 };

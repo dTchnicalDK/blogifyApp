@@ -7,11 +7,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FcGoogle } from "react-icons/fc";
 import Spinner from "../Spinner";
+import { useNavigate } from "react-router";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const FirebaseLoginComp = () => {
   const { loggedUser, login, logOut } = useContext(userContext);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const signInWithGoogle = async () => {
     try {
@@ -35,6 +37,7 @@ const FirebaseLoginComp = () => {
 
         toast.success(savedUser.data.msg);
         login(savedUser.data.user);
+        navigate("/user");
         // console.log("loggedInUser details", savedUser.data.user);
       } else {
         toast.error("no response from google");

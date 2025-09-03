@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { handleError } from "../helper/errorHandler.js";
 import cloudinary from "../configurations/cloudinaryConfig.js";
+import fs from "fs";
 const tokenSecretCode = process.env.JWT_TOKEN_SECRET;
 
 //------------------function to register user-----------------------------
@@ -143,7 +144,9 @@ export const updateProfile = async (req, res, next) => {
       },
       { new: true }
     ).select("-password");
-    console.log("updated profile", updateProfile);
+
+    fs.unlinkSync(req.file.path);
+    // console.log("updated profile", updateProfile);
     res.status(201).json({
       message: "Profile Data updated successfully",
       success: true,
@@ -163,15 +166,11 @@ export const updateProfile = async (req, res, next) => {
 //------------------function delete users-----------------------------
 export const deleteUser = async (req, res, next) => {
   const { id } = req.params;
-  // console.log("route hit", id);
-
   try {
-    // const deletedUser = await User.findByIdAndDelete(id);
-    // console.log("deletedUser be", deletedUser);
     const suspendedUser = await User.findByIdAndUpdate(id, {
       userStatus: "suspended",
     });
-    // console.log("suspended", suspendedUser);
+
     return res
       .status(200)
       .json({ message: "user deleted successfully!", data: suspendedUser });
@@ -191,7 +190,7 @@ export const reActivateUser = async (req, res, next) => {
 
   try {
     const isSuspended = await User.findById(id);
-    console.log("suspended account", isSuspended);
+    // console.log("suspended account", isSuspended);
     if (isSuspended.userStatus === "active") {
       return res.status(400).json({ message: "user is already active!" });
     }

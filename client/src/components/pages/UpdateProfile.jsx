@@ -77,7 +77,7 @@ const UpdateProfile = () => {
       formData.append("photoURL", selectedfile);
     }
     const data = Object.fromEntries(formData);
-    console.log("formdata at fe", data);
+    // console.log("formdata at fe", data);
     try {
       setIsLoading(true);
       const response = await axios.put(
@@ -87,6 +87,7 @@ const UpdateProfile = () => {
           withCredentials: true,
         }
       );
+
       if (response.data.success) {
         login(response.data.data);
       }
@@ -94,6 +95,10 @@ const UpdateProfile = () => {
       setIsEditing(false);
     } catch (error) {
       console.error("Frontend update error:", error);
+      if (error.response.status == 401) {
+        navigate("/login");
+        // toast.error(response.data.message);
+      }
       toast.error(
         error?.response?.data.message ||
           error.response.data.msg ||

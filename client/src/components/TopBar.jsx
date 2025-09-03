@@ -28,13 +28,8 @@ const TopBar = () => {
 
   const handleLogout = async () => {
     try {
-      const logOutStatus = await axios.get(`${baseUrl}/api/user/logout`, {
-        withCredentials: true,
-      });
-      await logout();
       navigate("/login");
-      // console.log("logout status", logOutStatus);
-      toast.info(logOutStatus.data.message);
+      toast.success("user logged out !");
     } catch (error) {
       console.log("logout error", error);
       toast.error(error.response?.msg || error.message || "logout error");
