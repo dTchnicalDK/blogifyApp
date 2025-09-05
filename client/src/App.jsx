@@ -25,6 +25,7 @@ import ActiveUserAuth from "./components/authComponents/ActiveUserAuth";
 import OnlyAdminAllowed from "./components/authComponents/OnlyAdminAllowed";
 import UserCommentsDetails from "./components/pages/UserComment";
 import MyBlogsList from "./components/pages/blogs/MyBlogsList";
+import { SidebarProvider } from "./components/ui/sidebar";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
@@ -59,7 +60,11 @@ function App() {
     /////////////////user Auth route////////////
     {
       path: "/user",
-      element: <UserLayout />,
+      element: (
+        // <SidebarProvider>
+        <UserLayout />
+        // </SidebarProvider>
+      ),
       children: [
         { index: true, element: <ClientBoard /> },
         { path: "single-blogs/:id", element: <SingleBlog /> },

@@ -15,13 +15,13 @@ const SearchBar = () => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <form onSubmit={handleSearch}>
         <Input
           name={"q"}
           type={"search"}
           placeholder={"search here.."}
-          className="rounded-full w-2xl text-center bg-slate-50 border-0 "
+          className="rounded-full w-[45vw] text-center bg-slate-50 border-0 "
           onInput={handleChange}
         />
       </form>

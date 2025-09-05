@@ -1,32 +1,30 @@
 import React, { useContext, useEffect } from "react";
 import { Outlet } from "react-router";
 import AppSideBar from "../AppSideBar";
-import { SidebarProvider } from "../ui/sidebar";
 import TopBar from "../TopBar";
 import Footer1 from "../Footer1";
 
 const UserLayout = () => {
   return (
-    <div className=" flex flex-col ">
-      <div id="top-bar" className="w-full fixed z-20">
-        {" "}
+    <div className=" flex flex-col   bg-slate-50">
+      <div id="top-bar" className="w-full z-20 border  py-2 bg-slate-50 fixed">
         <TopBar />
       </div>
-      <SidebarProvider>
-        <div
-          id="main-sec"
-          className="w-screen  flex justify-between mt-[70px] bg-slate-50"
-        >
-          <div id="sidebar">
-            <AppSideBar />
-          </div>
-          <main className=" w-full flex flex-col justify-center items-center py-3.5 px-2.5">
-            <Outlet />
-            {/* <footer className="mt-[20%]">footer</footer> */}
-            <Footer1 className="mt-[20%]" />
-          </main>
+
+      <div
+        id="main-sec"
+        className="w-screen  flex justify-between mt-[70px] bg-slate-50 "
+      >
+        <div id="sidebar">
+          <AppSideBar />
         </div>
-      </SidebarProvider>
+        <main className=" w-full flex flex-col justify-center items-center py-3.5 px-2.5 mt-3.5">
+          <div className="mb-20">
+            <Outlet />
+          </div>
+          <Footer1 className="relative bottom-0 " />
+        </main>
+      </div>
     </div>
   );
 };

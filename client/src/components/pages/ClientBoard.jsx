@@ -8,6 +8,7 @@ import { Card } from "../ui/card";
 import BlogCard from "../BlogCard";
 import { Button } from "../ui/button";
 import { IoAddSharp } from "react-icons/io5";
+import SearchBar from "../SearchBar";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const ClientBoard = () => {
@@ -49,18 +50,22 @@ const ClientBoard = () => {
   }
 
   return (
-    <div className="w-full flex flex-col justify-around relative">
+    <div className="w-full flex flex-col justify-around relative ">
       {!loggedUser ? (
-        <h1>welcome guest</h1>
-      ) : (
-        <h1 className="text-4xl text-orange-700 font-bold text-center mb-2">
-          Welcome Mr. {loggedUser?.displayName || loggedUser?.email}
+        <h1 className="text-center text-3xl text-orange-500 font-bold tracking-wider ">
+          welcome guest
         </h1>
+      ) : (
+        <>
+          <h1 className="text-4xl text-orange-700 font-bold text-center mb-2">
+            Welcome Mr. {loggedUser?.displayName || loggedUser?.email}
+          </h1>
+          {/* <SearchBar /> */}
+        </>
       )}
       <div className=" m-5 md:m-4">
         <Button asChild>
           <Link to={loggedUser ? "/user/blog/add" : "/login"}>
-            {/* /user/blog/add */}
             <IoAddSharp /> Add New Blog
           </Link>
         </Button>

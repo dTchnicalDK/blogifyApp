@@ -17,12 +17,12 @@ function LandingPage() {
         className="py-8"
         aria-label="Recommended blogs for you"
       >
-        <TrendingNowSection sectionTitle="Just for you blogs" />
+        {/* <TrendingNowSection sectionTitle="Just for you blogs" /> */}
       </section>
 
       <section id="trending-blogs" className="py-8">
         {/* Add content here */}
-        <TrendingNowSection sectionTitle="Trending now blogs" />
+        {/* <TrendingNowSection sectionTitle="Trending now blogs" /> */}
       </section>
 
       <section id="blogs" className="py-8">
