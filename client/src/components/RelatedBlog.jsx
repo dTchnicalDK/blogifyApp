@@ -55,12 +55,12 @@ const RelatedBlog = ({ props }) => {
           {relatedBlogs.map((blog) => {
             return (
               <div
-                className="border-2 border-slate-100 p-2 bg-white rounded-lg"
+                className="container border-2 border-slate-100 p-2 bg-white rounded-lg"
                 key={blog._id}
                 onClick={() => handleGoClickedBlog(blog._id)}
               >
                 <Link>
-                  <div className="h-full w-full flex justify-start items-center gap-2 relative">
+                  <div className="h-full w-full px-2 flex justify-start items-center gap-2 relative">
                     <img
                       src={blog.featuredImage || blogImg}
                       alt="Blog image"

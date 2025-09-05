@@ -57,11 +57,12 @@ const CategoryBlog = () => {
         <> no blog to display</>
       ) : (
         <>
-          <h1 className="text-2xl text-violet-900 font-bold">
+          <h1 className="text-2xl text-sky-700 text-center md:text-left font-bold mb-2">
             Category: {blogs[0]?.category?.categoryName}
           </h1>
 
-          <div className="w-full flex justify-start flex-wrap gap-5 ">
+          {/* <div className="w-full flex justify-between flex-wrap gap-5 "> */}
+          <div className="container w-full grid grid-cols-1 md:grid-cols-3 gap-1.5">
             {blogs &&
               blogs.map((blog) => {
                 return (

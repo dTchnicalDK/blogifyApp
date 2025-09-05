@@ -85,14 +85,16 @@ const BlogDetails = () => {
       ) : (
         <div>
           {/* {console.log("get all blgs", blogs)} */}
-          <div className="m-3 fixed z-10 md:left-75 md:top-20">
+          <div className="m-3 md:left-75 md:top-20">
             <Button asChild>
               <Link to="/user/blog/add">
                 <IoAddSharp /> New Blog
               </Link>
             </Button>
           </div>
-
+          <h1 className="text-2xl text-center text-zinc-700 capitalize">
+            blogs details
+          </h1>
           {blogs && blogs.length > 0 ? (
             <Table className=" ">
               <TableCaption>A list of your recent invoices.</TableCaption>

@@ -46,9 +46,9 @@ const CommentSection = ({ props, setRefetchCommentCount }) => {
   }, [comments]); // Run when comments array changes
 
   return (
-    <div className="bg-slate-50 relative mt-1  p-5">
+    <div className=" bg-slate-50 relative mt-1  p-5">
       <h1 className="text-2xl p-2 text-slate-800 font-bold">Comments</h1>
-      <div className="comment-container overflow-auto max-h-50 mb-5 p-3 bg-slate-50">
+      <div className="comment-container container overflow-auto max-h-50 mb-5 p-3 bg-slate-50">
         {/* //////////////////All comments/////////////////////////// */}
         {comments &&
           comments.map((comm) => {

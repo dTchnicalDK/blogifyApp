@@ -42,12 +42,12 @@ const TopBar = () => {
   };
 
   return (
-    <div className="w-full flex justify-between items-center bg-slate-50 px-5 ">
+    <div className="container w-full flex justify-between items-center bg-slate-50 px-5 ">
       {/* <div className="text-2xl border border-slate-300"></div> */}
 
       <div className="md:w-1/12 flex justify-around items-center gap-2">
         <div className="text-3xl text-slate-400 md:hidden cursor-pointer">
-          <button onClick={toggleSidebar}>
+          <button onClick={toggleSidebar} className="cursor-pointer">
             <IoIosMenu />
           </button>
         </div>
@@ -56,9 +56,9 @@ const TopBar = () => {
         </Link>
       </div>
 
-      <div className="absolute md:top-4 left-[50%] top-22 translate-x-[-50%] border border-slate-800 md:border-none rounded-full">
+      <div className="absolute sm:top-4 left-[50%] top-22 translate-x-[-50%] border border-slate-800 sm:border-none rounded-full">
         <div
-          className={`${showSearchBar ? showSearchBar : "hidden"} md:block `}
+          className={`${showSearchBar ? showSearchBar : "hidden"} sm:block `}
         >
           <SearchBar />
         </div>

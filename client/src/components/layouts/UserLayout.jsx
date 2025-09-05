@@ -6,20 +6,20 @@ import Footer1 from "../Footer1";
 
 const UserLayout = () => {
   return (
-    <div className=" flex flex-col   bg-slate-50">
+    <div className="w-full flex flex-col bg-slate-50">
       <div id="top-bar" className="w-full z-20 border  py-2 bg-slate-50 fixed">
         <TopBar />
       </div>
 
       <div
         id="main-sec"
-        className="w-screen  flex justify-between mt-[70px] bg-slate-50 "
+        className="w-full flex justify-between mt-[70px] bg-white "
       >
         <div id="sidebar">
           <AppSideBar />
         </div>
         <main className=" w-full flex flex-col justify-center items-center py-3.5 px-2.5 mt-3.5">
-          <div className="mb-20">
+          <div className="container mb-20 mt-5">
             <Outlet />
           </div>
           <Footer1 className="relative bottom-0 " />

@@ -27,7 +27,7 @@ const AppSideBar = () => {
   const { categories } = useContext(CategoriesContext);
   const { loggedUser } = useContext(userContext);
   const { toggleSidebar } = useSidebar();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  // const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   switch (loggedUser?.role) {
     case "user":
@@ -125,7 +125,7 @@ const AppSideBar = () => {
             </div>
 
             <div className="relative top-0 left-63 text-3xl text-slate-500 z-30">
-              <button onClick={toggleSidebar}>
+              <button onClick={toggleSidebar} className="cursor-pointer">
                 <GoSidebarExpand />
               </button>
             </div>

@@ -69,7 +69,9 @@ const CategoriesDetails = () => {
           </Link>
         </Button>
       </div>
-      <h1>Categories</h1>
+      <h1 className="text-2xl text-center text-zinc-700 capitalize">
+        list of categories
+      </h1>
 
       {categories && categories.length >= 1 ? (
         <Table className="mt-12 ">

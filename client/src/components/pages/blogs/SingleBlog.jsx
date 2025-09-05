@@ -97,7 +97,7 @@ const SingleBlog = () => {
         <div>No blogs to show</div>
       ) : (
         <div className="container flex flex-col md:flex-row ">
-          <div className="single-blog-detais w-full px-4">
+          <div className="  single-blog-detais w-full px-4">
             <Card>
               <CardHeader className="text-3xl text-center font-serif font-semibold text-zinc-700">
                 <h1>{blogObj?.blogTitle}</h1>
@@ -108,7 +108,7 @@ const SingleBlog = () => {
                   <img
                     src={blogObj?.featuredImage || defaultBlogImage}
                     alt="blog-image"
-                    className="w-full mb5"
+                    className="w-full mb5 rounded-md"
                   />
                 </div>
                 <div className="content mb-5">
@@ -117,7 +117,7 @@ const SingleBlog = () => {
                 {/* ------------------------------topbar section----------------------- */}
                 {/* author like comment section  */}
                 <Separator className={"mt-2"} />
-                <div className=" w-full flex justify-between items-center mt-5">
+                <div className="container w-full flex justify-between items-center flex-wrap mt-5">
                   <div>
                     <Link>
                       <div>
@@ -138,7 +138,7 @@ const SingleBlog = () => {
                   </div>
 
                   {/* -----------------buttons Section------------------------- */}
-                  <div className="action w-full flex justify-around items-center py-2.5 m-2.5  text-slate-500  ">
+                  <div className=" action w-full flex justify-around  items-center py-2.5 m-2.5  text-slate-500  ">
                     {!loggedUser || !blogObj ? (
                       <h1>loading....</h1>
                     ) : (
@@ -160,7 +160,7 @@ const SingleBlog = () => {
 
                     <div
                       onClick={handleCommentClick}
-                      className="comment-count px-8 rounded-2xl py-1.5 flex justify-center items-center hover:bg-slate-100 cursor-pointer gap-2"
+                      className="comment-count px-5 rounded-2xl py-1.5 flex justify-center items-center hover:bg-slate-100 cursor-pointer gap-2"
                     >
                       <FaRegComments className="text-2xl text-gray-700" />
                       <span>{commentCount}</span>
@@ -193,7 +193,7 @@ const SingleBlog = () => {
                         )}
                       </div> */}
 
-                    <div className="px-8 rounded-2xl py-1.5 flex justify-center items-center hover:bg-slate-100 cursor-pointer">
+                    <div className="px-5 rounded-2xl py-1.5 flex justify-center items-center hover:bg-slate-100 cursor-pointer">
                       <PiShareFatLight className="text-2xl text-gray-700" />
                     </div>
                     <div className="text-center">
@@ -215,7 +215,7 @@ const SingleBlog = () => {
             <div className="comment-ref" ref={commentRef}></div>
           </div>
 
-          <div className="md:w-2/6">
+          <div className="container md:w-2/6">
             <h1 className="font-bold">Related Blogs</h1>
 
             <RelatedBlog

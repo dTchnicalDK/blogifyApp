@@ -111,6 +111,7 @@ const UserDetails = () => {
   return (
     <div>
       {/* {console.log("fetchedUsers", users)} */}
+
       <div className="m-3 md:left-75 md:top-5">
         <Button asChild>
           <Link to="/register">
@@ -118,6 +119,9 @@ const UserDetails = () => {
           </Link>
         </Button>
       </div>
+      <h1 className="text-2xl text-center text-zinc-700 capitalize">
+        list of Users Registered
+      </h1>
 
       {users && users.length > 0 ? (
         <Table className=" ">

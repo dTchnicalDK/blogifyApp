@@ -94,7 +94,10 @@ const CommentDetails = () => {
   }
 
   return (
-    <div>
+    <div className="container m-5 w-full max-h-[400px] md:max-h-full overflow-auto">
+      <h1 className="text-2xl text-center text-zinc-700 capitalize">
+        list of comments
+      </h1>
       {comments && comments.length > 0 ? (
         <Table>
           <TableCaption>A list of comments.</TableCaption>

@@ -57,10 +57,9 @@ const ClientBoard = () => {
         </h1>
       ) : (
         <>
-          <h1 className="text-4xl text-orange-700 font-bold text-center mb-2">
+          <h1 className=" text-4xl text-orange-700 font-bold text-center mb-2">
             Welcome Mr. {loggedUser?.displayName || loggedUser?.email}
           </h1>
-          {/* <SearchBar /> */}
         </>
       )}
       <div className=" m-5 md:m-4">
