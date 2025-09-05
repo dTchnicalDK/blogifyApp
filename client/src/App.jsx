@@ -26,6 +26,12 @@ import OnlyAdminAllowed from "./components/authComponents/OnlyAdminAllowed";
 import UserCommentsDetails from "./components/pages/UserComment";
 import MyBlogsList from "./components/pages/blogs/MyBlogsList";
 import { SidebarProvider } from "./components/ui/sidebar";
+import PrivacyPolicy from "./components/pages/legalPages/PrivacyPolicy";
+import TermsOfService from "./components/pages/legalPages/TermsOfServices";
+import ContactPage from "./components/pages/company/ContactPage";
+import CareersPage from "./components/pages/company/CareerPage";
+import AboutUs from "./components/pages/company/AboutUs";
+import StunningLandingPage from "./components/pages/other/StunningLandingPage";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
@@ -38,7 +44,8 @@ function App() {
       children: [
         {
           index: true,
-          element: <LandingPage />,
+          // element: <LandingPage />,
+          element: <StunningLandingPage />,
         },
         {
           path: "register",
@@ -55,6 +62,12 @@ function App() {
           path: "udashboard",
           element: <UserDashboard />,
         },
+        // -------------------------------------
+        { path: "privacy-policy", element: <PrivacyPolicy /> },
+        { path: "terms", element: <TermsOfService /> },
+        { path: "contact", element: <ContactPage /> },
+        { path: "careers", element: <CareersPage /> },
+        { path: "about", element: <AboutUs /> },
       ],
     },
     /////////////////user Auth route////////////
@@ -71,6 +84,8 @@ function App() {
         { path: "search", element: <SearchPage /> },
         { path: "category-blogs/:categoryid", element: <CategoryBlog /> },
         // { path: "comment-details", element: <UserCommentsDetails /> },
+        // { path: "privacy-policy", element: <PrivacyPolicy /> },
+
         {
           path: "update-profile",
           element: (

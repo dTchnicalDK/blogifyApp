@@ -6,8 +6,8 @@ import Footer1 from "../Footer1";
 
 const UserLayout = () => {
   return (
-    <div className="w-full flex flex-col bg-slate-50">
-      <div id="top-bar" className="w-full z-20 border  py-2 bg-slate-50 fixed">
+    <div className="w-full flex flex-col">
+      <div id="top-bar" className="w-full z-20 border  py-2 bg-white fixed">
         <TopBar />
       </div>
 
@@ -18,7 +18,7 @@ const UserLayout = () => {
         <div id="sidebar">
           <AppSideBar />
         </div>
-        <main className=" w-full flex flex-col justify-center items-center py-3.5 px-2.5 mt-3.5">
+        <main className=" w-full flex flex-col justify-center items-center py-3.5 px-2.5 mt-3.5 bg-gradient-to-br from-slate-100 to-indigo-100">
           <div className="container mb-20 mt-5">
             <Outlet />
           </div>

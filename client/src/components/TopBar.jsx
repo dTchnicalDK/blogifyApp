@@ -42,7 +42,7 @@ const TopBar = () => {
   };
 
   return (
-    <div className="container w-full flex justify-between items-center bg-slate-50 px-5 ">
+    <div className="container w-full flex justify-between items-center bg-white ">
       {/* <div className="text-2xl border border-slate-300"></div> */}
 
       <div className="md:w-1/12 flex justify-around items-center gap-2">

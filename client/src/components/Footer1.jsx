@@ -119,7 +119,7 @@ const Footer1 = () => {
                 </li>
                 <li className="mb-2">
                   <Link
-                    to="/blog"
+                    to="/user"
                     className="hover:text-white transition-colors"
                   >
                     Blog
@@ -142,7 +142,7 @@ const Footer1 = () => {
               <ul>
                 <li className="mb-2">
                   <Link
-                    to="/privacy"
+                    to="/privacy-policy"
                     className="hover:text-white transition-colors"
                   >
                     Privacy Policy

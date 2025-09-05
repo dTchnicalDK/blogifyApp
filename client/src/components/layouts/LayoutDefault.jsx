@@ -12,7 +12,7 @@ import Footer1 from "../Footer1";
 function LayoutDefault({ loggedInUser }) {
   return (
     <div className="layout w-full">
-      <Navbar loggedInUser={loggedInUser} />
+      {/* <Navbar loggedInUser={loggedInUser} /> */}
       {/* <TopBar /> */}
       <main>
         <Outlet />

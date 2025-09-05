@@ -26,7 +26,7 @@ const BlogCard = ({ props = defaultBlog }) => {
   }
 
   return (
-    <div className="border-2 border-blue-500 w-[85vw] md:w-[300px] h-[40vh] md:h-full mx-auto  flex-shrink-0  p-4 flex justify-between md:flex-col gap-3 shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+    <div className="border-2 border-blue-500 w-[85vw] md:w-[300px] h-[40vh] md:h-full mx-auto  flex-shrink-0  p-4 flex justify-between md:flex-col gap-3 shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer bg-white">
       {/* Image Container */}
       <div className="h-full w-full md:w-full md:h-[200px]  md:overflow-hidden rounded-lg ">
         <img
@@ -39,7 +39,7 @@ const BlogCard = ({ props = defaultBlog }) => {
       {/* Content Container */}
       <div className="flex flex-col flex-grow gap-2 w-7/12  md:w-full ">
         {/* Title with line clamping */}
-        <h2 className="text-3xl font-sans text-sky-900 font-semibold capitalize line-clamp-3 min-h-[3.5rem]">
+        <h2 className="text-3xl font-sans text-gray-800 font-semibold  line-clamp-3 min-h-[3.5rem] capitalize">
           {props.blogTitle}
         </h2>
         {/* Read More Link */}
