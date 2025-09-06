@@ -1,11 +1,10 @@
 import React, { useContext, useState } from "react";
-import logo from "@/assets/logo2.jpg";
+import logo from "@/assets/siteLogo.png";
 import { Button } from "./ui/button";
 import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
 import { Link, Navigate, useNavigate } from "react-router";
 import SearchBar from "./SearchBar";
 import { userContext } from "@/contexts/UserContexProvider";
-import axios from "axios";
 import { toast } from "react-toastify";
 import UserProfileImage from "./UserProfileImage";
 import { ImProfile } from "react-icons/im";
@@ -52,7 +51,7 @@ const TopBar = () => {
           </button>
         </div>
         <Link to={"/"}>
-          <img src={logo} alt="logo" width={"60px"} className="rounded-full" />
+          <img src={logo} alt="logo" width={"100px"} className="rounded-full" />
         </Link>
       </div>
 

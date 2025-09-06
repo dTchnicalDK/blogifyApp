@@ -50,7 +50,7 @@ const AppSideBar = () => {
             </div>
 
             <div className="relative top-0 left-63 text-3xl text-slate-500 z-30">
-              <button onClick={toggleSidebar}>
+              <button onClick={toggleSidebar} className="cursor-pointer">
                 <GoSidebarExpand />
               </button>
             </div>
@@ -213,8 +213,8 @@ const AppSideBar = () => {
                 </h1>
               </div>
 
-              <div className="relative top-0 left-63 text-3xl text-slate-500 z-30">
-                <button onClick={toggleSidebar}>
+              <div className="relative  top-0 left-63 text-3xl text-slate-500 z-30">
+                <button onClick={toggleSidebar} className="cursor-pointer">
                   <GoSidebarExpand />
                 </button>
               </div>

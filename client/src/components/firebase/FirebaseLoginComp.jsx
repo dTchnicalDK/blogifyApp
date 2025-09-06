@@ -17,6 +17,7 @@ const FirebaseLoginComp = () => {
 
   const signInWithGoogle = async () => {
     try {
+      setIsLoading(true);
       const googleRes = await signInWithPopup(auth, googleProvider);
       if (googleRes) {
         const { uid, email, displayName, photoURL } = googleRes.user;
@@ -62,7 +63,7 @@ const FirebaseLoginComp = () => {
         className="cursor-pointer"
       >
         <FcGoogle />
-        <p className="text-xl">Sign in with Google</p>
+        <p className="text-xl">Proceed with Google</p>
       </Button>
     </div>
   );

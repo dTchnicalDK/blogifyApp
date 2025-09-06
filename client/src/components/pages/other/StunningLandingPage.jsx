@@ -1,5 +1,6 @@
+import { Strikethrough } from "lucide-react";
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 
 const StunningLandingPage = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -78,45 +79,65 @@ const StunningLandingPage = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center">
               <div className="text-2xl font-bold text-blue-600">
-                Academic Insight Hub
+                <span className="text-indigo-600">My</span>Blogs
               </div>
             </div>
 
             <div className="hidden md:flex space-x-8">
-              <a
-                href="#features"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
+              <NavLink
+                to="/user"
+                className={({ isActive }) =>
+                  `py-4 px-2 text-gray-600 font-semibold hover:text-blue-600 transition duration-300 nav-item ${
+                    isActive ? "active" : ""
+                  }`
+                }
+                end
               >
                 Features
-              </a>
-              <a
-                href="#resources"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
+              </NavLink>
+              <NavLink
+                to="/coming-soon"
+                className={({ isActive }) =>
+                  `py-4 px-2 text-gray-600 font-semibold hover:text-blue-600 transition duration-300 nav-item ${
+                    isActive ? "active" : ""
+                  }`
+                }
+                end
               >
-                Resources
-              </a>
-              <a
-                href="#testimonials"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
+                <strike>Resources</strike>
+              </NavLink>
+              <NavLink
+                to="/coming-soon"
+                className={({ isActive }) =>
+                  `py-4 px-2 text-gray-600 font-semibold hover:text-blue-600 transition duration-300 nav-item ${
+                    isActive ? "active" : ""
+                  }`
+                }
+                end
               >
-                Testimonials
-              </a>
-              <a
-                href="#pricing"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
+                <strike>Testimonials</strike>
+              </NavLink>
+              <NavLink
+                to="/coming-soon"
+                className={({ isActive }) =>
+                  `py-4 px-2 text-gray-600 font-semibold hover:text-blue-600 transition duration-300 nav-item ${
+                    isActive ? "active" : ""
+                  }`
+                }
+                end
               >
-                Pricing
-              </a>
+                <strike>Pricing</strike>
+              </NavLink>
             </div>
 
             <div className="hidden md:flex space-x-4">
               <Link to={"/login"}>
-                <button className="px-4 py-2 text-blue-600 font-medium hover:text-blue-800 transition-colors">
+                <button className="px-4 py-2 text-blue-600 font-medium hover:text-blue-800 transition-colors cursor-pointer">
                   Login
                 </button>
               </Link>
               <Link to="/register">
-                <button className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                <button className="px-6 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
                   Sign Up
                 </button>
               </Link>
@@ -179,7 +200,7 @@ const StunningLandingPage = () => {
             <div className="md:w-1/2 mb-12 md:mb-0">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-800 leading-tight mb-6">
                 Transform Your{" "}
-                <span className="text-blue-600">Academic Journey</span>
+                <span className="text-blue-600">Learning Journey</span>
               </h1>
               <p className="text-xl text-gray-600 mb-8">
                 Discover targeted study strategies, uncommon resources, and
@@ -187,12 +208,16 @@ const StunningLandingPage = () => {
                 academically.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 transition-colors transform hover:-translate-y-1 duration-300">
-                  Start Learning Now
-                </button>
-                <button className="px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 shadow-sm hover:bg-blue-50 transition-colors">
-                  Explore Resources
-                </button>
+                <Link to="/user">
+                  <button className=" cursor-pointer px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 transition-colors transform hover:-translate-y-1 duration-300">
+                    Start Learning Now
+                  </button>
+                </Link>
+                <Link to="/user">
+                  <button className="cursor-pointer px-8 py-4 bg-white text-blue-600 font-semibold rounded-lg border border-blue-600 shadow-sm hover:bg-blue-50 transition-colors">
+                    Explore Resources
+                  </button>
+                </Link>
               </div>
             </div>
             <div className="md:w-1/2 relative">
@@ -416,9 +441,11 @@ const StunningLandingPage = () => {
             Join thousands of students who have achieved academic excellence
             with our targeted strategies and resources.
           </p>
-          <button className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-colors transform hover:-translate-y-1 duration-300">
-            Get Started Today
-          </button>
+          <Link to="/login">
+            <button className="cursor-pointer px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-700 transition-colors transform hover:-translate-y-1 duration-300">
+              Get Started Today
+            </button>
+          </Link>
           <p className="mt-6 text-gray-500">
             No credit card required. Free trial available.
           </p>
@@ -426,7 +453,7 @@ const StunningLandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-gray-400 py-12">
+      {/* <footer className="bg-gray-800 text-gray-400 py-12">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
@@ -528,7 +555,7 @@ const StunningLandingPage = () => {
             </p>
           </div>
         </div>
-      </footer>
+      </footer> */}
     </div>
   );
 };

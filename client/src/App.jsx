@@ -32,6 +32,7 @@ import ContactPage from "./components/pages/company/ContactPage";
 import CareersPage from "./components/pages/company/CareerPage";
 import AboutUs from "./components/pages/company/AboutUs";
 import StunningLandingPage from "./components/pages/other/StunningLandingPage";
+import ComingSoon from "./components/pages/other/ComingSoon";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
@@ -68,6 +69,7 @@ function App() {
         { path: "contact", element: <ContactPage /> },
         { path: "careers", element: <CareersPage /> },
         { path: "about", element: <AboutUs /> },
+        { path: "coming-soon", element: <ComingSoon /> },
       ],
     },
     /////////////////user Auth route////////////

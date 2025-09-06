@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
+import FirebaseLoginComp from "../firebase/FirebaseLoginComp";
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -38,6 +39,15 @@ function Register() {
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
             Register Here
           </h2>
+
+          <div className=" w-2/3 flex flex-col justify-center items-center m-auto">
+            <FirebaseLoginComp />
+          </div>
+          <div className="relative flex justify-center border-b-2 border-b-slate-400 mb-10 pb-5">
+            <span className="absolute bottom-[-10px] bg-white px-2 rounded-full">
+              or
+            </span>
+          </div>
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
