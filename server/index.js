@@ -16,7 +16,7 @@ import likeRouter from "./router/likeRouter.js";
 //middlewares
 app.use(
   cors({
-    origin: "http://localhost:5173", // Your frontend URL
+    origin: "https://blogify-app-client.vercel.app", // Your frontend URL
     credentials: true, // REQUIRED for cookies
   })
 );
