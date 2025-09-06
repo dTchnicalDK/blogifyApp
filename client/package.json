@@ -22,8 +22,6 @@
     "@tailwindcss/vite": "^4.1.11",
     "axios": "^1.9.0",
     "bootstrap": "^5.3.6",
-    "ckeditor5": "^46.0.0",
-    "ckeditor5-premium-features": "^46.0.0",
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.7.0",
     "clsx": "^2.1.1",
