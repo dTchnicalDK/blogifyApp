@@ -14,7 +14,7 @@ import CategorieUpdate from "./components/pages/categories/CategorieUpdate";
 import AddCategories from "./components/pages/categories/AddCategories";
 import AddBlog from "./components/pages/blogs/AddBlog";
 import UpdateBlog from "./components/pages/blogs/UpdateBlog";
-import BlogDetails from "./components/pages/blogs/blogDetails.jsx";
+import BlogDetails from "./components/pages/blogs/BlogDetails";
 import SingleBlog from "./components/pages/blogs/SingleBlog";
 import CategoryBlog from "./components/pages/blogs/CategoryBlog";
 import SearchPage from "./components/pages/SearchPage";
