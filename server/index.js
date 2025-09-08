@@ -11,7 +11,6 @@ import blogRouter from "./router/blogRouter.js";
 import { categoryRouter } from "./router/categoryRouter.js";
 import commentRouter from "./router/commentRouter.js";
 import likeRouter from "./router/likeRouter.js";
-// const urlFrontEnd = process.env.URL_FRONTEND;
 
 //middlewares
 app.use(
