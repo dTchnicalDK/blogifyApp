@@ -59,8 +59,8 @@ app.use((error, req, res, next) => {
   }
 
   res.status(500).json({ error: "Upload failed" });
+  next(handleError(error.status, error.message || "unknown error"));
 });
-return next(handleError(erro.status, error.message || "unknown error"));
 // --------------------------------------------------/---
 
 //connecting db and starting server
