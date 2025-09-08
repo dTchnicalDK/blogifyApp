@@ -9,15 +9,15 @@ import { connectDb } from "./configurations/serverNDBconnection.js";
 import cookieParser from "cookie-parser";
 import blogRouter from "./router/blogRouter.js";
 import { categoryRouter } from "./router/categoryRouter.js";
-// import fileRouter from "./router/fileRouter.js";
 import commentRouter from "./router/commentRouter.js";
 import likeRouter from "./router/likeRouter.js";
+// const urlFrontEnd = process.env.URL_FRONTEND;
 
 //middlewares
 app.use(
   cors({
     // origin: "https://blogify-app-client.vercel.app", // Your frontend URL
-    origin: "https://blogify-app-client.vercel.app", // Your frontend URL
+    origin: `${process.env.URL_FRONTEND}`, // Your frontend URL
     credentials: true, // REQUIRED for cookies
   })
 );

@@ -1,1 +1,1 @@
-// "Access-Control-Allow-Origin": "*",
+ "Access-Control-Allow-Origin": "https://blogify-app-client.vercel.app",
