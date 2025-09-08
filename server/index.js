@@ -41,6 +41,24 @@ app.use("/api/categories", categoryRouter);
 app.use("/api/comments", commentRouter);
 app.use("/api/likes", likeRouter);
 
+// -----------------for multer error----------------------------
+// In your main server file, after routes
+app.use((error, req, res, next) => {
+  if (error instanceof multer.MulterError) {
+    if (error.code === "LIMIT_FILE_SIZE") {
+      return res.status(400).json({ error: "File too large" });
+    }
+    return res.status(400).json({ error: error.message });
+  }
+
+  if (error.message === "Only image files are allowed") {
+    return res.status(400).json({ error: error.message });
+  }
+
+  res.status(500).json({ error: "Upload failed" });
+});
+// --------------------------------------------------/---
+
 //connecting db and starting server
 connectDb(dbUri, port, app);
 
