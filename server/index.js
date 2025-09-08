@@ -11,6 +11,8 @@ import blogRouter from "./router/blogRouter.js";
 import { categoryRouter } from "./router/categoryRouter.js";
 import commentRouter from "./router/commentRouter.js";
 import likeRouter from "./router/likeRouter.js";
+import multer from "multer"; // ← IMPORT MULTER
+import { handleError } from "./helper/errorHandler.js";
 
 //middlewares
 app.use(
@@ -44,6 +46,7 @@ app.use("/api/likes", likeRouter);
 // -----------------for multer error----------------------------
 // In your main server file, after routes
 app.use((error, req, res, next) => {
+  console.log("Multer error caught:", error); // ← Add logging for debugging
   if (error instanceof multer.MulterError) {
     if (error.code === "LIMIT_FILE_SIZE") {
       return res.status(400).json({ error: "File too large" });
@@ -57,6 +60,7 @@ app.use((error, req, res, next) => {
 
   res.status(500).json({ error: "Upload failed" });
 });
+return next(handleError(erro.status, error.message || "unknown error"));
 // --------------------------------------------------/---
 
 //connecting db and starting server
