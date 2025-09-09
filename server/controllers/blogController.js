@@ -5,60 +5,77 @@ import { decode, encode } from "entities";
 import jwt from "jsonwebtoken";
 import { Categories } from "../models/categoriesModel.js";
 import cloudinary from "../configurations/cloudinaryConfig.js";
-import fs from "fs";
 
 ////////////////////////creating blog//////////////////////////////////////////////
+// controllers/blogController.js
 export const addblog = async (req, res, next) => {
+  console.log("Add blog route hit");
   const { blogTitle, blogContent, category, author } = req.body;
 
-  // basic validation-----------------
+  // Basic validation
   if (!blogTitle || !blogContent || !category || !author) {
-    return next(400, "fill all the fields");
+    return next(handleError(400, "Please fill all the required fields"));
+  }
+
+  // Check if file was uploaded
+  if (!req.file) {
+    return next(handleError(400, "Featured image is required"));
   }
 
   try {
-    //checking if title alredy exits
+    // Check if title already exists
     const sanitizedTitle = blogTitle.trim();
-    const isDuplicateTitle = await Blog.findOne({ blogTitle: sanitizedTitle });
-    if (isDuplicateTitle) {
-      return next(handleError(903, "title already exits, choose another"));
-    }
-
-    // Upload an image to cloudinary
-    const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-      folder: "blogify/blogs",
+    const isDuplicateTitle = await Blog.findOne({
+      blogTitle: new RegExp(`^${sanitizedTitle}$`, "i"),
     });
 
-    // console.log(uploadResult);
-    //creating and saving data to database
+    if (isDuplicateTitle) {
+      return next(handleError(409, "A blog with this title already exists"));
+    }
+
+    // Convert buffer to base64 for Cloudinary
+    const b64 = Buffer.from(req.file.buffer).toString("base64");
+    const dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+
+    // Upload to Cloudinary
+    const uploadResult = await cloudinary.uploader.upload(dataURI, {
+      folder: "blogify/blogs",
+      transformation: [
+        { width: 1000, height: 750, crop: "limit" },
+        { quality: "auto" },
+        { format: "auto" },
+      ],
+    });
+
+    // Create and save blog to database
     const blog = new Blog({
       author,
-      blogTitle,
+      blogTitle: sanitizedTitle,
       blogContent,
       category,
       featuredImage: uploadResult.secure_url,
-      // slug,
     });
 
     const createdBlog = await blog.save();
 
-    if (!createdBlog) {
-      return next(handleError(500, "blog saving error"));
-    }
-
-    try {
-      fs.unlinkSync(req.file.path);
-      // console.log("File deleted successfully (synchronously)");
-    } catch (err) {
-      console.error("Error deleting file (synchronously):", err);
-    }
-    res.status(200).json({
-      message: "blog created successfully",
-      createdBlog,
+    res.status(201).json({
+      success: true,
+      message: "Blog created successfully",
+      data: createdBlog,
     });
   } catch (error) {
-    console.log("backend blog creation error", error);
-    next(handleError(error.status, error.message || "internal server error"));
+    console.error("Backend blog creation error:", error);
+
+    if (error.code === 11000) {
+      return next(handleError(409, "A blog with this title already exists"));
+    }
+
+    if (error.name === "ValidationError") {
+      const errors = Object.values(error.errors).map((err) => err.message);
+      return next(handleError(400, errors.join(", ")));
+    }
+
+    next(handleError(500, "Internal server error"));
   }
 };
 /////////////////////getting all blogs/////////////////////////
