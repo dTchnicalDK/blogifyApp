@@ -60,19 +60,23 @@ const RelatedBlog = ({ props }) => {
                 onClick={() => handleGoClickedBlog(blog._id)}
               >
                 <Link>
-                  <div className="h-full w-full px-2 flex justify-start items-center gap-2 relative">
+                  <div className=" relative h-full w-full px-2 flex justify-start items-center gap-2 ">
                     <img
                       src={blog.featuredImage || blogImg}
                       alt="Blog image"
-                      width={"80px"}
-                      className="rounded-sm"
+                      width={"70px"}
+                      className="rounded-sm h-full"
                     />
-                    <div>
-                      <h1 className="line-clamp-2 ">{blog.blogTitle}</h1>
+                    <div className=" flex flex-col pb-2">
+                      <div>
+                        <h1 className="line-clamp-2 ">{blog.blogTitle}</h1>
+                      </div>
+                      <div className="absolute right-0 bottom-0">
+                        <p className="text-right text-slate-300">
+                          {moment(blog.createdAt).format("DD-MM-YYYY")}
+                        </p>
+                      </div>
                     </div>
-                    <p className="absolute right-2 bottom-0 text-slate-300">
-                      {moment(blog.createdAt).format("DD-MM-YYYY")}
-                    </p>
                   </div>
                 </Link>
               </div>

@@ -116,7 +116,7 @@ const UpdateProfile = () => {
     <div>
       <div
         id="wrapper"
-        className="w-full flex flex-col justify-center items-start "
+        className="w-full flex flex-col justify-center items-center "
       >
         {!isEditing ? (
           <div className="profile-view flex flex-col justify-center items-center">
@@ -161,7 +161,7 @@ const UpdateProfile = () => {
             </Button>
           </div>
         ) : (
-          <div className="w-full mx-auto ">
+          <div className="w-full mx-auto">
             <h2 className=" text-center text-2xl text-slate-600 font-bold capitalize">
               update your profile here
             </h2>

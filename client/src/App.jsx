@@ -44,7 +44,6 @@ function App() {
       children: [
         {
           index: true,
-          // element: <LandingPage />,
           element: <StunningLandingPage />,
         },
         {
@@ -74,18 +73,12 @@ function App() {
     /////////////////user Auth route////////////
     {
       path: "/user",
-      element: (
-        // <SidebarProvider>
-        <UserLayout />
-        // </SidebarProvider>
-      ),
+      element: <UserLayout />,
       children: [
         { index: true, element: <ClientBoard /> },
         { path: "single-blogs/:id", element: <SingleBlog /> },
         { path: "search", element: <SearchPage /> },
         { path: "category-blogs/:categoryid", element: <CategoryBlog /> },
-        // { path: "comment-details", element: <UserCommentsDetails /> },
-        // { path: "privacy-policy", element: <PrivacyPolicy /> },
 
         {
           path: "update-profile",

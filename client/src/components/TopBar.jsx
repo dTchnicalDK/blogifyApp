@@ -23,6 +23,7 @@ import { LuSearch } from "react-icons/lu";
 import { IoIosMenu } from "react-icons/io";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 import { useSidebar } from "@/components/ui/sidebar";
+import axios from "axios";
 
 const TopBar = () => {
   const { loggedUser, logout } = useContext(userContext);
@@ -32,6 +33,10 @@ const TopBar = () => {
 
   const handleLogout = async () => {
     try {
+      const fetchedAllBlogs = await axios.get(`${baseUrl}/api/user/logout`, {
+        withCredentials: true,
+      });
+      // console.log("logout res", fetchedAllBlogs);
       navigate("/login");
       toast.success("user logged out !");
     } catch (error) {
@@ -41,7 +46,7 @@ const TopBar = () => {
   };
 
   return (
-    <div className="container w-full flex justify-between items-center bg-white ">
+    <div className="container w-full px-2 h-15 sm:h-20 flex justify-between items-center  ">
       {/* <div className="text-2xl border border-slate-300"></div> */}
 
       <div className="md:w-1/12 flex justify-around items-center gap-2">
@@ -55,7 +60,7 @@ const TopBar = () => {
         </Link>
       </div>
 
-      <div className="absolute sm:top-4 left-[50%] top-22 translate-x-[-50%] border border-slate-800 sm:border-none rounded-full">
+      <div className="absolute z-30 left-[50%] top-22 md:top-10  translate-x-[-50%] translate-y-[-50%] border border-slate-800 sm:border-none rounded-full">
         <div
           className={`${showSearchBar ? showSearchBar : "hidden"} sm:block `}
         >
@@ -94,17 +99,21 @@ const TopBar = () => {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem asChild>
-                  <Link to={"/user/update-profile"}>
+                  <Link to={"/user/update-profile"} className="cursor-pointer">
                     <ImProfile />
                     profile
                   </Link>
                 </DropdownMenuItem>
 
                 <Link>
-                  <DropdownMenuItem>
-                    {" "}
-                    <LiaBlogSolid />
-                    Bloggs
+                  <DropdownMenuItem asChild>
+                    <Link
+                      to="/user/my-blogs-details"
+                      className="cursor-pointer"
+                    >
+                      <LiaBlogSolid />
+                      Bloggs
+                    </Link>
                   </DropdownMenuItem>
                 </Link>
                 <Separator />
@@ -120,7 +129,7 @@ const TopBar = () => {
         ) : (
           <>
             <Button
-              className="rounded-full  px-5 text-2xl bg-slate-400 text-white  hover:bg-slate-600 "
+              className="rounded-full  px-5  text-l sm:text-2xl bg-slate-400 text-white  hover:bg-slate-600 "
               onClick={() => navigate("/login")}
             >
               <IoMdLogIn /> <span>SignIn</span>

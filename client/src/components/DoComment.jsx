@@ -77,7 +77,7 @@ const DoComment = ({ blogData, setComments }) => {
               value={text}
               placeholder="Type here..."
               onChange={handleChange}
-              className="w-full"
+              className="w-full bg-white"
             />
             <Button
               variant="ghost"
