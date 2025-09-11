@@ -71,7 +71,7 @@ connectDb(dbUri, port, app);
 app.use((error, req, res, next) => {
   const statusCode = error.statusCode || 500;
   const msg = error.message || "internal server error";
-  res.status(statusCode).json({
+  return res.status(statusCode).json({
     success: false,
     statusCode,
     msg,

@@ -104,6 +104,7 @@ const UpdateBlog = () => {
 
     try {
       setIsLoading(true);
+      console.log("form data", formData);
       const response = await axios.put(
         `${baseUrl}/api/blogs/update-blog/${blog._id}`,
         formData,
@@ -116,7 +117,7 @@ const UpdateBlog = () => {
       navigate("/user/blogs-Details");
     } catch (error) {
       console.error("Frontend update error:", error);
-      toast.error(
+      return toast.error(
         error.response?.data?.message ||
           error.message ||
           "Failed to update blog"

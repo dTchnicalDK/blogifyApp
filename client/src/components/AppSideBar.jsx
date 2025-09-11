@@ -250,7 +250,7 @@ const AppSideBar = () => {
                 </SidebarMenu>
               </SidebarGroup>
             </SidebarContent>
-            <SidebarFooter>footer</SidebarFooter>
+            <SidebarFooter>© dharmendra & chauhan broth.</SidebarFooter>
           </Sidebar>
         </>
       );

@@ -24,7 +24,6 @@ import ActiveUserAuth from "./components/authComponents/ActiveUserAuth";
 import OnlyAdminAllowed from "./components/authComponents/OnlyAdminAllowed";
 import UserCommentsDetails from "./components/pages/UserComment";
 import MyBlogsList from "./components/pages/blogs/MyBlogsList";
-import { SidebarProvider } from "./components/ui/sidebar";
 import PrivacyPolicy from "./components/pages/legalPages/PrivacyPolicy";
 import TermsOfService from "./components/pages/legalPages/TermsOfServices";
 import ContactPage from "./components/pages/company/ContactPage";

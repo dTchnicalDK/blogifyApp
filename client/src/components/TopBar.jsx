@@ -36,7 +36,7 @@ const TopBar = () => {
       const fetchedAllBlogs = await axios.get(`${baseUrl}/api/user/logout`, {
         withCredentials: true,
       });
-      // console.log("logout res", fetchedAllBlogs);
+      logout();
       navigate("/login");
       toast.success("user logged out !");
     } catch (error) {
