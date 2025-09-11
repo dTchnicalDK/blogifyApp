@@ -104,7 +104,6 @@ const UpdateBlog = () => {
 
     try {
       setIsLoading(true);
-      console.log("form data", formData);
       const response = await axios.put(
         `${baseUrl}/api/blogs/update-blog/${blog._id}`,
         formData,
@@ -203,7 +202,7 @@ const UpdateBlog = () => {
                   Update Now
                 </Button>
                 <Button variant="destructive">
-                  <Link to="/user/categories">Cancel</Link>
+                  <Link to="/user/blogs-Details">Cancel</Link>
                 </Button>
               </div>
             </form>

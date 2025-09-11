@@ -190,11 +190,10 @@ export const getBlogByUser = async (req, res, next) => {
 
 ///////////////editBlogById///////////////////////////////
 export const updateBlog = async (req, res, next) => {
-  console.log("route hit");
   const { id } = req.params;
   const { data } = req.body;
   const reqdata = JSON.parse(data);
-  console.log("data", reqdata);
+
   try {
     // Basic validation
     if (!id) {
@@ -219,18 +218,9 @@ export const updateBlog = async (req, res, next) => {
       });
     }
 
-    // // Upload an image to cloudinary
-    // let uploadResult = null;
-    // if (req.file) {
-    //   uploadResult = await cloudinary.uploader.upload(req.file.path, {
-    //     folder: "blogify/blogs",
-    //   });
-    // }
-
     // Convert buffer to base64 for Cloudinary
     const b64 = Buffer.from(req.file.buffer).toString("base64");
     const dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-    console.log("buffer data", dataURI);
 
     // Upload to Cloudinary
     const uploadResult = await cloudinary.uploader.upload(dataURI, {
@@ -248,7 +238,6 @@ export const updateBlog = async (req, res, next) => {
       category: reqdata.category._id ? reqdata.category._id : reqdata.category,
     };
 
-    console.log("dataToReplaceWith", dataToReplaceWith);
     const updatedBlog = await Blog.findByIdAndUpdate(id, dataToReplaceWith, {
       new: true,
     });
