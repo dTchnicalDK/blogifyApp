@@ -17,6 +17,20 @@ import { Spinner } from "react-bootstrap";
 import RelatedBlog from "@/components/RelatedBlog";
 import { Separator } from "@/components/ui/separator";
 import CommentSection from "@/components/CommentSection";
+
+import {
+  FacebookIcon,
+  FacebookShareButton,
+  LinkedinIcon,
+  LinkedinShareButton,
+  TelegramIcon,
+  TelegramShareButton,
+  TwitterIcon,
+  TwitterShareButton,
+  WhatsappIcon,
+  WhatsappShareButton,
+} from "react-share";
+
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const SingleBlog = () => {
@@ -30,6 +44,9 @@ const SingleBlog = () => {
   const [translate, setTranslate] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const commentRef = useRef(null);
+
+  const shareUrl = "https://example.com/article";
+  const title = "Check out this article!";
 
   // --------------fetching user on load--------------------------
   useEffect(() => {
@@ -97,8 +114,8 @@ const SingleBlog = () => {
         <div>No blogs to show</div>
       ) : (
         <div className="container flex flex-col md:flex-row ">
-          <div className="  single-blog-detais w-full px-4 ">
-            <Card className="bg-white">
+          <div className="  single-blog-detais w-full px-1 ">
+            <Card className="bg-white w-full">
               <CardHeader className="text-3xl text-center font-serif font-semibold text-zinc-700">
                 <h1>{blogObj?.blogTitle}</h1>
               </CardHeader>
@@ -138,7 +155,7 @@ const SingleBlog = () => {
                   </div>
 
                   {/* -----------------buttons Section------------------------- */}
-                  <div className=" action w-full flex justify-around  items-center py-2.5 m-2.5  text-slate-500  ">
+                  <div className=" action w-full flex justify-around  items-center py-1.5 m-1.5  text-slate-500  ">
                     {!loggedUser || !blogObj ? (
                       <h1>loading....</h1>
                     ) : (
@@ -160,7 +177,7 @@ const SingleBlog = () => {
 
                     <div
                       onClick={handleCommentClick}
-                      className="comment-count px-5 rounded-2xl py-1.5 flex justify-center items-center hover:bg-slate-100 cursor-pointer gap-2"
+                      className="comment-count px-5 rounded-2xl py-1.5 flex justify-center items-center hover:bg-slate-100 cursor-pointer gap-1 md:gap-2"
                     >
                       <FaRegComments className="text-2xl text-gray-700" />
                       <span>{commentCount}</span>
@@ -193,8 +210,28 @@ const SingleBlog = () => {
                         )}
                       </div> */}
 
-                    <div className="px-5 rounded-2xl py-1.5 flex justify-center items-center hover:bg-slate-100 cursor-pointer">
+                    <div className="px-5 rounded-2xl py-1.5 flex justify-center items-center hover:bg-slate-100  gap-2">
                       <PiShareFatLight className="text-2xl text-gray-700" />
+                      <FacebookShareButton url={shareUrl} quote={title}>
+                        <FacebookIcon size={20} round />
+                      </FacebookShareButton>
+                      <WhatsappShareButton
+                        url={shareUrl}
+                        quote={title}
+                        title="MyBlog"
+                        separator=" "
+                      >
+                        <WhatsappIcon size={20} round />
+                      </WhatsappShareButton>
+                      <TwitterShareButton url={shareUrl} title="MyBlog">
+                        <TwitterIcon size={20} round />
+                      </TwitterShareButton>
+                      <TelegramShareButton url={shareUrl} title="MyBlog">
+                        <TelegramIcon size={20} round />
+                      </TelegramShareButton>
+                      <LinkedinShareButton url={shareUrl} title="MyBlog">
+                        <LinkedinIcon size={20} round />
+                      </LinkedinShareButton>
                     </div>
                     <div className="text-center">
                       <p>Category</p>

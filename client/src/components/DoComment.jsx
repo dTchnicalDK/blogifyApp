@@ -6,6 +6,7 @@ import defaultAvatar from "@/assets/profileImg.svg";
 import { Link, Navigate, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { userContext } from "@/contexts/UserContexProvider";
+import { IoSend } from "react-icons/io5";
 import axios from "axios";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
@@ -54,7 +55,7 @@ const DoComment = ({ blogData, setComments }) => {
 
   return (
     <div>
-      <div className="py-1 ">
+      <div className="py-1 w-full">
         <h1 className="my.5 text-zinc-700">you can now type in English</h1>
 
         <div className="flex justify-between items-center gap-1.5 mt-3">
@@ -62,7 +63,6 @@ const DoComment = ({ blogData, setComments }) => {
             <div>
               <span>
                 <img
-                  // src={blogData?.props?.author?.photoURL || defaultAvatar}
                   src={loggedUser?.photoURL || defaultAvatar}
                   height={"40px"}
                   width={"40px"}
@@ -72,20 +72,20 @@ const DoComment = ({ blogData, setComments }) => {
               </span>
             </div>
           </Link>
-          <div className="relative flex w-full bg-white/50">
+          <div className="relative w-full flex items-center  bg-white/50">
             <Textarea
               value={text}
               placeholder="Type here..."
               onChange={handleChange}
               className="w-full bg-white"
             />
-            <Button
-              variant="ghost"
+
+            <span
+              className="font-bold text-green-600 absolute right-3 top-5 text-2xl cursor-pointer"
               onClick={handleSubmit}
-              className="absolute right-3 top-3"
             >
-              <MdOutlineForward className="text-slate-700" />
-            </Button>
+              <IoSend />
+            </span>
           </div>
         </div>
       </div>

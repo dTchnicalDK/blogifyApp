@@ -75,7 +75,7 @@ const LikeButton = ({ props }) => {
   return (
     <div
       onClick={handleLike}
-      className=" px-5 rounded-2xl py-1.5 flex justify-center items-center hover:bg-slate-100 cursor-pointer gap-2"
+      className=" px-5 rounded-2xl py-1.5 flex justify-center items-center hover:bg-slate-100 cursor-pointer gap-1 md:gap-2"
     >
       <BiLike className="text-2xl  text-gray-700" />
       <p className="text-lg">{likeCount}</p>
