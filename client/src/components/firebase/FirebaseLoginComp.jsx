@@ -52,7 +52,7 @@ const FirebaseLoginComp = () => {
   };
 
   if (isLoading) {
-    <Spinner />;
+    return <Spinner />;
   }
 
   return (
