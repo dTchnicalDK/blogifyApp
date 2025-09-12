@@ -30,7 +30,14 @@ import {
   WhatsappIcon,
   WhatsappShareButton,
 } from "react-share";
-
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const SingleBlog = () => {
@@ -44,8 +51,9 @@ const SingleBlog = () => {
   const [translate, setTranslate] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const commentRef = useRef(null);
+  const [shareUrl, setShareUrl] = useState("http://localhost:5173/");
 
-  const shareUrl = "https://example.com/article";
+  // const shareUrl = "https://example.com/article";
   const title = "Check out this article!";
 
   // --------------fetching user on load--------------------------
@@ -58,6 +66,8 @@ const SingleBlog = () => {
           const blog = await axios.get(`${baseUrl}/api/blogs/getblog/${id}`);
           // console.log("blog data res before set", blog.data.data);
           setBlogObj(blog.data.data);
+          //set current url to shareUrl state.
+          setShareUrl(window.location.href);
         } catch (error) {
           console.error("Blog fetch error:", error);
           toast.error(error.message || "Error fetching blog");
@@ -101,7 +111,7 @@ const SingleBlog = () => {
   const handleCommentClick = () => {
     // console.log("comment clicked");
     //scrolling to comment input box
-    commentRef.current.scrollIntoView({ behavior: "smooth" });
+    // commentRef.current.scrollIntoView({ behavior: "smooth" });
   };
 
   if (!blogObj) {
@@ -134,10 +144,10 @@ const SingleBlog = () => {
                 {/* ------------------------------topbar section----------------------- */}
                 {/* author like comment section  */}
                 <Separator className={"mt-2"} />
-                <div className="container w-full flex justify-between items-center flex-wrap mt-5">
+                <div className=" w-full flex justify-around items-baseline-last flex-wrap mt-5">
                   <div>
                     <Link>
-                      <div>
+                      <div className="flex flex-col justify-center items-center">
                         <span>
                           <img
                             src={blogObj?.author?.photoURL || defaultAvatar}
@@ -153,9 +163,15 @@ const SingleBlog = () => {
                       </div>
                     </Link>
                   </div>
+                  <div className="text-center ">
+                    <p>Category</p>
+                    <p className="text-slate-400">
+                      {blogObj?.category?.categoryName}
+                    </p>
+                  </div>
 
                   {/* -----------------buttons Section------------------------- */}
-                  <div className=" action w-full flex justify-around  items-center py-1.5 m-1.5  text-slate-500  ">
+                  <div className=" action w-full flex justify-around  items-center  m-1.5  text-slate-500  ">
                     {!loggedUser || !blogObj ? (
                       <h1>loading....</h1>
                     ) : (
@@ -210,34 +226,72 @@ const SingleBlog = () => {
                         )}
                       </div> */}
 
-                    <div className="px-5 rounded-2xl py-1.5 flex justify-center items-center hover:bg-slate-100  gap-2">
-                      <PiShareFatLight className="text-2xl text-gray-700" />
-                      <FacebookShareButton url={shareUrl} quote={title}>
-                        <FacebookIcon size={20} round />
-                      </FacebookShareButton>
-                      <WhatsappShareButton
-                        url={shareUrl}
-                        quote={title}
-                        title="MyBlog"
-                        separator=" "
-                      >
-                        <WhatsappIcon size={20} round />
-                      </WhatsappShareButton>
-                      <TwitterShareButton url={shareUrl} title="MyBlog">
-                        <TwitterIcon size={20} round />
-                      </TwitterShareButton>
-                      <TelegramShareButton url={shareUrl} title="MyBlog">
-                        <TelegramIcon size={20} round />
-                      </TelegramShareButton>
-                      <LinkedinShareButton url={shareUrl} title="MyBlog">
-                        <LinkedinIcon size={20} round />
-                      </LinkedinShareButton>
-                    </div>
-                    <div className="text-center">
-                      <p>Category</p>
-                      <p className="text-slate-400">
-                        {blogObj?.category?.categoryName}
-                      </p>
+                    <div className="share-button-dropdown px-5.5 rounded-2xl py-1.5 flex justify-center items-baseline-last  hover:bg-slate-100  gap-2">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          {" "}
+                          <PiShareFatLight className="text-2xl text-gray-700" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="ml-[40%] transition-all duration-500">
+                          <DropdownMenuLabel>
+                            Share Blog To...
+                          </DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem>
+                            <FacebookShareButton
+                              url={shareUrl}
+                              quote={title}
+                              className="flex gap-1"
+                            >
+                              <FacebookIcon size={20} round />{" "}
+                              <small> Facebook</small>
+                            </FacebookShareButton>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <WhatsappShareButton
+                              url={shareUrl}
+                              quote={title}
+                              title="MyBlog"
+                              separator="  "
+                              className="flex gap-1"
+                            >
+                              <WhatsappIcon size={20} round />{" "}
+                              <small>WhatsApp</small>
+                            </WhatsappShareButton>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <TwitterShareButton
+                              url={shareUrl}
+                              title="MyBlog"
+                              className="flex gap-1"
+                            >
+                              <TwitterIcon size={20} round />{" "}
+                              <small> x / twitter</small>
+                            </TwitterShareButton>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <TelegramShareButton
+                              url={shareUrl}
+                              title="MyBlog"
+                              className="flex gap-1"
+                            >
+                              <TelegramIcon size={20} round />{" "}
+                              <small>Telegram</small>
+                            </TelegramShareButton>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <LinkedinShareButton
+                              url={shareUrl}
+                              title="MyBlog"
+                              className="flex gap-1"
+                            >
+                              <LinkedinIcon size={20} round />
+                              <small>Linkedin</small>
+                            </LinkedinShareButton>
+                          </DropdownMenuItem>
+                          {/* <DropdownMenuItem>Subscription</DropdownMenuItem> */}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </div>
                 </div>
@@ -249,7 +303,7 @@ const SingleBlog = () => {
               props={blogObj}
               setRefetchCommentCount={setRefetchCommentCount}
             />
-            <div className="comment-ref" ref={commentRef}></div>
+            {/* <div className="comment-ref" ref={commentRef}></div> */}
           </div>
 
           <div className="container md:w-2/6">

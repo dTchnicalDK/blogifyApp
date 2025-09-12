@@ -78,7 +78,7 @@ const CommentSection = ({ props, setRefetchCommentCount }) => {
           })}
       </div>
       {/* ////////comment input section //////////////// */}
-      <div className="do-comment-section w-[95%] px-3.5 relative left-2.5 bottom-2.5 ">
+      <div className="do-comment-section w-[100%] px-3.5 relative left-2.5 bottom-2.5 ">
         {/* <div className="do-comment-section sticky bottom-0 bg-white pt-3 border-t"> */}
         <div ref={bottomRef}></div>
         <DoComment blogData={{ props }} setComments={setComments} />

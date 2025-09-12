@@ -4,11 +4,12 @@ import { Navigate, Outlet } from "react-router";
 import { toast } from "react-toastify";
 
 const OnlyAdminAllowed = ({ children }) => {
-  const { loggedUser } = useContext(userContext);
+  const { loggedUser, logout } = useContext(userContext);
   if (loggedUser && loggedUser.role === "admin") {
     return children;
     // <Outlet />;
   } else {
+    logout();
     toast.error("Not Authorised! conatact admin");
     return <Navigate to={"/login"} replace />;
   }

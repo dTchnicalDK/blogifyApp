@@ -37,7 +37,7 @@ const BlogCard = ({ props = defaultBlog }) => {
       </div>
 
       {/* Content Container */}
-      <div className="flex flex-col flex-grow gap-2 w-2/3 ">
+      <div className="flex flex-col flex-grow gap-2 w-2/3 md:w-full">
         {/* Title with line clamping */}
         <h2 className="text-2xl md:text-3xl font-sans text-gray-800 font-semibold  line-clamp-3 min-h-[3.5rem] capitalize">
           {props.blogTitle}
@@ -69,18 +69,17 @@ const BlogCard = ({ props = defaultBlog }) => {
                     {/* Dharmendra kumar dhanga chauhan */}
                   </span>
                 </div>
-
-                <p className="text-sm text-gray-600">
-                  Created on: {moment(props.createdAt).format("DD-MM-YYYY")}{" "}
-                </p>
               </div>
 
               {/* <LikeCountCom /> */}
-              <div>
+              <div className="flex flex-col justify-center items-center">
                 <h3>Category</h3>
                 <h3>{props?.category?.categoryName}</h3>
               </div>
             </div>
+            <p className="text-sm text-gray-600">
+              Created on: {moment(props.createdAt).format("DD-MM-YYYY")}{" "}
+            </p>
 
             {/* Date */}
           </div>

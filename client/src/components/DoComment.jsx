@@ -58,7 +58,7 @@ const DoComment = ({ blogData, setComments }) => {
       <div className="py-1 w-full">
         <h1 className="my.5 text-zinc-700">you can now type in English</h1>
 
-        <div className="flex justify-between items-center gap-1.5 mt-3">
+        <div className="w-full flex justify-between items-center gap-3.5 mt-3">
           <Link>
             <div>
               <span>
@@ -77,11 +77,11 @@ const DoComment = ({ blogData, setComments }) => {
               value={text}
               placeholder="Type here..."
               onChange={handleChange}
-              className="w-full bg-white"
+              className="w-full bg-white "
             />
 
             <span
-              className="font-bold text-green-600 absolute right-3 top-5 text-2xl cursor-pointer"
+              className="font-bold text-green-300 absolute right-3 top-5 text-2xl cursor-pointer"
               onClick={handleSubmit}
             >
               <IoSend />
