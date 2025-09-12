@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   deleteUser,
   getAllusers,
+  getUserById,
   loginUser,
   reActivateUser,
   registerUser,
@@ -21,6 +22,7 @@ userRouter.post("/register-google", registerGoogleUser);
 userRouter.post("/login", loginUser);
 userRouter.get("/logout", userProtectedRoute, userLogOut);
 userRouter.get("/all-users", onlyAdminRoute, getAllusers);
+userRouter.get("/getuser-byid/:id", userProtectedRoute, getUserById);
 userRouter.delete("/delete/:id", onlyAdminRoute, deleteUser);
 userRouter.get("/reactivate/:id", onlyAdminRoute, reActivateUser);
 userRouter.put(

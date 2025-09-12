@@ -39,30 +39,30 @@ const CategoriesDetails = () => {
   }, [reRender]);
 
   const handleEdit = (id) => {
-    navigate(`/user/categories/update/${id}`);
+    navigate(`/admin/categories/update/${id}`);
   };
 
-  const handleDelete = async (id) => {
-    try {
-      const deletedCategory = await axios.delete(
-        `${baseUrl}/api/categories/delete/${id}`,
-        { withCredentials: true }
-      );
-      if (deletedCategory) {
-        setRerender(() => (reRender ? false : true));
-        toast.success(deletedCategory.data.msg);
-      } else {
-        toast.error("something went wrong");
-      }
-    } catch (error) {
-      console.log("error deleting category", error);
-    }
-    // navigate(`/user/categories/update/${id}`);
-  };
+  // const handleDelete = async (id) => {
+  //   try {
+  //     const deletedCategory = await axios.delete(
+  //       `${baseUrl}/api/categories/delete/${id}`,
+  //       { withCredentials: true }
+  //     );
+  //     if (deletedCategory) {
+  //       setRerender(() => (reRender ? false : true));
+  //       toast.success(deletedCategory.data.msg);
+  //     } else {
+  //       toast.error("something went wrong");
+  //     }
+  //   } catch (error) {
+  //     console.log("error deleting category", error);
+  //   }
+  //   // navigate(`/user/categories/update/${id}`);
+  // };
 
   return (
-    <div className="relative w-full p-4">
-      <div className="m-3 fixed z-10 md:left-80">
+    <div className="relative w-full  p-4">
+      <div className="m-2  md:left-80">
         <Button asChild>
           <Link to="/user/categories/add">
             <IoAddSharp /> NewCategory
@@ -74,9 +74,9 @@ const CategoriesDetails = () => {
       </h1>
 
       {categories && categories.length >= 1 ? (
-        <Table className="mt-12 ">
+        <Table className="mt-12 bg-slate-50">
           <TableCaption>A list of your recent invoices.</TableCaption>
-          <TableHeader>
+          <TableHeader className="bg-slate-400 text-white font-bold text-xl ">
             <TableRow>
               <TableHead className="w-[100px]">Sl No.</TableHead>
               <TableHead>Category Name</TableHead>
@@ -105,7 +105,7 @@ const CategoriesDetails = () => {
                       <RiEdit2Fill />
                     </Button>
                   </TableCell>
-                  <TableCell className="text-right ">
+                  {/* <TableCell className="text-right ">
                     <Button
                       variant="secondary"
                       size="icon"
@@ -116,7 +116,7 @@ const CategoriesDetails = () => {
                     >
                       <RiDeleteBin5Fill />
                     </Button>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               );
             })}

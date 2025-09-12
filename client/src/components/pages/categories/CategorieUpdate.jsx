@@ -6,6 +6,8 @@ import React, { useEffect, useState } from "react";
 import { IoAddSharp } from "react-icons/io5";
 import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
+import slugify from "slugify";
+// import { json } from "stream/consumers";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const CategorieUpdate = () => {
@@ -31,10 +33,18 @@ const CategorieUpdate = () => {
     fetchCategoryToEdit();
   }, []);
 
-  const handleChange = (e) => {
+  const handleCaegoryNameChange = (e) => {
     const { name, value } = e.target;
-    setCategoryEdit({ ...categoryEdit, [name]: value });
-    // console.log("object ", category);
+    setCategoryEdit((prevCategory) => ({
+      ...prevCategory,
+      categoryName: value,
+      categorySlug: slugify(value, {
+        lower: true, // convert to lowercase
+        strict: true, // remove special characters
+        locale: "en", // language-specific rules
+      }),
+    }));
+    // console.log("data", categoryEdit);
   };
 
   const handleSubmit = async (e) => {
@@ -49,15 +59,14 @@ const CategorieUpdate = () => {
         }
       );
       // console.log("updatedCategory", updatedCategory);
-      if (updatedCategory.data) {
-        navigate("/user/categories");
-        toast.success(updatedCategory.data.msg);
-      }
+      navigate("/admin/categories");
+      toast.success(updatedCategory.data.message);
     } catch (error) {
       console.log("Update category data submit error fe", error);
-      if (error.status == 903) {
+      if (error.status === 903) {
         toast.warn(error.response.data.msg);
       }
+      toast.error(error.response.message || "somehing went wrong");
     }
   };
   const handleCancel = () => {
@@ -65,9 +74,9 @@ const CategorieUpdate = () => {
       "Do you want to really cancel the operation ?"
     );
     if (shouldReturn) {
-      navigate("/user/categories");
+      navigate("/admin/categories");
     }
-    console.log("shouldReturn", shouldReturn);
+    // console.log("shouldReturn", shouldReturn);
   };
   return (
     <div className="container">
@@ -83,25 +92,29 @@ const CategorieUpdate = () => {
               <IoAddSharp /> NewCategory
             </Link>
           </Button>
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4.5 mt-12">
+          <form
+            // onSubmit={handleSubmit}
+            className="flex flex-col gap-4.5 mt-12"
+          >
             <label htmlFor="categoryName">Enter category name: </label>
             <Input
               type="text"
               name="categoryName"
               placeholder="categoryName"
               value={categoryEdit.categoryName}
-              onChange={handleChange}
+              onChange={handleCaegoryNameChange}
             />
-            <label htmlFor="categorySlug">Enter category slug: </label>
+            <label htmlFor="categorySlug"> category slug: </label>
             <Input
               type="text"
               name="categorySlug"
               value={categoryEdit.categorySlug}
-              onChange={handleChange}
+              // onChange={handleChange}
               placeholder="category slug here"
+              disabled
             />
             <div className="flex justify-center gap-12">
-              <Button type="submit" className="">
+              <Button type="button" onClick={handleSubmit} className="">
                 Update Now
               </Button>
               <Button variant="destructive" onClick={handleCancel}>

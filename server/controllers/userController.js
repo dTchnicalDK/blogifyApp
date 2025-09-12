@@ -57,6 +57,25 @@ export const getAllusers = async (req, res, next) => {
     );
   }
 };
+//------------------function to get all users-----------------------------
+export const getUserById = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const fetchedUsers = await User.findById(id);
+    console.log("fetcged yser", fetchedUsers);
+    res
+      .status(200)
+      .json({ success: true, message: "user fetched", data: fetchedUsers });
+  } catch (error) {
+    console.log("getting user by id error", error);
+    next(
+      handleError(
+        error.status || 500,
+        error.message || "internal server error, fetching user"
+      )
+    );
+  }
+};
 
 //-----------------Method to Login user-----------------------------------
 export const loginUser = async (req, res) => {

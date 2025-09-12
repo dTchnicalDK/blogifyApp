@@ -31,6 +31,7 @@ import CareersPage from "./components/pages/company/CareerPage";
 import AboutUs from "./components/pages/company/AboutUs";
 import StunningLandingPage from "./components/pages/other/StunningLandingPage";
 import ComingSoon from "./components/pages/other/ComingSoon";
+import AuthorDetails from "./components/pages/AuthorDetailsPage";
 
 function App() {
   const [LoggedInUser, setLoggedInUser] = useState("");
@@ -128,6 +129,14 @@ function App() {
           element: (
             <ActiveUserAuth>
               <UpdateBlog />
+            </ActiveUserAuth>
+          ),
+        },
+        {
+          path: "author-details/:id",
+          element: (
+            <ActiveUserAuth>
+              <AuthorDetails />
             </ActiveUserAuth>
           ),
         },

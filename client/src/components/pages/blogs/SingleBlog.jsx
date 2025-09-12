@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import DOMPurify from "dompurify";
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { toast } from "react-toastify";
 import defaultAvatar from "@/assets/profileImg.svg";
 import defaultBlogImage from "@/assets/logo2.jpg";
@@ -17,7 +17,6 @@ import { Spinner } from "react-bootstrap";
 import RelatedBlog from "@/components/RelatedBlog";
 import { Separator } from "@/components/ui/separator";
 import CommentSection from "@/components/CommentSection";
-
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -51,6 +50,7 @@ const SingleBlog = () => {
   const [translate, setTranslate] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const commentRef = useRef(null);
+  const navigate = useNavigate();
   const [shareUrl, setShareUrl] = useState("http://localhost:5173/");
 
   // const shareUrl = "https://example.com/article";
@@ -113,6 +113,9 @@ const SingleBlog = () => {
     //scrolling to comment input box
     // commentRef.current.scrollIntoView({ behavior: "smooth" });
   };
+  const handleAuthorDetails = (author) => {
+    console.log("handle author details clicked", author);
+  };
 
   if (!blogObj) {
     return <Spinner />;
@@ -124,6 +127,7 @@ const SingleBlog = () => {
         <div>No blogs to show</div>
       ) : (
         <div className="container flex flex-col md:flex-row ">
+          {console.log("blog obj", blogObj)}
           <div className="  single-blog-detais w-full px-1 ">
             <Card className="bg-white w-full">
               <CardHeader className="text-3xl text-center font-serif font-semibold text-zinc-700">
@@ -146,22 +150,25 @@ const SingleBlog = () => {
                 <Separator className={"mt-2"} />
                 <div className=" w-full flex justify-around items-baseline-last flex-wrap mt-5">
                   <div>
-                    <Link>
-                      <div className="flex flex-col justify-center items-center">
-                        <span>
-                          <img
-                            src={blogObj?.author?.photoURL || defaultAvatar}
-                            height={"40px"}
-                            width={"40px"}
-                            alt="avatar"
-                            className="rounded-full "
-                          />
-                        </span>
-                        <span className="text-slate-400 text-center">
-                          {blogObj?.author?.displayName || "inactive user"}
-                        </span>
-                      </div>
-                    </Link>
+                    <div className="flex flex-col justify-center items-center ">
+                      <span
+                        onClick={() =>
+                          navigate(`/user/author-details/${blogObj.author._id}`)
+                        }
+                        className="cursor-pointer"
+                      >
+                        <img
+                          src={blogObj?.author?.photoURL || defaultAvatar}
+                          height={"40px"}
+                          width={"40px"}
+                          alt="avatar"
+                          className="rounded-full "
+                        />
+                      </span>
+                      <span className="text-slate-400 text-center">
+                        {blogObj?.author?.displayName || "inactive user"}
+                      </span>
+                    </div>
                   </div>
                   <div className="text-center ">
                     <p>Category</p>

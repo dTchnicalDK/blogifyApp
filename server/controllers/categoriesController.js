@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Categories } from "../models/categoriesModel.js";
+import { handleError } from "../helper/errorHandler.js";
 
 ///////////////getCategory by id//////////////////
 export const getCategoryById = async (req, res) => {
@@ -54,7 +55,7 @@ export const createCategory = async (req, res) => {
 };
 
 //////////////edit categories//////////////
-export const editCategory = async (req, res) => {
+export const editCategory = async (req, res, next) => {
   // console.log("edit category hit");
   const { id } = req.params;
   const { categoryName, categorySlug } = req.body;
@@ -63,10 +64,10 @@ export const editCategory = async (req, res) => {
   if (!categoryName || !categorySlug) {
     return res
       .status(400)
-      .json({ msg: "no field can be blank", success: false });
+      .json({ message: "no field can be blank", success: false });
   }
   if (!id) {
-    return res.status(400).json({ msg: "id missing", success: false });
+    return res.status(400).json({ message: "id missing", success: false });
   }
 
   try {
@@ -75,7 +76,7 @@ export const editCategory = async (req, res) => {
 
     if (isDuplicatCatgory) {
       return res.status(903).json({
-        msg: "catebgory already exits !!, choose another category name",
+        message: "catebgory already exits !!, choose another category name",
         id,
         success: false,
       });
@@ -86,17 +87,23 @@ export const editCategory = async (req, res) => {
       { new: true }
     );
     if (!updatedCategory) {
-      return res.status(400).json({ msg: "wrong id", id, success: false });
+      return res.status(400).json({ message: "wrong id", id, success: false });
     }
     // console.log("updatedCategory", updatedCategory);
     return res.status(201).json({
-      msg: `category edited into ${categoryName}`,
+      message: `category edited into ${categoryName}`,
       id,
       success: false,
       data: updatedCategory,
     });
   } catch (error) {
     console.log("edit category error", error);
+    next(
+      handleError(
+        error.status,
+        error.message || "internal server error, edit category"
+      )
+    );
   }
 };
 
