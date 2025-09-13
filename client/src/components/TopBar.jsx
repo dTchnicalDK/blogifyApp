@@ -105,17 +105,13 @@ const TopBar = () => {
                   </Link>
                 </DropdownMenuItem>
 
-                <Link>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      to="/user/my-blogs-details"
-                      className="cursor-pointer"
-                    >
-                      <LiaBlogSolid />
-                      Bloggs
-                    </Link>
-                  </DropdownMenuItem>
-                </Link>
+                <DropdownMenuItem asChild>
+                  <Link to="/user/my-blogs-details" className="cursor-pointer">
+                    <LiaBlogSolid />
+                    Bloggs
+                  </Link>
+                </DropdownMenuItem>
+
                 <Separator />
                 <DropdownMenuItem
                   onClick={handleLogout}

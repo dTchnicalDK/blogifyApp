@@ -62,7 +62,7 @@ const CategoriesDetails = () => {
 
   return (
     <div className="relative w-full  p-4">
-      <div className="m-2  md:left-80">
+      <div className="  absolute right-3">
         <Button asChild>
           <Link to="/admin/categories/add">
             <IoAddSharp /> NewCategory
@@ -74,7 +74,7 @@ const CategoriesDetails = () => {
       </h1>
 
       {categories && categories.length >= 1 ? (
-        <Table className="mt-12 bg-slate-50">
+        <Table className="mt-5 bg-slate-50">
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader className="bg-slate-400 text-white font-bold text-xl ">
             <TableRow>

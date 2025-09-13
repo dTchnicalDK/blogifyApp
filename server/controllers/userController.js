@@ -147,26 +147,38 @@ export const userLogOut = (req, res) => {
 export const updateProfile = async (req, res, next) => {
   const { _id, email, displayName, photoURL, bio, location } = req.body;
   const userOnDb = await User.findById({ _id });
-  // console.log("user got from db", userOnDb);
+
   try {
-    // Upload an image to cloudinary
-    const uploadResult = await cloudinary.uploader.upload(req.file.path, {
-      folder: "blogify/profiles",
-    });
+    let uploadResult;
+    if (req.file) {
+      // Convert buffer to base64 for Cloudinary
+      const b64 = Buffer.from(req.file.buffer).toString("base64");
+      const dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+
+      // Upload to Cloudinary
+      uploadResult = await cloudinary.uploader.upload(dataURI, {
+        folder: "blogify/blogs",
+        transformation: [
+          { width: 1000, height: 750, crop: "limit" },
+          { quality: "auto" },
+          { format: "auto" },
+        ],
+      });
+    }
+    console.log("cloudinary link", uploadResult);
+
     const updatedProfile = await User.findByIdAndUpdate(
       _id,
       {
         displayName,
-        photoURL: uploadResult.secure_url,
+        photoURL: uploadResult?.secure_url,
         bio,
         location,
       },
       { new: true }
     ).select("-password");
 
-    fs.unlinkSync(req.file.path);
-    // console.log("updated profile", updateProfile);
-    res.status(201).json({
+    return res.status(201).json({
       message: "Profile Data updated successfully",
       success: true,
       data: updatedProfile,

@@ -116,14 +116,15 @@ const UpdateProfile = () => {
     <div>
       <div
         id="wrapper"
-        className="w-full flex flex-col justify-center items-center "
+        className="w-full flex flex-col justify-center items-center py-5"
       >
         {!isEditing ? (
-          <div className="profile-view flex flex-col justify-center items-center">
+          // <div className="profile-view flex flex-col justify-center items-center">
+          <div className=" profile-photo relative w-5/6 md:w-2/3 rounded-md flex flex-col items-center py-5 bg-white">
             <h2 className="m-auto text-2xl text-slate-600 font-bold capitalize">
               your profile informations
             </h2>
-            <div className="profile-photo relative">
+            <div className="profile-photo relative mt-3">
               <img
                 src={loggedUser ? loggedUser.photoURL : profileLogo}
                 alt="photo"
@@ -133,23 +134,60 @@ const UpdateProfile = () => {
               <strong>{loggedUser.email}</strong>
             </div>
             <Separator />
-            <div id="informations" className="mt-12 w-full">
-              <div className="profile-field flex justify-between items-center">
-                <strong>Name:</strong> <span>{profile.displayName}</span>
+            <div
+              id="informations"
+              className="form w-full md:w-5/6 container flex flex-col justify-between items-stretch px-5 py-5 bg-white"
+            >
+              <div className="form-group flex justify-between items-center my-3 ">
+                <label>id:</label>
+                <div>
+                  <Input
+                    type="text"
+                    disabled
+                    name="id"
+                    value={loggedUser._id}
+                    className={"w-full px-7 md:w-md"}
+                  />
+                </div>
               </div>
-              <div className="profile-field flex justify-between items-center">
-                <strong>Bio:</strong> <span> {profile.bio}</span>
+              <div className="form-group flex justify-between items-center my-3">
+                <label>Name:</label>
+                <div>
+                  <Input
+                    type="text"
+                    name="displayName"
+                    value={profile.displayName}
+                    disabled
+                    className={"w-full px-7 md:w-md"}
+                  />
+                </div>
               </div>
-              <div className="profile-field flex justify-between items-center">
-                <strong>Location:</strong> <span> {profile.location}</span>
+
+              <div className="form-group flex justify-between items-center my-3">
+                <label>Bio:</label>
+                <div>
+                  <Input
+                    type="text"
+                    name="bio"
+                    value={profile.bio}
+                    disabled
+                    className={"w-full px-7 md:w-md"}
+                  />
+                </div>
               </div>
-              <Separator />
-              <div className="profile-field flex justify-between items-center">
-                <strong>Last updated:</strong>{" "}
-                <span>
-                  {" "}
-                  {moment(loggedUser.updatedAt).format("DD-MM-YYYY HH-MM-SS")}
-                </span>
+
+              <div className="form-group flex justify-between items-center gap-3 my-3">
+                <label>Location:</label>
+                <div>
+                  <Input
+                    type="text"
+                    name="location"
+                    value={profile.location}
+                    disabled
+                    className={"w-full px-7 md:w-md "}
+                  />
+                  {/* <span>{profile.location}</span> */}
+                </div>
               </div>
             </div>
 
@@ -161,17 +199,17 @@ const UpdateProfile = () => {
             </Button>
           </div>
         ) : (
-          <div className="w-full mx-auto">
-            <h2 className=" text-center text-2xl text-slate-600 font-bold capitalize">
-              update your profile here
-            </h2>
+          <div className="w-full flex flex-col justify-center items-center py-5">
             <div
               id="edit-wrapper"
-              className=" profile-photo group relative w-[60vw] flex flex-col items-center "
+              className=" profile-photo relative w-5/6 md:w-2/3 rounded-md flex flex-col items-center  bg-white"
             >
+              <h2 className=" text-center text-2xl text-slate-600 font-bold capitalize py-5">
+                update your profile here
+              </h2>
               <div className="">
                 {/* ------------------------dropzone------------------- */}
-                <div className="relative size-50 md:size-70 cursor-pointer">
+                <div className="relative size-50 rounded-full md:size-70 cursor-pointer group">
                   <img
                     src={preview ? preview : loggedUser.photoURL || profileLogo}
                     alt="photo"
@@ -186,8 +224,8 @@ const UpdateProfile = () => {
                         <div {...getRootProps()}>
                           <input {...getInputProps()} />
 
-                          <div className="size-full absolute z-30 bg-black/50 top-0 left-0 rounded-full hidden justify-center items-center group-hover:flex">
-                            <FaRegEdit className=" text-6xl text-white/50 cursor-pointer" />
+                          <div className="size-50 md:size-70 absolute z-30 bg-black/50 top-0 left-0 rounded-full flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <FaRegEdit className=" text-6xl text-white/30 md:text-white/50 cursor-pointer" />
                           </div>
                         </div>
                       </section>
@@ -200,48 +238,59 @@ const UpdateProfile = () => {
                 <strong className="text-slate-600">{loggedUser.email}</strong>
               </div>
               <Separator />
-              <div className="form w-full  container p-5">
-                <div className="form-group ">
+              <div className="form w-full md:w-5/6 container flex flex-col justify-between items-stretch px-5 py-5 bg-white">
+                <div className="form-group flex justify-between items-center my-3 ">
                   <label>id:</label>
-                  <Input
-                    type="text"
-                    disabled
-                    name="id"
-                    value={loggedUser._id}
-                    // onChange={handleInputChange}
-                  />
+                  <div>
+                    <Input
+                      type="text"
+                      disabled
+                      name="id"
+                      value={loggedUser._id}
+                      className={"w-full px-7 md:w-md"}
+                    />
+                  </div>
                 </div>
-                <div className="form-group">
+                <div className="form-group flex justify-between items-center my-3">
                   <label>Name:</label>
-                  <Input
-                    type="text"
-                    name="displayName"
-                    value={profile.displayName}
-                    onChange={handleInputChange}
-                  />
+                  <div>
+                    <Input
+                      type="text"
+                      name="displayName"
+                      value={profile.displayName}
+                      onChange={handleInputChange}
+                      className={"w-full px-7 md:w-md"}
+                    />
+                  </div>
                 </div>
 
-                <div className="form-group">
+                <div className="form-group flex justify-between items-center my-3">
                   <label>Bio:</label>
-                  <Input
-                    type="text"
-                    name="bio"
-                    value={profile.bio}
-                    onChange={handleInputChange}
-                  />
+                  <div>
+                    <Input
+                      type="text"
+                      name="bio"
+                      value={profile.bio}
+                      onChange={handleInputChange}
+                      className={"w-full px-7 md:w-md"}
+                    />
+                  </div>
                 </div>
 
-                <div className="form-group">
+                <div className="form-group flex justify-between items-center gap-3 my-3">
                   <label>Location:</label>
-                  <Input
-                    type="text"
-                    name="location"
-                    value={profile.location}
-                    onChange={handleInputChange}
-                  />
+                  <div>
+                    <Input
+                      type="text"
+                      name="location"
+                      value={profile.location}
+                      onChange={handleInputChange}
+                      className={"w-full px-7 md:w-md"}
+                    />
+                  </div>
                 </div>
 
-                <div className="buttons w-full flex justify-around m-5">
+                <div className="buttons w-full flex justify-around my-5">
                   <Button onClick={handleSave} className="bg-green-700">
                     update Changes
                   </Button>
