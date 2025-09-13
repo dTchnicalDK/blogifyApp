@@ -21,35 +21,43 @@ export const getCategoryById = async (req, res) => {
 };
 
 /////////////////creating category////////////////////
-export const createCategory = async (req, res) => {
+export const createCategory = async (req, res, next) => {
   const { categoryName, categorySlug } = req.body;
 
   try {
     if (!categoryName || !categorySlug) {
       return res
         .status(400)
-        .json({ msg: "all fiels are mandatory, fill first" });
+        .json({ message: "all fiels are mandatory, fill first" });
     }
     const isCatergoryAlreadyCreated = await Categories.findOne({
       categoryName,
     });
     if (isCatergoryAlreadyCreated) {
-      return res
-        .status(409)
-        .json({ msg: "category already created, use that or create other" });
+      return res.status(409).json({
+        message: "category already created, use that or create other",
+      });
     }
     const createdCategory = await Categories.create({
       categoryName,
       categorySlug,
     });
-    return res
-      .status(201)
-      .json({ msg: "category created successfully", data: createdCategory });
+    // console.log("createCategory", createCategory);
+    return res.status(201).json({
+      message: "category created successfully",
+      data: createdCategory,
+    });
   } catch (error) {
-    console.log("category creation error", error);
-    return res
-      .status(500)
-      .json({ msg: "Something went wrong during category creation." });
+    console.error("category creation error", error);
+    next(
+      handleError(
+        error?.status,
+        error.message || "Something went wrong during category creation."
+      )
+    );
+    //   return res
+    //     .status(500)
+    //     .json({ message:  });
   }
   // res.status(200).json({ categoryName, categorySlug });
 };

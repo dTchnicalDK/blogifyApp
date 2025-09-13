@@ -64,7 +64,7 @@ const CategoriesDetails = () => {
     <div className="relative w-full  p-4">
       <div className="m-2  md:left-80">
         <Button asChild>
-          <Link to="/user/categories/add">
+          <Link to="/admin/categories/add">
             <IoAddSharp /> NewCategory
           </Link>
         </Button>

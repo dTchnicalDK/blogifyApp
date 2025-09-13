@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import { IoAddSharp } from "react-icons/io5";
 import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import slugify from "slugify";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const AddCategories = () => {
@@ -17,8 +18,17 @@ const AddCategories = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCategory({ ...category, [name]: value });
-    // console.log("object ", category);
+
+    setCategory((prevCategory) => ({
+      ...prevCategory,
+      categoryName: value,
+      categorySlug: slugify(value, {
+        lower: true, // convert to lowercase
+        strict: true, // remove special characters
+        locale: "en", // language-specific rules
+      }),
+    }));
+    // console.log("data", category);
   };
 
   const handleSubmit = async (e) => {
@@ -35,11 +45,11 @@ const AddCategories = () => {
         { withCredentials: true }
       );
       // console.log("addedCategory", addedCategory);
-      navigate("/user/categories");
-      toast.success(addedCategory.data.msg);
+      navigate("/admin/categories");
+      toast.success(addedCategory.data.message);
     } catch (error) {
       if (error.response.status == 409) {
-        return toast.warn(error.response.data.msg);
+        return toast.warn(error.response.data.message);
       } else {
         console.log("frontend add category error", error);
         toast.error(error.message);
@@ -60,12 +70,14 @@ const AddCategories = () => {
               placeholder="categoryName"
               onChange={handleChange}
             />
-            <label htmlFor="categorySlug">Enter category slug: </label>
+            <label htmlFor="categorySlug"> category slug is</label>
             <Input
               type="text"
               name="categorySlug"
+              value={category.categorySlug}
               onChange={handleChange}
               placeholder="category slug here"
+              disabled
             />
             <div className="flex justify-center gap-12">
               <Button type="submit" className="">

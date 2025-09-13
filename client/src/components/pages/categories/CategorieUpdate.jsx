@@ -35,6 +35,7 @@ const CategorieUpdate = () => {
 
   const handleCaegoryNameChange = (e) => {
     const { name, value } = e.target;
+
     setCategoryEdit((prevCategory) => ({
       ...prevCategory,
       categoryName: value,
