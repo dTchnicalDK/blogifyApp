@@ -7,14 +7,22 @@ import fs from "fs";
 const tokenSecretCode = process.env.JWT_TOKEN_SECRET;
 
 //------------------function to register user-----------------------------
-export const registerUser = async (req, res) => {
-  let { email, password } = req.body;
-  //grab form data
+/**
+ * Register a new user
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * @param {Function} next - Express next middleware function
+ */
+export const registerUser = async (req, res, next) => {
+  const { email, password } = req.body;
 
   try {
     //validate for empty and already registered
     if (!email || !password) {
-      return res.status(200).json({ msg: "fill all the fields first" });
+      return res.status(400).json({
+        success: false,
+        message: "Email and password are required",
+      });
     }
     const isUserAlredyRegistered = await User.findOne({ email });
     if (isUserAlredyRegistered) {
@@ -33,6 +41,12 @@ export const registerUser = async (req, res) => {
     });
   } catch (error) {
     console.log("user registration error", error);
+    next(
+      handleError(
+        error.status || 500,
+        error.message || "internal server error, fetching user"
+      )
+    );
   }
 };
 //------------------function to get all users-----------------------------
@@ -100,7 +114,14 @@ export const loginUser = async (req, res) => {
     }
 
     // Creating token
-    const token = jwt.sign({ email: validUser.email }, tokenSecretCode);
+    const token = jwt.sign(
+      {
+        userId: validUser._id,
+        email: validUser.email,
+        role: validUser.role,
+      },
+      tokenSecretCode
+    );
 
     //creating safe object to send in response without password
     const userObject = validUser.toObject();
@@ -112,7 +133,7 @@ export const loginUser = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // true in production
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: 30 * 60 * 1000, // 10 minutes in milliseconds
+      maxAge: 30 * 60 * 60 * 1000, // 24 hours in milliseconds
       // domain: Remove this line for localhost testing
     });
 
@@ -122,7 +143,12 @@ export const loginUser = async (req, res) => {
     });
   } catch (error) {
     console.log("User login error", error);
-    res.status(500).json({ msg: "Server error" });
+    next(
+      handleError(
+        error.status || 500,
+        error.message || "internal server error, fetching user"
+      )
+    );
   }
 };
 

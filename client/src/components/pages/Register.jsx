@@ -6,7 +6,7 @@ import FirebaseLoginComp from "../firebase/FirebaseLoginComp";
 
 function Register() {
   const [formData, setFormData] = useState({
-    email: " ",
+    email: "",
     password: "",
     rePassword: "",
   });
