@@ -7,41 +7,35 @@ import fs from "fs";
 const tokenSecretCode = process.env.JWT_TOKEN_SECRET;
 
 //------------------function to register user-----------------------------
-/**
- * Register a new user
- * @param {Object} req - Express request object
- * @param {Object} res - Express response object
- * @param {Function} next - Express next middleware function
- */
+
 export const registerUser = async (req, res, next) => {
   const { email, password } = req.body;
+  console.log("email and password", email, password);
 
   try {
     //validate for empty and already registered
     if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Email and password are required",
-      });
+      return next(handleError(400, "Email and password are required"));
     }
-    const isUserAlredyRegistered = await User.findOne({ email });
-    if (isUserAlredyRegistered) {
-      return res
-        .status(200)
-        .json({ msg: "user already registered, please login" });
+    const isUserAlreadyRegistered = await User.findOne({ email });
+    if (isUserAlreadyRegistered) {
+      return next(handleError(400, "user already registered, please login"));
     }
     //hash password
     const hashedPwd = await bcrypt.hash(password, 8);
-    password = hashedPwd;
+    // password = hashedPwd;
     //save to database and create user
-    const createdUser = await User.create({ email, password });
-    res.status(200).json({
-      msg: "user registered successfully",
+    const createdUser = await User.create({ email, password: hashedPwd });
+    console.log("createdUser", createdUser);
+
+    return res.status(200).json({
+      message: "user registered successfully",
       // user: createdUser.select("- password"),
+      data: createdUser,
     });
   } catch (error) {
     console.log("user registration error", error);
-    next(
+    return next(
       handleError(
         error.status || 500,
         error.message || "internal server error, fetching user"
@@ -92,7 +86,7 @@ export const getUserById = async (req, res, next) => {
 };
 
 //-----------------Method to Login user-----------------------------------
-export const loginUser = async (req, res) => {
+export const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     // Basic validation
@@ -138,7 +132,7 @@ export const loginUser = async (req, res) => {
     });
 
     res.status(200).json({
-      msg: "User logged in successfully !",
+      message: "User logged in successfully !",
       user: userObject,
     });
   } catch (error) {

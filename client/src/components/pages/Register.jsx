@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
+const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 import FirebaseLoginComp from "../firebase/FirebaseLoginComp";
 
 function Register() {
@@ -13,7 +14,6 @@ function Register() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    // console.log(formData);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,12 +22,15 @@ function Register() {
       return toast.error("password don't match");
     }
     try {
-      const userCreationRespose = await axios.post(
-        "http://localhost:2000/api/user/register",
+      const userCreationResponse = await axios.post(
+        // "http://localhost:2000/api/user/register",
+        `${baseUrl}/api/user/register`,
         formData
       );
-      console.log("userCreationRespose", userCreationRespose?.data.msg);
+      toast.success(userCreationResponse?.data.message);
+      console.log("userCreationResponse", userCreationResponse?.data.message);
     } catch (error) {
+      toast.error(error.response.data.message || error.message);
       console.log("user registration error (frontend): ", error);
     }
   };
@@ -98,10 +101,6 @@ function Register() {
                 value={formData.rePassword}
                 onChange={handleChange}
               />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label className="flex items-center"></label>
             </div>
 
             <button className="w-full bg-slate-600 hover:bg-slate-700 text-white font-medium py-2.5 rounded-lg transition-colors">
