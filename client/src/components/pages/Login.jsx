@@ -7,6 +7,7 @@ import { userContext } from "../../contexts/UserContexProvider";
 import FirebaseLoginComp from "../firebase/FirebaseLoginComp";
 import siteLogo from "@/assets/logo2.jpg";
 import Spinner from "../Spinner";
+const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 function Login() {
   const { loggedUser, login } = useContext(userContext);
@@ -26,18 +27,18 @@ function Login() {
     try {
       setIsLoading(true);
       const userLoginRespose = await axios.post(
-        "http://localhost:2000/api/user/login",
+        `${baseUrl}/api/user/login`,
         formData,
         { withCredentials: true }
       );
 
       login(userLoginRespose.data.user);
       navigate("/user");
-      toast.success(userLoginRespose.data.msg, { position: "top-right" });
+      toast.success(userLoginRespose.data.message, { position: "top-right" });
     } catch (error) {
       console.log("user registration error: ", error);
       toast.error(
-        error.response?.data?.msg ||
+        error.response?.data?.message ||
           error.response.data.message ||
           error.message ||
           "login failed",
