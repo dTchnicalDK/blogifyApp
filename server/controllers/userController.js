@@ -114,7 +114,8 @@ export const loginUser = async (req, res, next) => {
         email: validUser.email,
         role: validUser.role,
       },
-      tokenSecretCode
+      tokenSecretCode,
+      { expiresIn: "1h" }
     );
 
     //creating safe object to send in response without password
@@ -149,7 +150,11 @@ export const loginUser = async (req, res, next) => {
 ////user logout -----------------------------------------------
 export const userLogOut = (req, res) => {
   try {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // ensure secure in production
+      sameSite: "Strict", // or 'Lax' depending on your needs
+    });
     res.status(200).json({
       success: true,
       message: "User logged out successfully",

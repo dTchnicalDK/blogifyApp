@@ -89,6 +89,8 @@ function Login() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                 placeholder="your@email.com"
                 value={formData.email}
+                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" //regex for valid email
+                title="insert valid email!"
                 onChange={handleChange}
               />
             </div>
@@ -102,8 +104,8 @@ function Login() {
                 name="password"
                 required
                 minLength={6}
-                // pattern="^(?=.*[A-Z])(?=.*\d).+$" //insures at least one capital letter and a nuber
-                // title="Must include at least one CAPITAL LETTER and a NUM13ER"
+                pattern="^(?=.*[A-Z])(?=.*\d).+$" //insures at least one capital letter and a nuber
+                title="Must include at least one CAPITAL LETTER and a NUM13ER"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                 placeholder="••••••••"
                 value={formData.password}
