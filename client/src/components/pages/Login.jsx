@@ -101,8 +101,8 @@ function Login() {
                 name="password"
                 required
                 minLength={6}
-                // pattern="^(?=.*[A-Z])(?=.*\d).+$" //insures at least one capital letter and a nuber
-                // title="Must include at least one CAPITAL LETTER and a NUM13ER"
+                pattern="^(?=.*[A-Z])(?=.*\d).+$" //insures at least one capital letter and a nuber
+                title="Must include at least one CAPITAL LETTER and a NUM13ER"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                 placeholder="••••••••"
                 value={formData.password}
