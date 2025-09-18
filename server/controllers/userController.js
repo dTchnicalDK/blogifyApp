@@ -22,7 +22,7 @@ export const registerUser = async (req, res, next) => {
       return next(handleError(400, "user already registered, please login"));
     }
     //hash password
-    const hashedPwd = await bcrypt.hash(password, 8);
+    const hashedPwd = await bcrypt.hash(password, 12);
     // password = hashedPwd;
     //save to database and create user
     const createdUser = await User.create({ email, password: hashedPwd });
@@ -91,20 +91,18 @@ export const loginUser = async (req, res, next) => {
   try {
     // Basic validation
     if (!email || !password) {
-      return res.status(400).json({ msg: "Fill all the fields first" }); // 400 is more appropriate
+      return res.status(400).json({ message: "Fill all the fields first" }); // 400 is more appropriate
     }
 
     const validUser = await User.findOne({ email });
     if (!validUser) {
-      return res.status(401).json({ msg: "Wrong credentials" }); // 401 for unauthorized
+      return res.status(401).json({ message: "Invalid credentials" }); // 401 for unauthorized
     }
 
     // Comparing password
     const matchedPassword = await bcrypt.compare(password, validUser.password);
     if (!matchedPassword) {
-      return res
-        .status(401)
-        .json({ msg: "Wrong credentials, Check userId and Password!" });
+      return res.status(401).json({ message: "Wrong userId or Password!" });
     }
 
     // Creating token
@@ -113,6 +111,7 @@ export const loginUser = async (req, res, next) => {
         userId: validUser._id,
         email: validUser.email,
         role: validUser.role,
+        userStatus: validUser.userStatus,
       },
       tokenSecretCode,
       { expiresIn: "1h" }

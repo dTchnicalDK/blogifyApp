@@ -9,6 +9,7 @@ export const userProtectedRoute = async (req, res, next) => {
       return next(handleError(401, "no token"));
     }
     const verifiedUser = jwt.verify(token, process.env.JWT_TOKEN_SECRET);
+
     if (!verifiedUser || verifiedUser.userStatus !== "active") {
       res.clearCookie("token");
       return next(handleError(401, "Only logged user allowed"));
