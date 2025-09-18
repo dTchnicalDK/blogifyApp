@@ -53,7 +53,8 @@ function App() {
         {
           path: "login",
           element: (
-            <Login setUser={setLoggedInUser} LoggedInUser={LoggedInUser} />
+            // <Login setUser={setLoggedInUser} LoggedInUser={LoggedInUser} />
+            <Login />
           ),
         },
 

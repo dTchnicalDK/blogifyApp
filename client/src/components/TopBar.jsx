@@ -38,17 +38,25 @@ const TopBar = () => {
       });
       logout();
       navigate("/login");
-      toast.success("user logged out !");
+      toast.success(fetchedAllBlogs.data.message || "user logged out custom!");
     } catch (error) {
       console.log("logout error", error);
-      toast.error(error.response?.msg || error.message || "logout error");
+      if (error.response.status === 401) {
+        navigate("/login");
+      } else {
+        toast.error(
+          error.response?.data?.message || error.message || "logout error"
+        );
+      }
+      toast.error(
+        error.response?.data?.message || error.message || "logout error"
+      );
     }
   };
 
   return (
     <div className="container w-full px-2 h-15 sm:h-20 flex justify-between items-center  ">
       {/* <div className="text-2xl border border-slate-300"></div> */}
-
       <div className="md:w-1/12 flex justify-around items-center gap-2">
         <div className="text-3xl text-slate-400 md:hidden cursor-pointer">
           <button onClick={toggleSidebar} className="cursor-pointer">

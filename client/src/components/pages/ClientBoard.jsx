@@ -4,11 +4,11 @@ import { Link, useNavigate } from "react-router";
 import { userContext } from "../../contexts/UserContexProvider";
 import { toast } from "react-toastify";
 import Spinner from "../Spinner";
-import { Card } from "../ui/card";
+
 import BlogCard from "../BlogCard";
 import { Button } from "../ui/button";
 import { IoAddSharp } from "react-icons/io5";
-import SearchBar from "../SearchBar";
+
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
 
 const ClientBoard = () => {
@@ -27,6 +27,7 @@ const ClientBoard = () => {
           `${baseUrl}/api/blogs/getblogs`,
           { withCredentials: true }
         );
+
         if (!fetchedAllBlogs) {
           toast.error("couldn't load blog, try again!");
         }

@@ -59,8 +59,8 @@ app.use((error, req, res, next) => {
     return res.status(400).json({ error: error.message });
   }
 
-  res.status(500).json({ error: "Upload failed" });
-  next(handleError(error.status, error.message || "unknown error"));
+  // For other errors, pass to next error handler instead of sending response
+  next(error);
 });
 // --------------------------------------------------/---
 
@@ -70,10 +70,10 @@ connectDb(dbUri, port, app);
 //error handling
 app.use((error, req, res, next) => {
   const statusCode = error.statusCode || 500;
-  const msg = error.message || "internal server error";
+  const message = error.message || "internal server error";
   return res.status(statusCode).json({
     success: false,
     statusCode,
-    msg,
+    message: message,
   });
 });

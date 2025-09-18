@@ -7,32 +7,40 @@ import fs from "fs";
 const tokenSecretCode = process.env.JWT_TOKEN_SECRET;
 
 //------------------function to register user-----------------------------
-export const registerUser = async (req, res) => {
-  let { email, password } = req.body;
-  //grab form data
+
+export const registerUser = async (req, res, next) => {
+  const { email, password } = req.body;
+  console.log("email and password", email, password);
 
   try {
     //validate for empty and already registered
     if (!email || !password) {
-      return res.status(200).json({ msg: "fill all the fields first" });
+      return next(handleError(400, "Email and password are required"));
     }
-    const isUserAlredyRegistered = await User.findOne({ email });
-    if (isUserAlredyRegistered) {
-      return res
-        .status(200)
-        .json({ msg: "user already registered, please login" });
+    const isUserAlreadyRegistered = await User.findOne({ email });
+    if (isUserAlreadyRegistered) {
+      return next(handleError(400, "user already registered, please login"));
     }
     //hash password
-    const hashedPwd = await bcrypt.hash(password, 8);
-    password = hashedPwd;
+    const hashedPwd = await bcrypt.hash(password, 12);
+    // password = hashedPwd;
     //save to database and create user
-    const createdUser = await User.create({ email, password });
-    res.status(200).json({
-      msg: "user registered successfully",
+    const createdUser = await User.create({ email, password: hashedPwd });
+    console.log("createdUser", createdUser);
+
+    return res.status(200).json({
+      message: "user registered successfully",
       // user: createdUser.select("- password"),
+      data: createdUser,
     });
   } catch (error) {
     console.log("user registration error", error);
+    return next(
+      handleError(
+        error.status || 500,
+        error.message || "internal server error, fetching user"
+      )
+    );
   }
 };
 //------------------function to get all users-----------------------------
@@ -78,29 +86,36 @@ export const getUserById = async (req, res, next) => {
 };
 
 //-----------------Method to Login user-----------------------------------
-export const loginUser = async (req, res) => {
+export const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
   try {
     // Basic validation
     if (!email || !password) {
-      return res.status(400).json({ msg: "Fill all the fields first" }); // 400 is more appropriate
+      return res.status(400).json({ message: "Fill all the fields first" }); // 400 is more appropriate
     }
 
     const validUser = await User.findOne({ email });
     if (!validUser) {
-      return res.status(401).json({ msg: "Wrong credentials" }); // 401 for unauthorized
+      return res.status(401).json({ message: "Invalid credentials" }); // 401 for unauthorized
     }
 
     // Comparing password
     const matchedPassword = await bcrypt.compare(password, validUser.password);
     if (!matchedPassword) {
-      return res
-        .status(401)
-        .json({ msg: "Wrong credentials, Check userId and Password!" });
+      return res.status(401).json({ message: "Wrong userId or Password!" });
     }
 
     // Creating token
-    const token = jwt.sign({ email: validUser.email }, tokenSecretCode);
+    const token = jwt.sign(
+      {
+        userId: validUser._id,
+        email: validUser.email,
+        role: validUser.role,
+        userStatus: validUser.userStatus,
+      },
+      tokenSecretCode,
+      { expiresIn: "1h" }
+    );
 
     //creating safe object to send in response without password
     const userObject = validUser.toObject();
@@ -112,24 +127,33 @@ export const loginUser = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", // true in production
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      maxAge: 30 * 60 * 1000, // 10 minutes in milliseconds
+      maxAge: 30 * 60 * 60 * 1000, // 24 hours in milliseconds
       // domain: Remove this line for localhost testing
     });
 
     res.status(200).json({
-      msg: "User logged in successfully !",
+      message: "User logged in successfully !",
       user: userObject,
     });
   } catch (error) {
     console.log("User login error", error);
-    res.status(500).json({ msg: "Server error" });
+    next(
+      handleError(
+        error.status || 500,
+        error.message || "internal server error, fetching user"
+      )
+    );
   }
 };
 
 ////user logout -----------------------------------------------
 export const userLogOut = (req, res) => {
   try {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // ensure secure in production
+      sameSite: "Strict", // or 'Lax' depending on your needs
+    });
     res.status(200).json({
       success: true,
       message: "User logged out successfully",
