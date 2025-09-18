@@ -38,10 +38,7 @@ function Login() {
     } catch (error) {
       console.log("user registration error: ", error);
       toast.error(
-        error.response?.data?.message ||
-          error.response.data.message ||
-          error.message ||
-          "login failed",
+        error.response?.data?.message || error.message || "login failed",
         {
           position: "top-center",
         }
@@ -89,7 +86,7 @@ function Login() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                 placeholder="your@email.com"
                 value={formData.email}
-                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" //regex for valid email
+                pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
                 title="insert valid email!"
                 onChange={handleChange}
               />

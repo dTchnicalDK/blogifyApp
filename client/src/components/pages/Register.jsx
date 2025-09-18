@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import axios from "axios";
 import { toast } from "react-toastify";
 const baseUrl = import.meta.env.VITE_BASE_BACKENED_URL;
@@ -14,8 +14,10 @@ function Register() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log("from data", formData);
   };
   const handleSubmit = async (e) => {
+    const navigate = useNavigate();
     e.preventDefault();
     //validation if password and repassword matches
     if (formData.password !== formData.rePassword) {
@@ -27,6 +29,7 @@ function Register() {
         `${baseUrl}/api/user/register`,
         formData
       );
+      navigate("/login");
       toast.success(userCreationResponse?.data.message);
       console.log("userCreationResponse", userCreationResponse?.data.message);
     } catch (error) {
@@ -52,7 +55,7 @@ function Register() {
             </span>
           </div>
 
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
@@ -103,7 +106,10 @@ function Register() {
               />
             </div>
 
-            <button className="w-full bg-slate-600 hover:bg-slate-700 text-white font-medium py-2.5 rounded-lg transition-colors">
+            <button
+              onClick={handleSubmit}
+              className="w-full bg-slate-600 hover:bg-slate-700 text-white font-medium py-2.5 rounded-lg transition-colors"
+            >
               Submit Now
             </button>
           </form>

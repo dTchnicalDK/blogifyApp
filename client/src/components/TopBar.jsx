@@ -44,9 +44,13 @@ const TopBar = () => {
       if (error.response.status === 401) {
         navigate("/login");
       } else {
-        toast.error(error.response?.msg || error.message || "logout error");
+        toast.error(
+          error.response?.data?.message || error.message || "logout error"
+        );
       }
-      toast.error(error.response?.msg || error.message || "logout error");
+      toast.error(
+        error.response?.data?.message || error.message || "logout error"
+      );
     }
   };
 
